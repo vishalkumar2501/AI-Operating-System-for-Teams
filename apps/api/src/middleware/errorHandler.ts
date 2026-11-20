@@ -22,7 +22,7 @@ export const errorHandler: ErrorRequestHandler = (
   err: ApiError,
   req: Request,
   res: Response,
-  _next: NextFunction,
+  _next: NextFunction
 ) => {
   // Zod validation failures — shape them into user-friendly field errors
   if (err instanceof ZodError) {
@@ -85,7 +85,7 @@ export const errorHandler: ErrorRequestHandler = (
       path: req.path,
       method: req.method,
     },
-    'Unhandled server error',
+    'Unhandled server error'
   );
 
   res.status(500).json({

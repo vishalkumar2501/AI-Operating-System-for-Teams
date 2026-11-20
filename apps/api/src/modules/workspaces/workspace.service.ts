@@ -13,10 +13,10 @@ function slugify(name: string): string {
   return name
     .toLowerCase()
     .trim()
-    .replace(/[^a-z0-9\s-]/g, '')   // remove non-alphanumeric chars
-    .replace(/\s+/g, '-')           // spaces → hyphens
-    .replace(/-+/g, '-')            // collapse multiple hyphens
-    .slice(0, 60);                  // cap length
+    .replace(/[^a-z0-9\s-]/g, '') // remove non-alphanumeric chars
+    .replace(/\s+/g, '-') // spaces → hyphens
+    .replace(/-+/g, '-') // collapse multiple hyphens
+    .slice(0, 60); // cap length
 }
 
 export async function createWorkspace(userId: string, dto: CreateWorkspaceDto) {
@@ -49,11 +49,7 @@ export async function createWorkspace(userId: string, dto: CreateWorkspaceDto) {
   return workspace;
 }
 
-export async function inviteMember(
-  workspaceId: string,
-  inviterId: string,
-  dto: InviteDto,
-) {
+export async function inviteMember(workspaceId: string, inviterId: string, dto: InviteDto) {
   const inviterMember = await workspaceRepository.getMember(workspaceId, inviterId);
   if (
     !inviterMember ||
@@ -65,7 +61,11 @@ export async function inviteMember(
   // Prevent inviting someone who is already a member
   const existingInvite = await workspaceRepository.findInviteByEmail(workspaceId, dto.email);
   if (existingInvite) {
-    throw createHttpError(409, 'DUPLICATE_INVITE', 'An active invite for this email already exists');
+    throw createHttpError(
+      409,
+      'DUPLICATE_INVITE',
+      'An active invite for this email already exists'
+    );
   }
 
   // We generate a raw token for the email link, but store only the hash in the DB
@@ -147,13 +147,10 @@ export async function updateMemberRole(
   workspaceId: string,
   actorId: string,
   targetUserId: string,
-  dto: UpdateMemberRoleDto,
+  dto: UpdateMemberRoleDto
 ) {
   const actor = await workspaceRepository.getMember(workspaceId, actorId);
-  if (
-    !actor ||
-    (actor.role !== WorkspaceRole.OWNER && actor.role !== WorkspaceRole.ADMIN)
-  ) {
+  if (!actor || (actor.role !== WorkspaceRole.OWNER && actor.role !== WorkspaceRole.ADMIN)) {
     throw createHttpError(403, 'FORBIDDEN', 'Only owners and admins can change member roles');
   }
 

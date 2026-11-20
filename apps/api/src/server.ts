@@ -31,7 +31,7 @@ async function startServer(): Promise<void> {
         env: env.NODE_ENV,
         url: `http://localhost:${env.PORT}/api/v1/health`,
       },
-      '🚀 TeamOS API server is running',
+      '🚀 TeamOS API server is running'
     );
   });
 

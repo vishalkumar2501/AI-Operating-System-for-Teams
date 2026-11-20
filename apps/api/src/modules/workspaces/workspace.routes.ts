@@ -4,11 +4,7 @@ import { requireWorkspaceMember } from '../../middleware/requireWorkspaceMember'
 import { requireRole } from '../../middleware/requireRole';
 import { validate } from '../../middleware/validate';
 import { WorkspaceRole } from '@prisma/client';
-import {
-  CreateWorkspaceSchema,
-  InviteSchema,
-  UpdateMemberRoleSchema,
-} from './workspace.schema';
+import { CreateWorkspaceSchema, InviteSchema, UpdateMemberRoleSchema } from './workspace.schema';
 import * as workspaceController from './workspace.controller';
 
 export const workspaceRouter = Router();
@@ -18,7 +14,7 @@ workspaceRouter.post(
   '/workspaces',
   authenticate,
   validate(CreateWorkspaceSchema),
-  workspaceController.createWorkspace,
+  workspaceController.createWorkspace
 );
 
 // List workspaces the requesting user is a member of
@@ -31,22 +27,18 @@ workspaceRouter.post(
   requireWorkspaceMember,
   requireRole(WorkspaceRole.ADMIN, WorkspaceRole.OWNER),
   validate(InviteSchema),
-  workspaceController.inviteMember,
+  workspaceController.inviteMember
 );
 
 // Accept an invite via the token from the email link
-workspaceRouter.post(
-  '/invites/:token/accept',
-  authenticate,
-  workspaceController.acceptInvite,
-);
+workspaceRouter.post('/invites/:token/accept', authenticate, workspaceController.acceptInvite);
 
 // List members — any workspace member can see the roster
 workspaceRouter.get(
   '/workspaces/:workspaceId/members',
   authenticate,
   requireWorkspaceMember,
-  workspaceController.getMembers,
+  workspaceController.getMembers
 );
 
 // Change a member's role — only ADMINs and OWNERs
@@ -56,5 +48,5 @@ workspaceRouter.patch(
   requireWorkspaceMember,
   requireRole(WorkspaceRole.ADMIN, WorkspaceRole.OWNER),
   validate(UpdateMemberRoleSchema),
-  workspaceController.updateMemberRole,
+  workspaceController.updateMemberRole
 );

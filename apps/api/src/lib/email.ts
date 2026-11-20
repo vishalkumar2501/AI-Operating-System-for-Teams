@@ -22,7 +22,7 @@ export async function sendEmail(opts: SendEmailOptions): Promise<void> {
         // Show first 500 chars of body so the log doesn't balloon
         preview: opts.text.slice(0, 500),
       },
-      '[email:console] Would send email',
+      '[email:console] Would send email'
     );
     return;
   }

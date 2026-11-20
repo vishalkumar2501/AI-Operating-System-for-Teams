@@ -61,7 +61,7 @@ function buildOAuthClient() {
   return new google.auth.OAuth2(
     env.GOOGLE_CLIENT_ID,
     env.GOOGLE_CLIENT_SECRET,
-    env.GOOGLE_CALLBACK_URL,
+    env.GOOGLE_CALLBACK_URL
   );
 }
 
@@ -123,7 +123,7 @@ export async function login(dto: LoginDto): Promise<AuthResult> {
 }
 
 export async function refreshTokens(
-  rawRefreshToken: string,
+  rawRefreshToken: string
 ): Promise<{ accessToken: string; refreshToken: string }> {
   let payload: { id: string; email: string };
 
@@ -153,7 +153,7 @@ export async function logout(userId: string, rawRefreshToken: string): Promise<v
 /** Generate and persist a new access + refresh token pair. */
 async function issueTokenPair(
   userId: string,
-  email: string,
+  email: string
 ): Promise<{ accessToken: string; refreshToken: string }> {
   const accessToken = generateAccessToken({ id: userId, email });
   const refreshToken = generateRefreshToken({ id: userId, email });
@@ -167,7 +167,7 @@ export function getGoogleAuthUrl(): string {
     throw createHttpError(
       503,
       'OAUTH_NOT_CONFIGURED',
-      'Google OAuth not configured. Add GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET to .env',
+      'Google OAuth not configured. Add GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET to .env'
     );
   }
   const oAuth2Client = buildOAuthClient();
@@ -183,21 +183,26 @@ export async function handleGoogleCallback(code: string): Promise<AuthResult> {
     throw createHttpError(
       503,
       'OAUTH_NOT_CONFIGURED',
-      'Google OAuth not configured. Add GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET to .env',
+      'Google OAuth not configured. Add GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET to .env'
     );
   }
 
   const oAuth2Client = buildOAuthClient();
 
-  let googleTokens: Awaited<ReturnType<typeof oAuth2Client.getToken>>;
+  let tokens: any;
   try {
-    googleTokens = await oAuth2Client.getToken(code);
+    const tokenResponse = await oAuth2Client.getToken(code);
+    tokens = tokenResponse.tokens;
   } catch (err) {
     logger.warn({ err }, 'Google token exchange failed');
-    throw createHttpError(400, 'GOOGLE_AUTH_FAILED', 'Failed to exchange Google authorization code');
+    throw createHttpError(
+      400,
+      'GOOGLE_AUTH_FAILED',
+      'Failed to exchange Google authorization code'
+    );
   }
 
-  oAuth2Client.setCredentials(googleTokens.tokens);
+  oAuth2Client.setCredentials(tokens);
 
   const oauth2 = google.oauth2({ version: 'v2', auth: oAuth2Client });
   const { data: profile } = await oauth2.userinfo.get();

@@ -173,11 +173,7 @@ export function WorkspaceShell() {
               className="shrink-0 rounded-md p-1.5 text-slate-500 hover:bg-slate-800 hover:text-slate-300 transition-colors"
               title="Sign out"
             >
-              {logout.isPending ? (
-                <Spinner size="sm" />
-              ) : (
-                <LogOut className="h-4 w-4" />
-              )}
+              {logout.isPending ? <Spinner size="sm" /> : <LogOut className="h-4 w-4" />}
             </button>
           </div>
         </div>

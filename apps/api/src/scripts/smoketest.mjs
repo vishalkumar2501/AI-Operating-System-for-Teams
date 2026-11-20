@@ -22,13 +22,34 @@ async function run() {
   console.log('GET ME', me.status, JSON.stringify(meData).slice(0, 200));
 
   // --- create workspace ---
+  const wsName = `Smoke Test Workspace ${Date.now()}`;
   const ws = await fetch(`${BASE}/workspaces`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
-    body: JSON.stringify({ name: 'Smoke Test Workspace' }),
+    body: JSON.stringify({ name: wsName }),
   });
   const wsData = await ws.json();
   console.log('CREATE WS', ws.status, JSON.stringify(wsData).slice(0, 200));
+
+  if (!wsData.success) { process.exit(1); }
+  const workspaceId = wsData.data.id;
+
+  // --- invite member ---
+  const inviteEmail = `invited+${Date.now()}@teamos.dev`;
+  const inv = await fetch(`${BASE}/workspaces/${workspaceId}/invites`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` },
+    body: JSON.stringify({ email: inviteEmail, role: 'MEMBER' }),
+  });
+  const invData = await inv.json();
+  console.log('INVITE MEMBER', inv.status, JSON.stringify(invData).slice(0, 200));
+
+  // --- list members ---
+  const members = await fetch(`${BASE}/workspaces/${workspaceId}/members`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  });
+  const membersData = await members.json();
+  console.log('LIST MEMBERS', members.status, JSON.stringify(membersData).slice(0, 200));
 
   // --- list workspaces ---
   const list = await fetch(`${BASE}/workspaces`, {

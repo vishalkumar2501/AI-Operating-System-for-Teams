@@ -26,10 +26,10 @@ declare global {
 export async function requireWorkspaceMember(
   req: Request,
   _res: Response,
-  next: NextFunction,
+  next: NextFunction
 ): Promise<void> {
   try {
-    const { workspaceId } = req.params;
+    const workspaceId = req.params['workspaceId'] as string;
 
     if (!req.user) {
       return next(createHttpError(401, 'UNAUTHORIZED', 'Authentication required'));
@@ -45,9 +45,7 @@ export async function requireWorkspaceMember(
     });
 
     if (!member) {
-      return next(
-        createHttpError(403, 'FORBIDDEN', 'You are not a member of this workspace'),
-      );
+      return next(createHttpError(403, 'FORBIDDEN', 'You are not a member of this workspace'));
     }
 
     req.workspaceMember = {

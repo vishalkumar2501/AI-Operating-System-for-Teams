@@ -13,7 +13,7 @@ export function requireRole(...allowedRoles: WorkspaceRole[]): RequestHandler {
   return (req: Request, _res: Response, next: NextFunction) => {
     if (!req.workspaceMember) {
       return next(
-        createHttpError(403, 'FORBIDDEN', 'Workspace membership check must run before role check'),
+        createHttpError(403, 'FORBIDDEN', 'Workspace membership check must run before role check')
       );
     }
 
@@ -22,8 +22,8 @@ export function requireRole(...allowedRoles: WorkspaceRole[]): RequestHandler {
         createHttpError(
           403,
           'FORBIDDEN',
-          `This action requires one of the following roles: ${allowedRoles.join(', ')}`,
-        ),
+          `This action requires one of the following roles: ${allowedRoles.join(', ')}`
+        )
       );
     }
 

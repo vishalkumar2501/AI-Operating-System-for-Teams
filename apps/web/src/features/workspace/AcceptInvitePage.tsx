@@ -84,9 +84,8 @@ export function AcceptInvitePage() {
           <>
             <h1 className="text-lg font-bold text-slate-100">You&apos;re invited!</h1>
             <p className="mt-2 text-sm text-slate-400">
-              Join{' '}
-              <span className="font-semibold text-slate-200">{inviteInfo.workspaceName}</span> as{' '}
-              <span className="font-semibold text-slate-200">{inviteInfo.role}</span>.
+              Join <span className="font-semibold text-slate-200">{inviteInfo.workspaceName}</span>{' '}
+              as <span className="font-semibold text-slate-200">{inviteInfo.role}</span>.
             </p>
             <Button
               className="mt-6 w-full"
@@ -95,11 +94,7 @@ export function AcceptInvitePage() {
             >
               Accept invitation
             </Button>
-            <Button
-              className="mt-2 w-full"
-              variant="ghost"
-              onClick={() => navigate('/workspaces')}
-            >
+            <Button className="mt-2 w-full" variant="ghost" onClick={() => navigate('/workspaces')}>
               Decline
             </Button>
           </>

@@ -27,9 +27,7 @@ const envSchema = z.object({
   // Google OAuth 2.0 (Optional at boot, enforced when Google Auth is triggered)
   GOOGLE_CLIENT_ID: z.string().optional().default(''),
   GOOGLE_CLIENT_SECRET: z.string().optional().default(''),
-  GOOGLE_CALLBACK_URL: z
-    .string()
-    .default('http://localhost:5000/api/v1/auth/google/callback'),
+  GOOGLE_CALLBACK_URL: z.string().default('http://localhost:5000/api/v1/auth/google/callback'),
 
   // Email Service
   EMAIL_PROVIDER: z.enum(['console', 'ethereal', 'resend', 'smtp']).default('console'),

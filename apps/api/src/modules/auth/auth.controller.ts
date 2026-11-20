@@ -87,7 +87,11 @@ export function googleRedirect(req: Request, res: Response, next: NextFunction):
   }
 }
 
-export async function googleCallback(req: Request, res: Response, next: NextFunction): Promise<void> {
+export async function googleCallback(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   try {
     const code = req.query['code'] as string | undefined;
     if (!code) {

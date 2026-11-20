@@ -53,8 +53,7 @@ export function RegisterPage() {
       navigate('/workspaces');
     } catch (err) {
       const axiosErr = err as AxiosError<{ error?: { message?: string } }>;
-      const msg =
-        axiosErr.response?.data?.error?.message ?? 'Failed to create account. Try again.';
+      const msg = axiosErr.response?.data?.error?.message ?? 'Failed to create account. Try again.';
       toast(msg, 'error');
     }
   };

@@ -45,8 +45,7 @@ export function LoginPage() {
       navigate(redirectTo);
     } catch (err) {
       const axiosErr = err as AxiosError<{ error?: { message?: string } }>;
-      const msg =
-        axiosErr.response?.data?.error?.message ?? 'Invalid email or password';
+      const msg = axiosErr.response?.data?.error?.message ?? 'Invalid email or password';
       toast(msg, 'error');
     }
   };
@@ -75,7 +74,9 @@ export function LoginPage() {
 
         {errorParam && (
           <div className="mb-4 rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-400">
-            {errorParam === 'no_token' ? 'No authentication token received.' : 'Authentication failed. Please try again.'}
+            {errorParam === 'no_token'
+              ? 'No authentication token received.'
+              : 'Authentication failed. Please try again.'}
           </div>
         )}
 

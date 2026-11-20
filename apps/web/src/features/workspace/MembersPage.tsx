@@ -41,9 +41,7 @@ function MemberRow({ member }: { member: WorkspaceMember }) {
       </td>
       <td className="px-4 py-3 text-sm text-slate-400">{member.user.email}</td>
       <td className="px-4 py-3">
-        <Badge variant={roleBadgeVariant[member.role] ?? 'default'}>
-          {member.role}
-        </Badge>
+        <Badge variant={roleBadgeVariant[member.role] ?? 'default'}>{member.role}</Badge>
       </td>
       <td className="px-4 py-3 text-sm text-slate-500">
         {new Date(member.joinedAt).toLocaleDateString()}
@@ -156,14 +154,9 @@ export function MembersPage() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-slate-100">Members</h1>
-          <p className="mt-0.5 text-sm text-slate-400">
-            Manage who has access to this workspace
-          </p>
+          <p className="mt-0.5 text-sm text-slate-400">Manage who has access to this workspace</p>
         </div>
-        <Button
-          leftIcon={<Plus className="h-4 w-4" />}
-          onClick={() => setShowInvite(true)}
-        >
+        <Button leftIcon={<Plus className="h-4 w-4" />} onClick={() => setShowInvite(true)}>
           Invite member
         </Button>
       </div>

@@ -26,7 +26,7 @@ app.use(
     credentials: true, // needed so the browser sends the refresh-token cookie
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-Id'],
-  }),
+  })
 );
 
 // ---------------------------------------------------------------------------
@@ -42,7 +42,7 @@ app.use(
       success: false,
       error: { code: 'RATE_LIMITED', message: 'Too many requests, please try again later' },
     },
-  }),
+  })
 );
 
 // ---------------------------------------------------------------------------
@@ -66,7 +66,7 @@ app.use(
       if (res.statusCode >= 400) return 'warn';
       return 'info';
     },
-  }),
+  })
 );
 
 // ---------------------------------------------------------------------------
