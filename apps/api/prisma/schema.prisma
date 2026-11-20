@@ -1,0 +1,270 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [vector]
+}
+
+enum WorkspaceRole {
+  OWNER
+  ADMIN
+  MEMBER
+  GUEST
+}
+
+enum ActorType {
+  USER
+  AI_AGENT
+  SYSTEM
+}
+
+enum TaskStatus {
+  BACKLOG
+  TODO
+  IN_PROGRESS
+  IN_REVIEW
+  DONE
+  BLOCKED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum DependencyType {
+  BLOCKS
+}
+
+enum AgentActionStatus {
+  PROPOSED
+  APPROVED
+  REJECTED
+  EXECUTED
+  FAILED
+}
+
+model User {
+  id           String            @id @default(uuid())
+  email        String            @unique
+  name         String
+  avatarUrl    String?
+  passwordHash String?
+  googleId     String?           @unique
+  memberships  WorkspaceMember[]
+  ownedWorkspaces Workspace[]    @relation("WorkspaceOwner")
+  createdTasks Task[]            @relation("TaskReporter")
+  assignedTasks Task[]           @relation("TaskAssignee")
+  taskSubscriptions TaskSubscriber[]
+  comments     Comment[]
+  auditLogs    AuditLog[]
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  deletedAt    DateTime?
+
+  @@index([email])
+}
+
+model Workspace {
+  id          String            @id @default(uuid())
+  name        String
+  slug        String            @unique
+  ownerId     String
+  owner       User              @relation("WorkspaceOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  members     WorkspaceMember[]
+  invites     Invite[]
+  projects    Project[]
+  tasks       Task[]
+  auditLogs   AuditLog[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  deletedAt   DateTime?
+
+  @@index([slug])
+}
+
+model WorkspaceMember {
+  id          String        @id @default(uuid())
+  workspaceId String
+  workspace   Workspace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role        WorkspaceRole @default(MEMBER)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@unique([workspaceId, userId])
+  @@index([workspaceId])
+  @@index([userId])
+}
+
+model Invite {
+  id          String        @id @default(uuid())
+  workspaceId String
+  workspace   Workspace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  email       String
+  role        WorkspaceRole @default(MEMBER)
+  tokenHash   String        @unique
+  expiresAt   DateTime
+  acceptedAt  DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([workspaceId])
+  @@index([email])
+  @@index([tokenHash])
+}
+
+model Project {
+  id          String    @id @default(uuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name        String
+  key         String    // e.g. "WEB"
+  description String?
+  startDate   DateTime?
+  targetDate  DateTime?
+  tasks       Task[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  @@unique([workspaceId, key])
+  @@index([workspaceId])
+}
+
+model Task {
+  id              String           @id @default(uuid())
+  workspaceId     String
+  workspace       Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  projectId       String
+  project         Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  number          Int              // Auto per project, e.g. 42
+  title           String
+  description     String?
+  status          TaskStatus       @default(TODO)
+  priority        TaskPriority     @default(MEDIUM)
+  assigneeId      String?
+  assignee        User?            @relation("TaskAssignee", fields: [assigneeId], references: [id])
+  reporterId      String
+  reporter        User             @relation("TaskReporter", fields: [reporterId], references: [id])
+  parentTaskId    String?
+  parentTask      Task?            @relation("SubTasks", fields: [parentTaskId], references: [id], onDelete: Cascade)
+  subtasks        Task[]           @relation("SubTasks")
+  startDate       DateTime?
+  dueDate         DateTime?
+  completedAt     DateTime?
+  estimate        Float?           // In hours/points
+  position        Float            @default(0)
+  subscribers     TaskSubscriber[]
+  comments        Comment[]
+  dependencies    TaskDependency[] @relation("TaskBlockedBy")
+  blocking        TaskDependency[] @relation("TaskBlocks")
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  deletedAt       DateTime?
+
+  @@unique([projectId, number])
+  @@index([workspaceId, projectId, status])
+  @@index([assigneeId, dueDate])
+  @@index([workspaceId, updatedAt])
+}
+
+model TaskSubscriber {
+  id        String   @id @default(uuid())
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([taskId, userId])
+}
+
+model TaskDependency {
+  id              String         @id @default(uuid())
+  taskId          String
+  task            Task           @relation("TaskBlockedBy", fields: [taskId], references: [id], onDelete: Cascade)
+  dependsOnTaskId String
+  dependsOnTask   Task           @relation("TaskBlocks", fields: [dependsOnTaskId], references: [id], onDelete: Cascade)
+  type            DependencyType @default(BLOCKS)
+  createdAt       DateTime       @default(now())
+
+  @@unique([taskId, dependsOnTaskId])
+}
+
+model Comment {
+  id              String    @id @default(uuid())
+  taskId          String
+  task            Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  authorId        String
+  author          User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  body            String
+  mentions        String[]  @default([])
+  parentCommentId String?
+  parentComment   Comment?  @relation("Thread", fields: [parentCommentId], references: [id], onDelete: Cascade)
+  replies         Comment[] @relation("Thread")
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([taskId, createdAt])
+}
+
+model AuditLog {
+  id          String    @id @default(uuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  actorType   ActorType
+  actorId     String
+  user        User?     @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  action      String    // e.g. "TASK_CREATED", "TASK_STATUS_UPDATED"
+  entityType  String    // e.g. "TASK", "WORKSPACE", "PROJECT"
+  entityId    String
+  before      Json?
+  after       Json?
+  approvalId  String?
+  ip          String?
+  createdAt   DateTime  @default(now())
+
+  @@index([workspaceId, createdAt])
+  @@index([entityType, entityId])
+}
+
+model AgentRun {
+  id          String        @id @default(uuid())
+  workspaceId String
+  userId      String
+  prompt      String
+  status      String        // RUNNING | COMPLETED | FAILED
+  steps       Json?
+  tokensUsed  Int           @default(0)
+  latencyMs   Int           @default(0)
+  actions     AgentAction[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([workspaceId, createdAt])
+}
+
+model AgentAction {
+  id          String            @id @default(uuid())
+  agentRunId  String
+  agentRun    AgentRun          @relation(fields: [agentRunId], references: [id], onDelete: Cascade)
+  tool        String
+  input       Json
+  status      AgentActionStatus @default(PROPOSED)
+  approvedBy  String?
+  executedAt  DateTime?
+  result      Json?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@index([agentRunId])
+  @@index([status])
+}
