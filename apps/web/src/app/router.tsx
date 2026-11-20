@@ -7,7 +7,9 @@ import { WorkspacesPage } from '@/features/workspace/WorkspacesPage';
 import { WorkspaceShell } from '@/features/workspace/WorkspaceShell';
 import { MembersPage } from '@/features/workspace/MembersPage';
 import { AcceptInvitePage } from '@/features/workspace/AcceptInvitePage';
-import { ProjectsPlaceholder } from '@/features/workspace/ProjectsPlaceholder';
+import { ProjectsPage } from '@/features/projects/ProjectsPage';
+import { ProjectTasksPage } from '@/features/tasks/ProjectTasksPage';
+import { MyTasksPage } from '@/features/tasks/MyTasksPage';
 import { SettingsPlaceholder } from '@/features/workspace/SettingsPlaceholder';
 
 export function AppRouter() {
@@ -24,7 +26,9 @@ export function AppRouter() {
           <Route path="/workspaces" element={<WorkspacesPage />} />
           <Route path="/workspaces/:workspaceId" element={<WorkspaceShell />}>
             <Route index element={<Navigate to="projects" replace />} />
-            <Route path="projects" element={<ProjectsPlaceholder />} />
+            <Route path="projects" element={<ProjectsPage />} />
+            <Route path="projects/:projectId" element={<ProjectTasksPage />} />
+            <Route path="my-tasks" element={<MyTasksPage />} />
             <Route path="members" element={<MembersPage />} />
             <Route path="settings" element={<SettingsPlaceholder />} />
           </Route>
