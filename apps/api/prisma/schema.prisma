@@ -64,6 +64,7 @@ model User {
   taskSubscriptions TaskSubscriber[]
   comments     Comment[]
   auditLogs    AuditLog[]
+  notifications Notification[]
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
   deletedAt    DateTime?
@@ -164,6 +165,7 @@ model Task {
   position        Float            @default(0)
   subscribers     TaskSubscriber[]
   comments        Comment[]
+  attachments     Attachment[]
   dependencies    TaskDependency[] @relation("TaskBlockedBy")
   blocking        TaskDependency[] @relation("TaskBlocks")
   createdAt       DateTime         @default(now())
@@ -268,3 +270,30 @@ model AgentAction {
   @@index([agentRunId])
   @@index([status])
 }
+
+model Attachment {
+  id        String   @id @default(uuid())
+  taskId    String?
+  task      Task?    @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  fileUrl   String
+  name      String
+  size      Int
+  mime      String
+  createdAt DateTime @default(now())
+
+  @@index([taskId])
+}
+
+model Notification {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String    // e.g. "TASK_ASSIGNED", "TASK_UPDATED", "TASK_DEADLINE_APPROACHING"
+  payload   Json
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId, readAt])
+  @@index([userId, createdAt])
+}
+
