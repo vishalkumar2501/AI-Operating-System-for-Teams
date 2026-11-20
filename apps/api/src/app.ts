@@ -1,4 +1,5 @@
 import express from 'express';
+import path from 'path';
 import helmet from 'helmet';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
@@ -11,6 +12,11 @@ import { errorHandler } from './middleware/errorHandler';
 import { apiRouter } from './routes/index';
 
 const app = express();
+
+// ---------------------------------------------------------------------------
+// Static file uploads directory
+// ---------------------------------------------------------------------------
+app.use('/uploads', express.static(path.resolve(process.cwd(), 'uploads')));
 
 // ---------------------------------------------------------------------------
 // Security headers — sets sensible defaults for X-Frame-Options, CSP, etc.

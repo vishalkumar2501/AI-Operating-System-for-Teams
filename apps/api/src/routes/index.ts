@@ -1,6 +1,9 @@
 import { Router } from 'express';
 import { authRouter } from '../modules/auth/auth.routes';
 import { workspaceRouter } from '../modules/workspaces/workspace.routes';
+import { projectRouter } from '../modules/projects/project.routes';
+import { taskRouter } from '../modules/tasks/task.routes';
+import { notificationRouter } from '../modules/notifications/notification.routes';
 import { prisma } from '../lib/prisma';
 import { redis } from '../lib/redis';
 
@@ -42,3 +45,6 @@ apiRouter.get('/health', async (_req, res) => {
 // ---------------------------------------------------------------------------
 apiRouter.use('/auth', authRouter);
 apiRouter.use('/', workspaceRouter);
+apiRouter.use('/', projectRouter);
+apiRouter.use('/', taskRouter);
+apiRouter.use('/', notificationRouter);
