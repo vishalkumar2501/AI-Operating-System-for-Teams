@@ -12,7 +12,7 @@ projectRouter.get(
   '/workspaces/:workspaceId/projects',
   authenticate,
   requireWorkspaceMember,
-  projectController.getWorkspaceProjects,
+  projectController.getWorkspaceProjects
 );
 
 projectRouter.post(
@@ -20,7 +20,7 @@ projectRouter.post(
   authenticate,
   requireWorkspaceMember,
   validate(CreateProjectSchema),
-  projectController.createProject,
+  projectController.createProject
 );
 
 // Individual project operations
@@ -29,6 +29,6 @@ projectRouter.patch(
   '/projects/:id',
   authenticate,
   validate(UpdateProjectSchema),
-  projectController.updateProject,
+  projectController.updateProject
 );
 projectRouter.delete('/projects/:id', authenticate, projectController.deleteProject);

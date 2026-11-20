@@ -46,21 +46,25 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
         <span className="text-xs font-mono font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">
           {task.project.key}-{task.number}
         </span>
-        <Badge variant={PRIORITY_BADGES[task.priority] || 'default'} className="text-[10px] px-1.5 py-0.5">
+        <Badge
+          variant={PRIORITY_BADGES[task.priority] || 'default'}
+          className="text-[10px] px-1.5 py-0.5"
+        >
           {task.priority}
         </Badge>
       </div>
 
-      <h4 className="text-sm font-medium text-slate-200 line-clamp-2 leading-snug">
-        {task.title}
-      </h4>
+      <h4 className="text-sm font-medium text-slate-200 line-clamp-2 leading-snug">{task.title}</h4>
 
       <div className="mt-3.5 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-500">
         <div className="flex items-center gap-3">
           {task.dueDate && (
             <span className="flex items-center gap-1 text-[11px] text-slate-400">
               <Calendar className="h-3 w-3" />
-              {new Date(task.dueDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+              {new Date(task.dueDate).toLocaleDateString(undefined, {
+                month: 'short',
+                day: 'numeric',
+              })}
             </span>
           )}
 

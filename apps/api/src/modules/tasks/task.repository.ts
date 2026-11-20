@@ -177,7 +177,7 @@ export const taskRepository = {
         ...(data.description !== undefined && { description: data.description }),
         ...(data.status !== undefined && {
           status: data.status as TaskStatus,
-          completedAt: isCompleted ? new Date() : (data.status ? null : undefined),
+          completedAt: isCompleted ? new Date() : data.status ? null : undefined,
         }),
         ...(data.priority !== undefined && { priority: data.priority as TaskPriority }),
         ...(data.assigneeId !== undefined && { assigneeId: data.assigneeId }),
@@ -229,7 +229,10 @@ export const taskRepository = {
     });
   },
 
-  async addAttachment(taskId: string, data: { fileUrl: string; name: string; size: number; mime: string }) {
+  async addAttachment(
+    taskId: string,
+    data: { fileUrl: string; name: string; size: number; mime: string }
+  ) {
     return prisma.attachment.create({
       data: {
         taskId,

@@ -74,14 +74,20 @@ export function TaskListView({ tasks, onTaskClick, onStatusChange }: TaskListVie
                   {task.status.replace('_', ' ')}
                 </span>
 
-                <Badge variant={PRIORITY_BADGES[task.priority] || 'default'} className="text-[10px]">
+                <Badge
+                  variant={PRIORITY_BADGES[task.priority] || 'default'}
+                  className="text-[10px]"
+                >
                   {task.priority}
                 </Badge>
 
                 {task.dueDate && (
                   <span className="hidden sm:flex items-center gap-1 text-xs text-slate-400 font-mono">
                     <Calendar className="h-3.5 w-3.5" />
-                    {new Date(task.dueDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                    {new Date(task.dueDate).toLocaleDateString(undefined, {
+                      month: 'short',
+                      day: 'numeric',
+                    })}
                   </span>
                 )}
 

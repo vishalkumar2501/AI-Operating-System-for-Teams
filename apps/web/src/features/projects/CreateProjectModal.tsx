@@ -93,7 +93,9 @@ export function CreateProjectModal({ workspaceId, isOpen, onClose }: CreateProje
         </div>
 
         <div>
-          <label className="block text-xs font-medium text-slate-300 mb-1.5">Description (optional)</label>
+          <label className="block text-xs font-medium text-slate-300 mb-1.5">
+            Description (optional)
+          </label>
           <textarea
             rows={3}
             placeholder="What is this project about?"

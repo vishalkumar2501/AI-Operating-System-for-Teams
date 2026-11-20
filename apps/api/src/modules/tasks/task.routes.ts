@@ -17,14 +17,14 @@ taskRouter.get(
   '/projects/:projectId/tasks',
   authenticate,
   validateQuery(TaskFilterQuerySchema),
-  taskController.getProjectTasks,
+  taskController.getProjectTasks
 );
 
 taskRouter.post(
   '/projects/:projectId/tasks',
   authenticate,
   validate(CreateTaskSchema),
-  taskController.createTask,
+  taskController.createTask
 );
 
 // My tasks across workspace
@@ -32,12 +32,7 @@ taskRouter.get('/tasks/my', authenticate, taskController.getMyTasks);
 
 // Individual task operations
 taskRouter.get('/tasks/:id', authenticate, taskController.getTask);
-taskRouter.patch(
-  '/tasks/:id',
-  authenticate,
-  validate(UpdateTaskSchema),
-  taskController.updateTask,
-);
+taskRouter.patch('/tasks/:id', authenticate, validate(UpdateTaskSchema), taskController.updateTask);
 taskRouter.delete('/tasks/:id', authenticate, taskController.deleteTask);
 
 // Subscribers
@@ -45,7 +40,7 @@ taskRouter.post(
   '/tasks/:id/subscribers',
   authenticate,
   validate(AddSubscriberSchema),
-  taskController.addSubscriber,
+  taskController.addSubscriber
 );
 taskRouter.delete('/tasks/:id/subscribers/:userId', authenticate, taskController.removeSubscriber);
 
@@ -54,6 +49,6 @@ taskRouter.post(
   '/tasks/:id/attachments',
   authenticate,
   upload.single('file'),
-  taskController.uploadAttachment,
+  taskController.uploadAttachment
 );
 taskRouter.delete('/attachments/:id', authenticate, taskController.deleteAttachment);

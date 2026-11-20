@@ -15,9 +15,10 @@ export function ProjectsPage() {
 
   const { data: projects = [], isLoading } = useProjects(workspaceId);
 
-  const filteredProjects = projects.filter((p) =>
-    p.name.toLowerCase().includes(search.toLowerCase()) ||
-    p.key.toLowerCase().includes(search.toLowerCase())
+  const filteredProjects = projects.filter(
+    (p) =>
+      p.name.toLowerCase().includes(search.toLowerCase()) ||
+      p.key.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -58,7 +59,9 @@ export function ProjectsPage() {
           <FolderKanban className="h-10 w-10 text-slate-500 mx-auto mb-3" />
           <h3 className="text-base font-semibold text-slate-200">No projects found</h3>
           <p className="text-sm text-slate-400 mt-1 max-w-sm mx-auto">
-            {search ? 'Try clearing your search query' : 'Get started by creating your first project to organize tasks.'}
+            {search
+              ? 'Try clearing your search query'
+              : 'Get started by creating your first project to organize tasks.'}
           </p>
           {!search && (
             <Button onClick={() => setIsModalOpen(true)} className="mt-4">

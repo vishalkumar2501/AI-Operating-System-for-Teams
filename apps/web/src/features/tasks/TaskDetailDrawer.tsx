@@ -1,14 +1,5 @@
 import { useState } from 'react';
-import {
-  X,
-  CheckSquare,
-  Paperclip,
-  Trash2,
-  Plus,
-  Bell,
-  BellOff,
-  Upload,
-} from 'lucide-react';
+import { X, CheckSquare, Paperclip, Trash2, Plus, Bell, BellOff, Upload } from 'lucide-react';
 import {
   useTask,
   useUpdateTask,
@@ -292,7 +283,9 @@ export function TaskDetailDrawer({
 
             {/* Description */}
             <div>
-              <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">Description</h4>
+              <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+                Description
+              </h4>
               <textarea
                 rows={4}
                 defaultValue={task.description || ''}
@@ -350,7 +343,12 @@ export function TaskDetailDrawer({
                     <Button type="submit" size="sm">
                       Add
                     </Button>
-                    <Button type="button" variant="ghost" size="sm" onClick={() => setIsAddingSubtask(false)}>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setIsAddingSubtask(false)}
+                    >
                       Cancel
                     </Button>
                   </form>

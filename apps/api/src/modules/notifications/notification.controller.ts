@@ -24,7 +24,9 @@ export const notificationController = {
   async markAllAsRead(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       await notificationService.markAllAsRead(req.user!.id);
-      res.status(200).json({ success: true, data: { message: 'All notifications marked as read' } });
+      res
+        .status(200)
+        .json({ success: true, data: { message: 'All notifications marked as read' } });
     } catch (err) {
       next(err);
     }

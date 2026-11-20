@@ -20,7 +20,11 @@ export const projectService = {
     // Check key uniqueness within this workspace
     const existing = await projectRepository.findByKey(workspaceId, data.key);
     if (existing) {
-      throw createHttpError(409, 'DUPLICATE_ENTRY', `A project with key "${data.key}" already exists in this workspace`);
+      throw createHttpError(
+        409,
+        'DUPLICATE_ENTRY',
+        `A project with key "${data.key}" already exists in this workspace`
+      );
     }
 
     const project = await projectRepository.create(workspaceId, data);
@@ -47,7 +51,11 @@ export const projectService = {
     if (data.key && data.key !== existing.key) {
       const keyConflict = await projectRepository.findByKey(existing.workspaceId, data.key);
       if (keyConflict) {
-        throw createHttpError(409, 'DUPLICATE_ENTRY', `A project with key "${data.key}" already exists`);
+        throw createHttpError(
+          409,
+          'DUPLICATE_ENTRY',
+          `A project with key "${data.key}" already exists`
+        );
       }
     }
 

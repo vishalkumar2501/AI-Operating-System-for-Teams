@@ -81,7 +81,8 @@ export const taskService = {
       workspaceId: existing.workspaceId,
       actorType: 'USER',
       actorId: userId,
-      action: data.status && data.status !== existing.status ? 'TASK_STATUS_CHANGED' : 'TASK_UPDATED',
+      action:
+        data.status && data.status !== existing.status ? 'TASK_STATUS_CHANGED' : 'TASK_UPDATED',
       entityType: 'TASK',
       entityId: taskId,
       before: existing as unknown as Record<string, unknown>,
@@ -89,16 +90,17 @@ export const taskService = {
     });
 
     // Notify all subscribers except the actor who made the change
-    const subscriberIds = existing.subscribers
-      .map((s) => s.userId)
-      .filter((id) => id !== userId);
+    const subscriberIds = existing.subscribers.map((s) => s.userId).filter((id) => id !== userId);
 
     if (subscriberIds.length > 0) {
       const changeDescriptions: string[] = [];
       if (data.status && data.status !== existing.status) {
         changeDescriptions.push(`status changed to ${data.status}`);
       }
-      if (data.dueDate !== undefined && data.dueDate !== (existing.dueDate?.toISOString() ?? null)) {
+      if (
+        data.dueDate !== undefined &&
+        data.dueDate !== (existing.dueDate?.toISOString() ?? null)
+      ) {
         changeDescriptions.push(`due date updated`);
       }
       if (data.assigneeId !== undefined && data.assigneeId !== existing.assigneeId) {
@@ -108,9 +110,8 @@ export const taskService = {
         changeDescriptions.push(`priority changed to ${data.priority}`);
       }
 
-      const summary = changeDescriptions.length > 0
-        ? changeDescriptions.join(', ')
-        : 'task details updated';
+      const summary =
+        changeDescriptions.length > 0 ? changeDescriptions.join(', ') : 'task details updated';
 
       await notificationService.notifyMultiple(subscriberIds, 'TASK_UPDATED', {
         taskId: existing.id,
@@ -162,7 +163,7 @@ export const taskService = {
   async addAttachment(
     taskId: string,
     userId: string,
-    file: { filename: string; originalname: string; size: number; mimetype: string },
+    file: { filename: string; originalname: string; size: number; mimetype: string }
   ) {
     const task = await taskRepository.findById(taskId);
     if (!task) {

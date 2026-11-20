@@ -1,12 +1,6 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import {
-  Kanban,
-  List,
-  Plus,
-  Search,
-  ArrowLeft,
-} from 'lucide-react';
+import { Kanban, List, Plus, Search, ArrowLeft } from 'lucide-react';
 import { useProject } from '@/features/projects/projects.queries';
 import { useProjectTasks, useUpdateTask, type TaskItem, type TaskFilters } from './tasks.queries';
 import { KanbanBoard } from './KanbanBoard';
@@ -62,7 +56,11 @@ export function ProjectTasksPage() {
     return (
       <div className="p-8 text-center text-slate-400">
         <p>Project not found.</p>
-        <Button variant="ghost" onClick={() => navigate(`/workspaces/${workspaceId}/projects`)} className="mt-4">
+        <Button
+          variant="ghost"
+          onClick={() => navigate(`/workspaces/${workspaceId}/projects`)}
+          className="mt-4"
+        >
           Back to Projects
         </Button>
       </div>

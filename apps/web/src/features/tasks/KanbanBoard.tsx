@@ -76,7 +76,12 @@ function KanbanColumn({
   );
 }
 
-export function KanbanBoard({ tasks, onTaskClick, onStatusChange, onOpenCreate }: KanbanBoardProps) {
+export function KanbanBoard({
+  tasks,
+  onTaskClick,
+  onStatusChange,
+  onOpenCreate,
+}: KanbanBoardProps) {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over) return;

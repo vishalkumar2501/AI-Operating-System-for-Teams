@@ -1,10 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Bell, CheckCheck, Clock } from 'lucide-react';
-import {
-  useNotifications,
-  useMarkAsRead,
-  useMarkAllAsRead,
-} from './notifications.queries';
+import { useNotifications, useMarkAsRead, useMarkAllAsRead } from './notifications.queries';
 
 export function NotificationBell() {
   const [isOpen, setIsOpen] = useState(false);
@@ -65,9 +61,7 @@ export function NotificationBell() {
           {/* List */}
           <div className="max-h-80 overflow-y-auto divide-y divide-slate-800/60">
             {notifications.length === 0 ? (
-              <div className="py-8 text-center text-xs text-slate-500">
-                No notifications yet.
-              </div>
+              <div className="py-8 text-center text-xs text-slate-500">No notifications yet.</div>
             ) : (
               notifications.map((notif) => {
                 const isUnread = !notif.readAt;
