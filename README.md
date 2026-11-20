@@ -88,7 +88,7 @@ npm run dev:web
 
 ## 📦 Phase Status & Roadmap
 
-- [x] **Phase 1: Foundation (Current)**
+- [x] **Phase 1: Foundation**
   - Monorepo setup with npm workspaces, strict TypeScript, ESLint, Prettier
   - Docker Compose setup (PostgreSQL 16 + pgvector on port 5433, Redis on port 6379)
   - Layered Express backend architecture (`route → controller → service → repository`)
@@ -98,7 +98,15 @@ npm run dev:web
   - Workspace invitations (secure token hash, 7-day expiration, email console logger)
   - Role-Based Access Control (`OWNER`, `ADMIN`, `MEMBER`, `GUEST`)
   - React SPA with dark mode UI, protected routing, login, register, workspace selector, members page, and responsive sidebar navigation
-- [ ] **Phase 2: Projects & Tasks** (Kanban board, List view, task detail drawer, rich text, attachments)
+- [x] **Phase 2: Projects & Tasks (Current)**
+  - Project CRUD with unique project keys (e.g. `WEB`, `CORE`), start/target dates, and status
+  - Task CRUD with sequential auto-incrementing numbers per project (`WEB-1`, `WEB-2`), rich descriptions, priorities, statuses
+  - Dynamic Kanban Board with drag-and-drop status transitions (`@dnd-kit`)
+  - List View with quick status completion toggle and filtering (search, status, priority, assignee)
+  - "My Tasks" view aggregating all assigned tasks across workspace projects
+  - Full Task Detail Drawer: inline property editing, subtasks checklist, subscriber management, and file attachments
+  - In-app notification engine notifying subscribers whenever a task status, deadline, or assignee is updated
+  - Complete audit log tracking on every project and task mutation (`PROJECT_CREATED`, `TASK_CREATED`, `TASK_STATUS_CHANGED`, `TASK_UPDATED`, `TASK_ATTACHMENT_ADDED`)
 - [ ] **Phase 3: Dependency Graph** (Cycle detection, React Flow DAG, critical path analysis)
 - [ ] **Phase 4: Realtime** (Socket.IO + Redis adapter, live presence, typing indicators, realtime comments)
 - [ ] **Phase 5: Calendar, Meetings & Transcripts** (Meeting audio pipeline, Whisper transcription, Google Calendar sync)
