@@ -40,6 +40,11 @@ export function WorkspaceShell() {
       icon: <FolderKanban className="h-4 w-4" />,
     },
     {
+      label: 'My Tasks',
+      to: `/workspaces/${workspaceId}/my-tasks`,
+      icon: <CheckSquare className="h-4 w-4" />,
+    },
+    {
       label: 'Members',
       to: `/workspaces/${workspaceId}/members`,
       icon: <Users className="h-4 w-4" />,
@@ -184,7 +189,7 @@ export function WorkspaceShell() {
       {/* Main area */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Top bar */}
-        <header className="flex h-14 items-center border-b border-slate-800 bg-slate-950 px-6">
+        <header className="flex h-14 items-center justify-between border-b border-slate-800 bg-slate-950 px-6">
           <div className="flex items-center gap-2 text-sm text-slate-500">
             <span
               className="hover:text-slate-300 cursor-pointer transition-colors"
@@ -196,6 +201,10 @@ export function WorkspaceShell() {
             <span className="text-slate-300 font-medium">
               {currentWorkspace?.name ?? 'Loading...'}
             </span>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <NotificationBell />
           </div>
         </header>
 
