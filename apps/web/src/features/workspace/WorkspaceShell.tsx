@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { NavLink, Outlet, useNavigate, useParams } from 'react-router-dom';
 import {
   FolderKanban,
+  CheckSquare,
   Users,
   Settings,
   ChevronDown,
@@ -13,6 +14,7 @@ import { useWorkspaces } from './workspace.queries';
 import { useAuthStore } from '@/store/auth.store';
 import { useLogout } from '@/features/auth/auth.queries';
 import { Avatar, Spinner } from '@/components/ui';
+import { NotificationBell } from '@/features/notifications/NotificationBell';
 
 interface NavItem {
   label: string;
