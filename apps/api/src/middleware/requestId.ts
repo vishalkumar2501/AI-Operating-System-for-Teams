@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { v4 as uuidv4 } from 'uuid';
+import { Request, Response, NextFunction } from 'express';
+import { randomUUID } from 'crypto';
 
 // Extend Express Request so downstream handlers can read req.id as a string
 declare global {
@@ -18,7 +19,7 @@ declare global {
 export function requestId(req: Request, res: Response, next: NextFunction): void {
   // Honour a request ID forwarded by a gateway/proxy; otherwise mint a fresh one
   const incomingId = req.headers['x-request-id'];
-  req.id = typeof incomingId === 'string' ? incomingId : uuidv4();
+  req.id = typeof incomingId === 'string' ? incomingId : randomUUID();
   res.setHeader('X-Request-Id', req.id);
   next();
 }

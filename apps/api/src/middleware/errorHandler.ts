@@ -66,7 +66,7 @@ export const errorHandler: ErrorRequestHandler = (
   }
 
   // Known API errors with an explicit status code set by our services
-  if (err.statusCode && err.statusCode < 500) {
+  if (err.statusCode && err.statusCode < 600) {
     res.status(err.statusCode).json({
       success: false,
       error: {
