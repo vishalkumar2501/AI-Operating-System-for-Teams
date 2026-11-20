@@ -5,7 +5,6 @@ import {
   List,
   Plus,
   Search,
-  Filter,
   ArrowLeft,
 } from 'lucide-react';
 import { useProject } from '@/features/projects/projects.queries';

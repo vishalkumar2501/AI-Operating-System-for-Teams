@@ -142,7 +142,7 @@ export function useUpdateTask(projectId?: string) {
       const res = await api.patch(`/tasks/${id}`, data);
       return res.data;
     },
-    onSuccess: (updatedTask, variables) => {
+    onSuccess: (_, variables) => {
       if (projectId) {
         queryClient.invalidateQueries({ queryKey: ['tasks', projectId] });
       }

@@ -90,4 +90,5 @@ export function unwrap<T>(response: { data: { data: T } }): T {
   return response.data.data;
 }
 
+export const api = apiClient;
 export default apiClient;

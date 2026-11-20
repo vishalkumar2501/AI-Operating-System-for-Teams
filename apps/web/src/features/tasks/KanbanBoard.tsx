@@ -2,7 +2,6 @@ import { DndContext, useDroppable, DragEndEvent } from '@dnd-kit/core';
 import { Plus } from 'lucide-react';
 import type { TaskItem } from './tasks.queries';
 import { TaskCard } from './TaskCard';
-import { Button } from '@/components/ui/Button';
 import type { TaskStatus } from '@teamos/shared';
 
 interface KanbanBoardProps {

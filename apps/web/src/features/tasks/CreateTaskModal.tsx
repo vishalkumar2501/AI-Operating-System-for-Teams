@@ -33,7 +33,7 @@ export function CreateTaskModal({
     reset,
     formState: { errors },
   } = useForm<CreateTaskDto>({
-    resolver: zodResolver(CreateTaskSchema),
+    resolver: zodResolver(CreateTaskSchema) as any,
     defaultValues: {
       title: '',
       description: '',
@@ -104,7 +104,7 @@ export function CreateTaskModal({
             >
               <option value="">Unassigned</option>
               {members.map((m) => (
-                <option key={m.userId} value={m.userId}>
+                <option key={m.user.id} value={m.user.id}>
                   {m.user.name || m.user.email}
                 </option>
               ))}

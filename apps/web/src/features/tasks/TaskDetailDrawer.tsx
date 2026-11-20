@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import {
   X,
-  Calendar,
-  Clock,
-  User as UserIcon,
   CheckSquare,
   Paperclip,
   Trash2,
@@ -130,6 +127,7 @@ export function TaskDetailDrawer({
         parentTaskId: taskId,
         status: 'TODO',
         priority: 'MEDIUM',
+        position: 0,
       });
       setNewSubtaskTitle('');
       setIsAddingSubtask(false);
@@ -273,7 +271,7 @@ export function TaskDetailDrawer({
                 >
                   <option value="">Unassigned</option>
                   {members.map((m) => (
-                    <option key={m.userId} value={m.userId}>
+                    <option key={m.user.id} value={m.user.id}>
                       {m.user.name || m.user.email}
                     </option>
                   ))}

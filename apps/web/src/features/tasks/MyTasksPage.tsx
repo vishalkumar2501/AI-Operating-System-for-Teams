@@ -1,11 +1,10 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { CheckSquare, Calendar } from 'lucide-react';
+import { CheckSquare } from 'lucide-react';
 import { useMyTasks, type TaskItem } from './tasks.queries';
 import { TaskListView } from './TaskListView';
 import { TaskDetailDrawer } from './TaskDetailDrawer';
 import { Spinner } from '@/components/ui/Spinner';
-import type { TaskStatus } from '@teamos/shared';
 
 export function MyTasksPage() {
   const { workspaceId } = useParams<{ workspaceId: string }>();
