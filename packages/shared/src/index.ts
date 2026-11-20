@@ -33,7 +33,7 @@ export const CreateProjectSchema = z.object({
     .max(10)
     .regex(/^[A-Z0-9]+$/, 'Project key must be uppercase alphanumeric (e.g. WEB, IOS, API)')
     .toUpperCase(),
-  description: z.string().max(1000).optional(),
+  description: z.string().max(1000).optional().nullable(),
   startDate: z.string().datetime().optional().nullable(),
   targetDate: z.string().datetime().optional().nullable(),
 });
@@ -48,14 +48,14 @@ export type UpdateProjectDto = z.infer<typeof UpdateProjectSchema>;
 export const CreateTaskSchema = z.object({
   title: z.string().min(1, 'Task title is required').max(200),
   description: z.string().max(10000).optional().nullable(),
-  status: TaskStatusEnum.default('TODO'),
-  priority: TaskPriorityEnum.default('MEDIUM'),
+  status: TaskStatusEnum.optional().default('TODO'),
+  priority: TaskPriorityEnum.optional().default('MEDIUM'),
   assigneeId: z.string().uuid().optional().nullable(),
   parentTaskId: z.string().uuid().optional().nullable(),
   startDate: z.string().datetime().optional().nullable(),
   dueDate: z.string().datetime().optional().nullable(),
   estimate: z.number().min(0).max(1000).optional().nullable(),
-  position: z.number().default(0),
+  position: z.number().optional().default(0),
 });
 export type CreateTaskDto = z.infer<typeof CreateTaskSchema>;
 
