@@ -155,6 +155,17 @@ export function ProjectTasksPage() {
               <List className="h-3.5 w-3.5" />
               <span>List</span>
             </button>
+            <button
+              onClick={() => setViewMode('graph')}
+              className={`p-1.5 rounded-md text-xs flex items-center gap-1.5 transition-colors ${
+                viewMode === 'graph'
+                  ? 'bg-slate-800 text-slate-100 font-medium'
+                  : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              <Network className="h-3.5 w-3.5" />
+              <span>Graph</span>
+            </button>
           </div>
 
           <Button
@@ -180,12 +191,22 @@ export function ProjectTasksPage() {
           onStatusChange={handleStatusChange}
           onOpenCreate={handleOpenCreateWithStatus}
         />
-      ) : (
+      ) : viewMode === 'list' ? (
         <TaskListView
           tasks={tasks}
           onTaskClick={(t) => setSelectedTask(t)}
           onStatusChange={handleStatusChange}
         />
+      ) : (
+        <div className="h-[750px] w-full rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
+          <DependencyGraphView
+            projectId={projectId}
+            onSelectTask={(id) => {
+              const found = tasks.find((t) => t.id === id);
+              if (found) setSelectedTask(found);
+            }}
+          />
+        </div>
       )}
 
       {/* Create Modal */}
