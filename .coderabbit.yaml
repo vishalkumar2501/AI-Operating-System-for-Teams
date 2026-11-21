@@ -1,0 +1,12 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+version: 2
+language: "en-US"
+reviews:
+  # Disable automatic review on every commit/push so you never hit rate limits.
+  # To review a PR on-demand, comment "@coderabbitai review" on the pull request.
+  auto_review:
+    enabled: false
+    drafts: false
+  request_changes_workflow: false
+chat:
+  auto_reply: false
