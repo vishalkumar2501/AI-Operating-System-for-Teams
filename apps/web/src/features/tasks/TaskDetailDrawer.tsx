@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, CheckSquare, Paperclip, Trash2, Plus, Bell, BellOff, Upload } from 'lucide-react';
+import { X, CheckSquare, Paperclip, Trash2, Plus, Bell, BellOff, Upload, Link2, ShieldAlert } from 'lucide-react';
 import {
   useTask,
   useUpdateTask,
@@ -9,7 +9,9 @@ import {
   useRemoveSubscriber,
   useUploadAttachment,
   useDeleteAttachment,
+  useProjectTasks,
 } from './tasks.queries';
+import { useAddDependency, useRemoveDependency } from '@/features/dependencies/dependencies.queries';
 import { useWorkspaceMembers } from '@/features/workspace/workspace.queries';
 import { useAuthStore } from '@/store/auth.store';
 import { Avatar } from '@/components/ui/Avatar';
