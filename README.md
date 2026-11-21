@@ -107,7 +107,15 @@ npm run dev:web
   - Full Task Detail Drawer: inline property editing, subtasks checklist, subscriber management, and file attachments
   - In-app notification engine notifying subscribers whenever a task status, deadline, or assignee is updated
   - Complete audit log tracking on every project and task mutation (`PROJECT_CREATED`, `TASK_CREATED`, `TASK_STATUS_CHANGED`, `TASK_UPDATED`, `TASK_ATTACHMENT_ADDED`)
-- [ ] **Phase 3: Dependency Graph** (Cycle detection, React Flow DAG, critical path analysis)
+- [x] **Phase 3: Dependency Graph**
+  - Directed Acyclic Graph (DAG) dependency modeling (`taskId` depends on `dependsOnTaskId`)
+  - Cycle detection using recursive Depth-First Search (DFS); circular dependencies rejected with `400 CYCLE_DETECTED`
+  - Auto-blocking logic: newly created dependencies transition incomplete dependent tasks to `BLOCKED` status
+  - Auto-unblocking engine: completing a prerequisite task or deleting a dependency automatically clears blockers and returns tasks to `TODO`
+  - Critical Path Method (CPM) using Kahn's topological sort and dynamic programming longest-path calculation
+  - Interactive React Flow DAG canvas (`@xyflow/react`) with custom task nodes, animated critical path connectors, and minimap
+  - Drag-and-drop edge creation with live cycle rejection feedback toasts
+  - In-drawer dependency management with "+ Add Blocker" selector and blocker removal controls
 - [ ] **Phase 4: Realtime** (Socket.IO + Redis adapter, live presence, typing indicators, realtime comments)
 - [ ] **Phase 5: Calendar, Meetings & Transcripts** (Meeting audio pipeline, Whisper transcription, Google Calendar sync)
 - [ ] **Phase 6: Docs, GitHub Activity & Hybrid Search** (TipTap docs, GitHub webhooks, pgvector + full-text RRF search)

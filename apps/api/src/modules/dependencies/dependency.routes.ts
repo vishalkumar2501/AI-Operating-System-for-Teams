@@ -20,18 +20,10 @@ dependencyRouter.delete(
   dependencyController.removeDependency
 );
 
-dependencyRouter.delete(
-  '/dependencies/:id',
-  authenticate,
-  dependencyController.removeDependency
-);
+dependencyRouter.delete('/dependencies/:id', authenticate, dependencyController.removeDependency);
 
 // Project graph & critical path analysis
-dependencyRouter.get(
-  '/projects/:id/graph',
-  authenticate,
-  dependencyController.getProjectGraph
-);
+dependencyRouter.get('/projects/:id/graph', authenticate, dependencyController.getProjectGraph);
 
 dependencyRouter.get(
   '/projects/:id/critical-path',

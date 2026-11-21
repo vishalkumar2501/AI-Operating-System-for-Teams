@@ -40,10 +40,10 @@ export const TaskNode = memo(({ data }: NodeProps<TaskNodeType>) => {
         isCritical
           ? 'border-amber-500/80 bg-slate-900/95 shadow-amber-950/40 ring-2 ring-amber-500/25 hover:border-amber-400'
           : isBlocked
-          ? 'border-rose-700/80 bg-slate-900/95 ring-1 ring-rose-500/20 hover:border-rose-500'
-          : isDone
-          ? 'border-slate-800/80 bg-slate-900/60 opacity-80 hover:opacity-100 hover:border-slate-700'
-          : 'border-slate-800 bg-slate-900/95 hover:border-indigo-500/60 hover:shadow-indigo-950/20'
+            ? 'border-rose-700/80 bg-slate-900/95 ring-1 ring-rose-500/20 hover:border-rose-500'
+            : isDone
+              ? 'border-slate-800/80 bg-slate-900/60 opacity-80 hover:opacity-100 hover:border-slate-700'
+              : 'border-slate-800 bg-slate-900/95 hover:border-indigo-500/60 hover:shadow-indigo-950/20'
       }`}
     >
       {/* Target handle: prerequisite connects here */}

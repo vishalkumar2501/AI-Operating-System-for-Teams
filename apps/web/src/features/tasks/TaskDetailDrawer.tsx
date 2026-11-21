@@ -1,5 +1,15 @@
 import { useState } from 'react';
-import { X, CheckSquare, Paperclip, Trash2, Plus, Bell, BellOff, Upload, Link2 } from 'lucide-react';
+import {
+  X,
+  CheckSquare,
+  Paperclip,
+  Trash2,
+  Plus,
+  Bell,
+  BellOff,
+  Upload,
+  Link2,
+} from 'lucide-react';
 import {
   useTask,
   useUpdateTask,
@@ -11,7 +21,10 @@ import {
   useDeleteAttachment,
   useProjectTasks,
 } from './tasks.queries';
-import { useAddDependency, useRemoveDependency } from '@/features/dependencies/dependencies.queries';
+import {
+  useAddDependency,
+  useRemoveDependency,
+} from '@/features/dependencies/dependencies.queries';
 import { useWorkspaceMembers } from '@/features/workspace/workspace.queries';
 import { useAuthStore } from '@/store/auth.store';
 import { Avatar } from '@/components/ui/Avatar';
@@ -66,7 +79,9 @@ export function TaskDetailDrawer({
       setSelectedBlockerId('');
       setIsAddingBlocker(false);
     } catch (err: any) {
-      const msg = err.response?.data?.error?.message || 'Failed to add blocker. Circular dependency detected.';
+      const msg =
+        err.response?.data?.error?.message ||
+        'Failed to add blocker. Circular dependency detected.';
       showToast(msg, 'error');
     }
   };
@@ -440,7 +455,9 @@ export function TaskDetailDrawer({
                           <span className="font-mono text-[11px] text-slate-400">
                             {b.task.project.key}-{b.task.number}
                           </span>
-                          <span className="font-medium text-slate-200 truncate">{b.task.title}</span>
+                          <span className="font-medium text-slate-200 truncate">
+                            {b.task.title}
+                          </span>
                         </div>
                         <span className="text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded">
                           {b.task.status}

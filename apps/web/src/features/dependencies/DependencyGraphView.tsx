@@ -33,7 +33,11 @@ interface DependencyGraphViewProps {
  * Assigns depth layers based on prerequisite dependencies (longest predecessor chain)
  * so that prerequisites sit to the left of their dependents.
  */
-function layoutGraph(rawNodes: GraphNode[], rawEdges: GraphEdge[], onSelectTask?: (id: string) => void) {
+function layoutGraph(
+  rawNodes: GraphNode[],
+  rawEdges: GraphEdge[],
+  onSelectTask?: (id: string) => void
+) {
   // Map prerequisites for each node
   const inDegree = new Map<string, number>();
   const predecessors = new Map<string, string[]>();

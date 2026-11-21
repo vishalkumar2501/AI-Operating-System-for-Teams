@@ -70,7 +70,9 @@ export const dependencyService = {
    * 4. Identify the exit task with the maximum cumulative duration.
    * 5. Backtrack from the terminal node to reconstruct the exact critical path.
    */
-  async calculateCriticalPath(projectId: string): Promise<{ taskIds: string[]; totalDuration: number }> {
+  async calculateCriticalPath(
+    projectId: string
+  ): Promise<{ taskIds: string[]; totalDuration: number }> {
     const tasks = await prisma.task.findMany({
       where: { projectId, deletedAt: null },
       select: { id: true, estimate: true },
@@ -188,7 +190,11 @@ export const dependencyService = {
     }
 
     if (task.projectId !== blockerTask.projectId) {
-      throw createHttpError(400, 'CROSS_PROJECT_DEPENDENCY', 'Task dependencies must belong to the same project');
+      throw createHttpError(
+        400,
+        'CROSS_PROJECT_DEPENDENCY',
+        'Task dependencies must belong to the same project'
+      );
     }
 
     // Check if dependency already exists
@@ -203,7 +209,7 @@ export const dependencyService = {
       throw createHttpError(
         400,
         'CYCLE_DETECTED',
-        'Circular dependency detected! Adding this dependency would create a cycle in the task graph.',
+        'Circular dependency detected! Adding this dependency would create a cycle in the task graph.'
       );
     }
 
@@ -302,7 +308,9 @@ export const dependencyService = {
       if (remainingBlockers.length === 0 && dep.task.status === 'BLOCKED') {
         await taskRepository.update(dep.taskId, { status: 'TODO' });
 
-        const subscriberIds = dep.task.subscribers.map((s) => s.userId).filter((id) => id !== actorUserId);
+        const subscriberIds = dep.task.subscribers
+          .map((s) => s.userId)
+          .filter((id) => id !== actorUserId);
         if (subscriberIds.length > 0) {
           await notificationService.notifyMultiple(subscriberIds, 'TASK_UNBLOCKED', {
             taskId: dep.task.id,
@@ -354,7 +362,7 @@ export const dependencyService = {
       return {
         id: d.id,
         source: d.dependsOnTaskId, // Blocker
-        target: d.taskId,          // Blocked task
+        target: d.taskId, // Blocked task
         type: 'smoothstep',
         isCriticalPath: isCritical,
       };

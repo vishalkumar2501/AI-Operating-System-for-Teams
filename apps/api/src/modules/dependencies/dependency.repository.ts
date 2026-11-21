@@ -5,7 +5,9 @@ export const dependencyRepository = {
     return prisma.taskDependency.findUnique({
       where: { id },
       include: {
-        task: { select: { id: true, projectId: true, title: true, status: true, workspaceId: true } },
+        task: {
+          select: { id: true, projectId: true, title: true, status: true, workspaceId: true },
+        },
         dependsOnTask: { select: { id: true, projectId: true, title: true, status: true } },
       },
     });
@@ -29,8 +31,27 @@ export const dependencyRepository = {
         dependsOnTask: { projectId, deletedAt: null },
       },
       include: {
-        task: { select: { id: true, number: true, title: true, status: true, priority: true, estimate: true, assigneeId: true } },
-        dependsOnTask: { select: { id: true, number: true, title: true, status: true, priority: true, estimate: true } },
+        task: {
+          select: {
+            id: true,
+            number: true,
+            title: true,
+            status: true,
+            priority: true,
+            estimate: true,
+            assigneeId: true,
+          },
+        },
+        dependsOnTask: {
+          select: {
+            id: true,
+            number: true,
+            title: true,
+            status: true,
+            priority: true,
+            estimate: true,
+          },
+        },
       },
     });
   },
