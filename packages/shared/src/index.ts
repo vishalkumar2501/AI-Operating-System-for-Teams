@@ -75,6 +75,48 @@ export const UpdateTaskSchema = z.object({
 export type UpdateTaskDto = z.infer<typeof UpdateTaskSchema>;
 
 // ============================================================================
+// Task Dependencies
+// ============================================================================
+export const AddDependencySchema = z.object({
+  dependsOnTaskId: z.string().uuid('Prerequisite task ID must be a valid UUID'),
+  type: z.enum(['BLOCKS']).default('BLOCKS'),
+});
+export type AddDependencyDto = z.infer<typeof AddDependencySchema>;
+
+export interface GraphNode {
+  id: string;
+  key: string;
+  number: number;
+  title: string;
+  status: TaskStatus;
+  priority: TaskPriority;
+  estimate: number | null;
+  isBlocked: boolean;
+  isCriticalPath: boolean;
+  assignee?: {
+    name: string;
+    avatarUrl?: string | null;
+  } | null;
+}
+
+export interface GraphEdge {
+  id: string;
+  source: string;
+  target: string;
+  type: string;
+  isCriticalPath: boolean;
+}
+
+export interface ProjectGraphData {
+  nodes: GraphNode[];
+  edges: GraphEdge[];
+  criticalPath: {
+    taskIds: string[];
+    totalDuration: number;
+  };
+}
+
+// ============================================================================
 // AI Agent Action Status
 // ============================================================================
 export const AgentActionStatusEnum = z.enum([
