@@ -200,7 +200,7 @@ export function ProjectTasksPage() {
       ) : (
         <div className="h-[750px] w-full rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
           <DependencyGraphView
-            projectId={projectId}
+            projectId={projectId!}
             onSelectTask={(id) => {
               const found = tasks.find((t) => t.id === id);
               if (found) setSelectedTask(found);

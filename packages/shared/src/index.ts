@@ -79,7 +79,7 @@ export type UpdateTaskDto = z.infer<typeof UpdateTaskSchema>;
 // ============================================================================
 export const AddDependencySchema = z.object({
   dependsOnTaskId: z.string().uuid('Prerequisite task ID must be a valid UUID'),
-  type: z.enum(['BLOCKS']).default('BLOCKS'),
+  type: z.enum(['BLOCKS']).optional().default('BLOCKS'),
 });
 export type AddDependencyDto = z.infer<typeof AddDependencySchema>;
 

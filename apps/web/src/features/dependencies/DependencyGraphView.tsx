@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useState, useEffect } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import {
   ReactFlow,
   Controls,
@@ -11,15 +11,16 @@ import {
   MarkerType,
   Node,
   Edge,
+  NodeTypes,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { Flame, AlertTriangle, RefreshCw, Info, HelpCircle } from 'lucide-react';
+import { Flame, AlertTriangle, RefreshCw, HelpCircle } from 'lucide-react';
 import { TaskNode } from './TaskNode';
 import { useProjectGraph, useAddDependency } from './dependencies.queries';
 import type { GraphNode, GraphEdge } from '@teamos/shared';
 
-const nodeTypes = {
-  taskNode: TaskNode,
+const nodeTypes: NodeTypes = {
+  taskNode: TaskNode as any,
 };
 
 interface DependencyGraphViewProps {
@@ -162,7 +163,7 @@ export function DependencyGraphView({ projectId, onSelectTask }: DependencyGraph
       try {
         await addDependency.mutateAsync({
           taskId: connection.target, // target is blocked by source
-          data: { dependsOnTaskId: connection.source },
+          data: { dependsOnTaskId: connection.source, type: 'BLOCKS' },
         });
       } catch (err: any) {
         const errorDetail =

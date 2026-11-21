@@ -1,11 +1,14 @@
-import React, { memo } from 'react';
-import { Handle, Position, NodeProps } from '@xyflow/react';
+import { memo } from 'react';
+import { Handle, Position, NodeProps, Node } from '@xyflow/react';
 import { Flame, AlertTriangle, Clock, CheckCircle2, Circle } from 'lucide-react';
 import type { GraphNode, TaskStatus } from '@teamos/shared';
 
 export interface TaskNodeData extends GraphNode {
   onSelectTask?: (taskId: string) => void;
+  [key: string]: unknown;
 }
+
+export type TaskNodeType = Node<TaskNodeData, 'taskNode'>;
 
 const statusColors: Record<TaskStatus, { bg: string; text: string; border: string }> = {
   BACKLOG: { bg: 'bg-slate-800', text: 'text-slate-400', border: 'border-slate-700' },
@@ -23,8 +26,8 @@ const priorityColors: Record<string, string> = {
   URGENT: 'text-rose-400 font-semibold',
 };
 
-export const TaskNode = memo(({ data }: NodeProps<any>) => {
-  const nodeData = data as TaskNodeData;
+export const TaskNode = memo(({ data }: NodeProps<TaskNodeType>) => {
+  const nodeData = data;
   const isDone = nodeData.status === 'DONE';
   const isBlocked = nodeData.status === 'BLOCKED' || nodeData.isBlocked;
   const isCritical = nodeData.isCriticalPath;

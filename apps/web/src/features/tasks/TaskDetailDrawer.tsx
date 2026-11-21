@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, CheckSquare, Paperclip, Trash2, Plus, Bell, BellOff, Upload, Link2, ShieldAlert } from 'lucide-react';
+import { X, CheckSquare, Paperclip, Trash2, Plus, Bell, BellOff, Upload, Link2 } from 'lucide-react';
 import {
   useTask,
   useUpdateTask,
@@ -60,7 +60,7 @@ export function TaskDetailDrawer({
     try {
       await addDependency.mutateAsync({
         taskId,
-        data: { dependsOnTaskId: selectedBlockerId },
+        data: { dependsOnTaskId: selectedBlockerId, type: 'BLOCKS' },
       });
       showToast('Blocker added', 'success');
       setSelectedBlockerId('');
@@ -331,6 +331,125 @@ export function TaskDetailDrawer({
                 }}
                 className="w-full rounded-lg border border-slate-800 bg-slate-950 p-3 text-sm text-slate-200 placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
               />
+            </div>
+
+            {/* Dependencies & Blockers */}
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                  <Link2 className="h-4 w-4 text-slate-400" />
+                  Dependencies
+                </h4>
+                {!isAddingBlocker && (
+                  <button
+                    onClick={() => setIsAddingBlocker(true)}
+                    className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1"
+                  >
+                    <Plus className="h-3.5 w-3.5" />
+                    Add Blocker
+                  </button>
+                )}
+              </div>
+
+              {/* Add Blocker Form */}
+              {isAddingBlocker && (
+                <form onSubmit={handleAddBlocker} className="flex gap-2 mb-3">
+                  <select
+                    value={selectedBlockerId}
+                    onChange={(e) => setSelectedBlockerId(e.target.value)}
+                    className="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                    autoFocus
+                  >
+                    <option value="">Select prerequisite blocker task...</option>
+                    {allProjectTasks
+                      .filter(
+                        (t) =>
+                          t.id !== taskId &&
+                          !task.dependencies?.some((d) => d.dependsOnTaskId === t.id)
+                      )
+                      .map((t) => (
+                        <option key={t.id} value={t.id}>
+                          {t.project.key}-{t.number}: {t.title} ({t.status})
+                        </option>
+                      ))}
+                  </select>
+                  <Button type="submit" size="sm" disabled={!selectedBlockerId}>
+                    Add
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setIsAddingBlocker(false);
+                      setSelectedBlockerId('');
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </form>
+              )}
+
+              {/* Blocked By List */}
+              <div className="space-y-2">
+                <div className="text-[11px] font-medium text-slate-400">Blocked by:</div>
+                {!task.dependencies || task.dependencies.length === 0 ? (
+                  <p className="text-xs text-slate-500 italic pl-1">No blocking tasks</p>
+                ) : (
+                  <div className="space-y-1.5">
+                    {task.dependencies.map((dep) => (
+                      <div
+                        key={dep.id}
+                        className="flex items-center justify-between p-2.5 rounded-lg bg-slate-950/60 border border-slate-800/80 text-xs"
+                      >
+                        <div className="flex items-center gap-2 truncate">
+                          <span className="font-mono text-[11px] text-slate-400">
+                            {dep.dependsOnTask.project.key}-{dep.dependsOnTask.number}
+                          </span>
+                          <span className="font-medium text-slate-200 truncate">
+                            {dep.dependsOnTask.title}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 shrink-0">
+                          <span className="text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded">
+                            {dep.dependsOnTask.status}
+                          </span>
+                          <button
+                            onClick={() => handleRemoveBlocker(dep.id)}
+                            className="text-slate-500 hover:text-rose-400 transition-colors"
+                            title="Remove dependency"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Blocking (Tasks waiting on this task) */}
+                {task.blocking && task.blocking.length > 0 && (
+                  <div className="mt-3 space-y-1.5">
+                    <div className="text-[11px] font-medium text-slate-400">Blocks:</div>
+                    {task.blocking.map((b) => (
+                      <div
+                        key={b.id}
+                        className="flex items-center justify-between p-2.5 rounded-lg bg-slate-950/60 border border-slate-800/80 text-xs"
+                      >
+                        <div className="flex items-center gap-2 truncate">
+                          <span className="font-mono text-[11px] text-slate-400">
+                            {b.task.project.key}-{b.task.number}
+                          </span>
+                          <span className="font-medium text-slate-200 truncate">{b.task.title}</span>
+                        </div>
+                        <span className="text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded">
+                          {b.task.status}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Subtasks */}
