@@ -45,9 +45,41 @@ export function TaskDetailDrawer({
   const removeSubscriber = useRemoveSubscriber(taskId || '');
   const uploadAttachment = useUploadAttachment(taskId || '');
   const deleteAttachment = useDeleteAttachment(taskId || '');
+  const addDependency = useAddDependency(projectId);
+  const removeDependency = useRemoveDependency(projectId);
+  const { data: allProjectTasks = [] } = useProjectTasks(projectId);
 
   const [newSubtaskTitle, setNewSubtaskTitle] = useState('');
   const [isAddingSubtask, setIsAddingSubtask] = useState(false);
+  const [isAddingBlocker, setIsAddingBlocker] = useState(false);
+  const [selectedBlockerId, setSelectedBlockerId] = useState('');
+
+  const handleAddBlocker = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedBlockerId || !taskId) return;
+    try {
+      await addDependency.mutateAsync({
+        taskId,
+        data: { dependsOnTaskId: selectedBlockerId },
+      });
+      showToast('Blocker added', 'success');
+      setSelectedBlockerId('');
+      setIsAddingBlocker(false);
+    } catch (err: any) {
+      const msg = err.response?.data?.error?.message || 'Failed to add blocker. Circular dependency detected.';
+      showToast(msg, 'error');
+    }
+  };
+
+  const handleRemoveBlocker = async (depId: string) => {
+    if (!taskId) return;
+    try {
+      await removeDependency.mutateAsync({ taskId, depId });
+      showToast('Blocker removed', 'success');
+    } catch {
+      showToast('Failed to remove blocker', 'error');
+    }
+  };
 
   if (!taskId) return null;
 
