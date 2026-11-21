@@ -1,6 +1,7 @@
 import { taskRepository } from './task.repository';
 import { projectRepository } from '../projects/project.repository';
 import { notificationService } from '../notifications/notification.service';
+import { dependencyService } from '../dependencies/dependency.service';
 import { createAuditLog } from '../audit/audit.service';
 import { createHttpError } from '../../middleware/errorHandler';
 import type { CreateTaskInput, UpdateTaskInput, TaskFilterQuery } from './task.schema';
@@ -120,6 +121,12 @@ export const taskService = {
         updatedBy: userId,
         summary,
       });
+    }
+
+    // AUTO-UNBLOCK DEPENDENTS:
+    // When a task transitions to DONE, check if any blocked dependent tasks can now be unblocked
+    if (data.status === 'DONE' && existing.status !== 'DONE') {
+      await dependencyService.autoUnblockDependents(taskId, userId);
     }
 
     return updated;

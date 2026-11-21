@@ -57,7 +57,17 @@ export const dependencyRepository = {
         task: { deletedAt: null },
       },
       include: {
-        task: { select: { id: true, number: true, title: true, status: true, workspaceId: true, subscribers: true } },
+        task: {
+          select: {
+            id: true,
+            number: true,
+            title: true,
+            status: true,
+            workspaceId: true,
+            project: { select: { key: true } },
+            subscribers: true,
+          },
+        },
       },
     });
   },

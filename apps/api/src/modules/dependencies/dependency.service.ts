@@ -306,7 +306,7 @@ export const dependencyService = {
         if (subscriberIds.length > 0) {
           await notificationService.notifyMultiple(subscriberIds, 'TASK_UNBLOCKED', {
             taskId: dep.task.id,
-            taskKey: `${dep.task.number}`,
+            taskKey: `${dep.task.project.key}-${dep.task.number}`,
             taskTitle: dep.task.title,
             summary: `unblocked because prerequisite task completed`,
           });
