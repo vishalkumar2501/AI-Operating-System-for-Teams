@@ -23,7 +23,7 @@ export function useProjects(workspaceId: string | undefined) {
     queryFn: async () => {
       if (!workspaceId) return [];
       const res = await api.get(`/workspaces/${workspaceId}/projects`);
-      return res.data;
+      return res.data.data ?? res.data;
     },
     enabled: Boolean(workspaceId),
   });
@@ -34,7 +34,7 @@ export function useProject(projectId: string | undefined) {
     queryKey: ['project', projectId],
     queryFn: async () => {
       const res = await api.get(`/projects/${projectId}`);
-      return res.data;
+      return res.data.data ?? res.data;
     },
     enabled: Boolean(projectId),
   });
@@ -45,7 +45,7 @@ export function useCreateProject(workspaceId: string) {
   return useMutation({
     mutationFn: async (dto: CreateProjectDto) => {
       const res = await api.post(`/workspaces/${workspaceId}/projects`, dto);
-      return res.data;
+      return res.data.data ?? res.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects', workspaceId] });
