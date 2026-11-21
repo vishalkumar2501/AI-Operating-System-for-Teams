@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Kanban, List, Plus, Search, ArrowLeft } from 'lucide-react';
+import { Kanban, List, Network, Plus, Search, ArrowLeft } from 'lucide-react';
 import { useProject } from '@/features/projects/projects.queries';
 import { useProjectTasks, useUpdateTask, type TaskItem, type TaskFilters } from './tasks.queries';
 import { KanbanBoard } from './KanbanBoard';
 import { TaskListView } from './TaskListView';
+import { DependencyGraphView } from '@/features/dependencies/DependencyGraphView';
 import { CreateTaskModal } from './CreateTaskModal';
 import { TaskDetailDrawer } from './TaskDetailDrawer';
 import { Button } from '@/components/ui/Button';
@@ -16,7 +17,7 @@ export function ProjectTasksPage() {
   const { workspaceId, projectId } = useParams<{ workspaceId: string; projectId: string }>();
   const navigate = useNavigate();
 
-  const [viewMode, setViewMode] = useState<'board' | 'list'>('board');
+  const [viewMode, setViewMode] = useState<'board' | 'list' | 'graph'>('board');
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('');

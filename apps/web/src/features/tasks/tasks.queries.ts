@@ -67,6 +67,28 @@ export interface TaskItem {
     mime: string;
     createdAt: string;
   }>;
+  dependencies?: Array<{
+    id: string;
+    dependsOnTaskId: string;
+    dependsOnTask: {
+      id: string;
+      number: number;
+      title: string;
+      status: TaskStatus;
+      project: { key: string };
+    };
+  }>;
+  blocking?: Array<{
+    id: string;
+    taskId: string;
+    task: {
+      id: string;
+      number: number;
+      title: string;
+      status: TaskStatus;
+      project: { key: string };
+    };
+  }>;
   _count?: {
     subtasks: number;
     comments: number;
@@ -93,7 +115,7 @@ export function useProjectTasks(projectId: string | undefined, filters?: TaskFil
       if (filters?.search) params.append('search', filters.search);
 
       const res = await api.get(`/projects/${projectId}/tasks?${params.toString()}`);
-      return res.data;
+      return res.data.data ?? res.data;
     },
     enabled: Boolean(projectId),
   });
@@ -104,7 +126,7 @@ export function useTask(taskId: string | null) {
     queryKey: ['task', taskId],
     queryFn: async () => {
       const res = await api.get(`/tasks/${taskId}`);
-      return res.data;
+      return res.data.data ?? res.data;
     },
     enabled: Boolean(taskId),
   });
@@ -116,7 +138,7 @@ export function useMyTasks(workspaceId?: string) {
     queryFn: async () => {
       const query = workspaceId ? `?workspaceId=${workspaceId}` : '';
       const res = await api.get(`/tasks/my${query}`);
-      return res.data;
+      return res.data.data ?? res.data;
     },
   });
 }
@@ -126,7 +148,7 @@ export function useCreateTask(projectId: string) {
   return useMutation({
     mutationFn: async (dto: CreateTaskDto) => {
       const res = await api.post(`/projects/${projectId}/tasks`, dto);
-      return res.data;
+      return res.data.data ?? res.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks', projectId] });
