@@ -89,6 +89,32 @@ export const taskRepository = {
         parentTask: {
           select: { id: true, number: true, title: true, status: true },
         },
+        dependencies: {
+          include: {
+            dependsOnTask: {
+              select: {
+                id: true,
+                number: true,
+                title: true,
+                status: true,
+                project: { select: { key: true } },
+              },
+            },
+          },
+        },
+        blocking: {
+          include: {
+            task: {
+              select: {
+                id: true,
+                number: true,
+                title: true,
+                status: true,
+                project: { select: { key: true } },
+              },
+            },
+          },
+        },
       },
     });
   },
