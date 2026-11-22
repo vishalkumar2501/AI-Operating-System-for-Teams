@@ -25,6 +25,8 @@ import {
   useAddDependency,
   useRemoveDependency,
 } from '@/features/dependencies/dependencies.queries';
+import { useTaskRealtime } from '@/features/realtime/useRealtime';
+import { TaskCommentsSection } from '@/features/comments/TaskCommentsSection';
 import { useWorkspaceMembers } from '@/features/workspace/workspace.queries';
 import { useAuthStore } from '@/store/auth.store';
 import { Avatar } from '@/components/ui/Avatar';
@@ -50,6 +52,8 @@ export function TaskDetailDrawer({
   const { showToast } = useToast();
   const { data: task, isLoading } = useTask(taskId);
   const { data: members = [] } = useWorkspaceMembers(workspaceId);
+  const { viewers, typingUsers, sendTyping } = useTaskRealtime(taskId);
+  const otherViewers = viewers.filter((v) => v.userId !== user?.id);
 
   const updateTask = useUpdateTask(projectId);
   const deleteTask = useDeleteTask(projectId);
@@ -230,6 +234,28 @@ export function TaskDetailDrawer({
           </div>
 
           <div className="flex items-center gap-2">
+            {otherViewers.length > 0 && (
+              <div
+                className="flex items-center gap-1.5 mr-2 rounded-full bg-slate-950/80 px-2 py-1 border border-slate-800"
+                title={`Currently viewing: ${otherViewers.map((v) => v.name).join(', ')}`}
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-[10px] text-slate-400 font-medium hidden sm:inline">
+                  Viewing:
+                </span>
+                <div className="flex -space-x-1.5 overflow-hidden">
+                  {otherViewers.map((v) => (
+                    <Avatar
+                      key={v.userId}
+                      name={v.name}
+                      src={v.avatarUrl || undefined}
+                      size="sm"
+                      className="ring-2 ring-slate-900 !h-5 !w-5 text-[9px]"
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
             <button
               onClick={handleDeleteTask}
               className="p-1.5 text-slate-500 hover:text-rose-400 hover:bg-slate-800 rounded transition-colors"
@@ -586,6 +612,15 @@ export function TaskDetailDrawer({
                   </div>
                 ))}
               </div>
+            </div>
+
+            {/* Realtime Comments Section */}
+            <div className="border-t border-slate-800/80 pt-4">
+              <TaskCommentsSection
+                taskId={task.id}
+                typingUsers={typingUsers}
+                sendTyping={sendTyping}
+              />
             </div>
           </div>
         )}

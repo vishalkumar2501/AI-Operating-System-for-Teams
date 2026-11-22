@@ -2,6 +2,7 @@ import { taskRepository } from './task.repository';
 import { projectRepository } from '../projects/project.repository';
 import { notificationService } from '../notifications/notification.service';
 import { dependencyService } from '../dependencies/dependency.service';
+import { emitTaskUpdated } from '../realtime/realtime.server';
 import { createAuditLog } from '../audit/audit.service';
 import { createHttpError } from '../../middleware/errorHandler';
 import type { CreateTaskInput, UpdateTaskInput, TaskFilterQuery } from './task.schema';
@@ -46,6 +47,9 @@ export const taskService = {
       });
     }
 
+    // Broadcast realtime event
+    emitTaskUpdated(project.workspaceId, projectId, task);
+
     return task;
   },
 
@@ -54,6 +58,7 @@ export const taskService = {
     if (!task) {
       throw createHttpError(404, 'NOT_FOUND', 'Task not found');
     }
+
     return task;
   },
 
@@ -128,6 +133,9 @@ export const taskService = {
     if (data.status === 'DONE' && existing.status !== 'DONE') {
       await dependencyService.autoUnblockDependents(taskId, userId);
     }
+
+    // Real-time broadcast for live Kanban and Graph updates
+    emitTaskUpdated(existing.workspaceId, existing.projectId, updated);
 
     return updated;
   },

@@ -117,6 +117,72 @@ export interface ProjectGraphData {
 }
 
 // ============================================================================
+// Comments (Phase 4)
+// ============================================================================
+export const CreateCommentSchema = z.object({
+  body: z.string().min(1, 'Comment body cannot be empty').max(10000),
+  mentions: z.array(z.string()).optional().default([]),
+  parentCommentId: z.string().uuid().optional().nullable(),
+});
+export type CreateCommentDto = z.infer<typeof CreateCommentSchema>;
+
+export interface CommentAuthor {
+  id: string;
+  name: string | null;
+  email: string;
+  avatarUrl: string | null;
+}
+
+export interface CommentItem {
+  id: string;
+  taskId: string;
+  authorId: string;
+  author: CommentAuthor;
+  body: string;
+  mentions: string[];
+  parentCommentId: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// ============================================================================
+// Realtime Presence & Socket Events (Phase 4)
+// ============================================================================
+export interface PresenceUser {
+  userId: string;
+  name: string;
+  email: string;
+  avatarUrl?: string | null;
+  lastActive: number;
+}
+
+export const SocketEvents = {
+  // Rooms
+  JOIN_WORKSPACE: 'room:join_workspace',
+  LEAVE_WORKSPACE: 'room:leave_workspace',
+  JOIN_PROJECT: 'room:join_project',
+  LEAVE_PROJECT: 'room:leave_project',
+  JOIN_TASK: 'room:join_task',
+  LEAVE_TASK: 'room:leave_task',
+
+  // Presence
+  PRESENCE_HEARTBEAT: 'presence:heartbeat',
+  PRESENCE_UPDATE: 'presence:update',
+  TASK_VIEWERS_UPDATE: 'task:viewers_update',
+
+  // Typing
+  TASK_TYPING: 'task:typing',
+  USER_TYPING: 'task:user_typing',
+
+  // Realtime events
+  TASK_UPDATED: 'task:updated',
+  COMMENT_CREATED: 'comment:created',
+  COMMENT_DELETED: 'comment:deleted',
+} as const;
+
+export type SocketEventType = (typeof SocketEvents)[keyof typeof SocketEvents];
+
+// ============================================================================
 // AI Agent Action Status
 // ============================================================================
 export const AgentActionStatusEnum = z.enum([

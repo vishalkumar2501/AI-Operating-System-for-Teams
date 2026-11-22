@@ -1,8 +1,10 @@
+import http from 'http';
 import { app } from './app';
 import { env } from './config/env';
 import { logger } from './lib/logger';
 import { prisma } from './lib/prisma';
 import { redis } from './lib/redis';
+import { initRealtimeServer } from './modules/realtime/realtime.server';
 
 async function startServer(): Promise<void> {
   // Verify infrastructure is reachable before accepting traffic.
@@ -24,14 +26,17 @@ async function startServer(): Promise<void> {
     process.exit(1);
   }
 
-  const server = app.listen(env.PORT, () => {
+  const httpServer = http.createServer(app);
+  await initRealtimeServer(httpServer);
+
+  const server = httpServer.listen(env.PORT, () => {
     logger.info(
       {
         port: env.PORT,
         env: env.NODE_ENV,
         url: `http://localhost:${env.PORT}/api/v1/health`,
       },
-      '🚀 TeamOS API server is running'
+      '🚀 TeamOS API server is running with Realtime Socket.IO'
     );
   });
 

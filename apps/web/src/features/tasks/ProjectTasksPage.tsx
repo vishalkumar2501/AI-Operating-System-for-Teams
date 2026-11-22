@@ -6,6 +6,7 @@ import { useProjectTasks, useUpdateTask, type TaskItem, type TaskFilters } from 
 import { KanbanBoard } from './KanbanBoard';
 import { TaskListView } from './TaskListView';
 import { DependencyGraphView } from '@/features/dependencies/DependencyGraphView';
+import { useProjectRealtime } from '@/features/realtime/useRealtime';
 import { CreateTaskModal } from './CreateTaskModal';
 import { TaskDetailDrawer } from './TaskDetailDrawer';
 import { Button } from '@/components/ui/Button';
@@ -26,6 +27,7 @@ export function ProjectTasksPage() {
   const [createDefaultStatus, setCreateDefaultStatus] = useState<TaskStatus>('TODO');
 
   const { data: project, isLoading: isProjectLoading } = useProject(projectId);
+  useProjectRealtime(projectId);
 
   const filters: TaskFilters = {
     search: search || undefined,

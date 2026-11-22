@@ -13,6 +13,7 @@ import {
 import { useWorkspaces } from './workspace.queries';
 import { useAuthStore } from '@/store/auth.store';
 import { useLogout } from '@/features/auth/auth.queries';
+import { useWorkspacePresence } from '@/features/realtime/useRealtime';
 import { Avatar, Spinner } from '@/components/ui';
 import { NotificationBell } from '@/features/notifications/NotificationBell';
 
@@ -28,6 +29,7 @@ export function WorkspaceShell() {
   const { user } = useAuthStore();
   const logout = useLogout();
   const { data: workspaces } = useWorkspaces();
+  const { onlineUsers } = useWorkspacePresence(workspaceId);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [switcherOpen, setSwitcherOpen] = useState(false);
 
@@ -204,6 +206,17 @@ export function WorkspaceShell() {
           </div>
 
           <div className="flex items-center gap-3">
+            {onlineUsers.length > 0 && (
+              <div
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs text-slate-300"
+                title={`Online in workspace: ${onlineUsers.map((u) => u.name).join(', ')}`}
+              >
+                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-[11px] font-medium hidden sm:inline">
+                  {onlineUsers.length} online
+                </span>
+              </div>
+            )}
             <NotificationBell />
           </div>
         </header>
