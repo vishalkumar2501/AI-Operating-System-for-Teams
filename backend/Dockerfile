@@ -9,8 +9,8 @@ RUN apk add --no-cache libc6-compat openssl
 # Copy workspace package manifests
 COPY package.json package-lock.json* ./
 COPY packages/shared/package.json ./packages/shared/
-COPY apps/api/package.json ./apps/api/
-COPY apps/web/package.json ./apps/web/
+COPY backend/package.json ./backend/
+COPY frontend/package.json ./frontend/
 
 # Install all dependencies (including devDependencies for building)
 RUN npm ci
@@ -19,11 +19,11 @@ RUN npm ci
 COPY packages/shared/ ./packages/shared/
 RUN npm run build --workspace=@teamos/shared
 
-# Copy API source and Prisma schema
-COPY apps/api/ ./apps/api/
+# Copy Backend source and Prisma schema
+COPY backend/ ./backend/
 
-# Generate Prisma client and build API
-RUN npx prisma generate --schema=./apps/api/prisma/schema.prisma
+# Generate Prisma client and build Backend API
+RUN npx prisma generate --schema=./backend/prisma/schema.prisma
 RUN npm run build --workspace=@teamos/api
 
 # Production stage
@@ -45,9 +45,9 @@ COPY --from=builder /app/package.json /app/package-lock.json* ./
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/packages/shared/dist ./packages/shared/dist
 COPY --from=builder /app/packages/shared/package.json ./packages/shared/package.json
-COPY --from=builder /app/apps/api/dist ./apps/api/dist
-COPY --from=builder /app/apps/api/prisma ./apps/api/prisma
-COPY --from=builder /app/apps/api/package.json ./apps/api/package.json
+COPY --from=builder /app/backend/dist ./backend/dist
+COPY --from=builder /app/backend/prisma ./backend/prisma
+COPY --from=builder /app/backend/package.json ./backend/package.json
 
 # Set ownership
 RUN chown -R teamos:nodejs /app
@@ -59,4 +59,4 @@ EXPOSE 5000
 HEALTHCHECK --interval=10s --timeout=5s --start-period=15s --retries=3 \
   CMD curl -f http://localhost:5000/health || exit 1
 
-CMD ["node", "apps/api/dist/server.js"]
+CMD ["node", "backend/dist/server.js"]
