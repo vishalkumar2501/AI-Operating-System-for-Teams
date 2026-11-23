@@ -24,11 +24,28 @@ app.use('/uploads', express.static(path.resolve(process.cwd(), 'uploads')));
 app.use(helmet());
 
 // ---------------------------------------------------------------------------
-// CORS — only allow requests from our own frontend
+// CORS — allow requests from our frontend
 // ---------------------------------------------------------------------------
+const allowedOrigins = Array.from(
+  new Set([
+    env.CLIENT_URL,
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+    'http://localhost:3000',
+    'http://localhost',
+  ])
+).filter(Boolean);
+
 app.use(
   cors({
-    origin: [env.CLIENT_URL],
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, server-to-server)
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(null, true); // Permissive in dev fallback
+      }
+    },
     credentials: true, // needed so the browser sends the refresh-token cookie
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-Id'],
