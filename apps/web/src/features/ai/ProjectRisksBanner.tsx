@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { AlertTriangle, ShieldAlert, Sparkles, ChevronRight } from 'lucide-react';
+import { AlertTriangle, Sparkles, ChevronRight } from 'lucide-react';
 import { aiApi } from './ai.api';
-import { ProjectRisk } from '@teamos/shared';
 
 interface ProjectRisksBannerProps {
   workspaceId: string;

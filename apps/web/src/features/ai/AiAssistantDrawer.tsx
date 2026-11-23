@@ -6,7 +6,6 @@ import {
   Send,
   AlertTriangle,
   Calendar,
-  CheckCircle2,
   FolderKanban,
 } from 'lucide-react';
 import { aiApi } from './ai.api';
