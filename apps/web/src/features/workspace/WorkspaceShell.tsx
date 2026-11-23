@@ -13,6 +13,7 @@ import {
   Video,
   FileText,
   Search,
+  Sparkles,
 } from 'lucide-react';
 import { useWorkspaces } from './workspace.queries';
 import { useAuthStore } from '@/store/auth.store';
@@ -21,6 +22,7 @@ import { useWorkspacePresence } from '@/features/realtime/useRealtime';
 import { Avatar, Spinner } from '@/components/ui';
 import { NotificationBell } from '@/features/notifications/NotificationBell';
 import { SearchModal } from '@/features/search/SearchModal';
+import { AiAssistantDrawer } from '@/features/ai/AiAssistantDrawer';
 
 interface NavItem {
   label: string;
@@ -38,6 +40,7 @@ export function WorkspaceShell() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [switcherOpen, setSwitcherOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [aiDrawerOpen, setAiDrawerOpen] = useState(false);
 
   // Keyboard shortcut Ctrl+K / Cmd+K
   useEffect(() => {
@@ -277,6 +280,22 @@ export function WorkspaceShell() {
         workspaceId={workspaceId!}
         isOpen={isSearchOpen}
         onClose={() => setIsSearchOpen(false)}
+      />
+
+      {/* Floating AI Assistant Trigger */}
+      <button
+        onClick={() => setAiDrawerOpen(true)}
+        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-2.5 text-xs font-bold text-white shadow-xl shadow-indigo-600/40 hover:bg-indigo-500 hover:scale-105 active:scale-95 transition-all"
+      >
+        <Sparkles className="h-4 w-4" />
+        <span>Ask AI Assistant</span>
+      </button>
+
+      {/* Floating AI Assistant Drawer */}
+      <AiAssistantDrawer
+        workspaceId={workspaceId!}
+        isOpen={aiDrawerOpen}
+        onClose={() => setAiDrawerOpen(false)}
       />
     </div>
   );
