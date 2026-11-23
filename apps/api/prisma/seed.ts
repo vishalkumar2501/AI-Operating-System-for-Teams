@@ -1,5 +1,5 @@
 import { PrismaClient, WorkspaceRole, TaskStatus, TaskPriority, DependencyType } from '@prisma/client';
-import bcrypt from 'bcryptjs';
+import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
