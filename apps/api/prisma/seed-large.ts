@@ -83,7 +83,7 @@ async function main() {
   const firstNames = ['Vishal', 'Sarah', 'Alex', 'Elena', 'David', 'Priya', 'Marcus', 'Chloe', 'Liam', 'Hana', 'Carlos', 'Fatima', 'Dmitry', 'Aoi', 'Mateo', 'Zoe', 'Lucas', 'Maya', 'Nia', 'Kenji'];
   const lastNames = ['Kumar', 'Chen', 'Rivera', 'Rostova', 'Kim', 'Sharma', 'Vance', 'Dubois', 'O’Connor', 'Tanaka', 'Silva', 'Al-Mansoor', 'Ivanov', 'Sato', 'Morales', 'Zhang', 'Müller', 'Patel', 'Nkosi', 'Takahashi'];
 
-  const userRecords: { id: string; name: string; email: string; passwordHash: string }[] = [];
+  const userRecords: { id: string; name: string; email: string; passwordHash: string; createdAt: Date; updatedAt: Date }[] = [];
   for (let i = 1; i <= 200; i++) {
     const fn = firstNames[i % firstNames.length];
     const ln = lastNames[(i * 3) % lastNames.length];
@@ -92,12 +92,14 @@ async function main() {
       name: `${fn} ${ln}`,
       email: i === 1 ? 'vishal@teamos.dev' : `engineer.${i}@teamos.dev`,
       passwordHash,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
   }
 
   // Create Users in batches
   for (const chunk of chunkArray(userRecords, 50)) {
-    await prisma.user.createMany({ data: chunk, skipDuplicates: true });
+    await prisma.user.createMany({ data: chunk });
   }
   console.log(`   ✓ Seeded ${userRecords.length} users.`);
 
@@ -105,10 +107,8 @@ async function main() {
   const createdWorkspaces: { id: string; name: string; slug: string }[] = [];
   for (let i = 0; i < workspaceDefs.length; i++) {
     const def = workspaceDefs[i];
-    const ws = await prisma.workspace.upsert({
-      where: { slug: def.slug },
-      update: {},
-      create: {
+    const ws = await prisma.workspace.create({
+      data: {
         id: crypto.randomUUID(),
         name: def.name,
         slug: def.slug,
@@ -120,7 +120,7 @@ async function main() {
   console.log(`   ✓ Seeded ${createdWorkspaces.length} workspaces.`);
 
   // Create Workspace Memberships
-  const memberRecords: { id: string; workspaceId: string; userId: string; role: WorkspaceRole }[] = [];
+  const memberRecords: { id: string; workspaceId: string; userId: string; role: WorkspaceRole; createdAt: Date; updatedAt: Date }[] = [];
   for (const ws of createdWorkspaces) {
     for (let uIdx = 0; uIdx < userRecords.length; uIdx++) {
       const u = userRecords[uIdx];
@@ -130,18 +130,20 @@ async function main() {
         workspaceId: ws.id,
         userId: u.id,
         role,
+        createdAt: new Date(),
+        updatedAt: new Date(),
       });
     }
   }
   for (const chunk of chunkArray(memberRecords, 200)) {
-    await prisma.workspaceMember.createMany({ data: chunk, skipDuplicates: true });
+    await prisma.workspaceMember.createMany({ data: chunk });
   }
   console.log(`   ✓ Seeded ${memberRecords.length} workspace memberships.`);
 
   // 3. Projects (50 total, 10 per workspace)
   console.log('3. Seeding 50 enterprise engineering projects...');
   const projectKeys = ['CORE', 'WEB', 'AI', 'MOB', 'OPS', 'DATA', 'SEC', 'API', 'EDGE', 'DIST'];
-  const projectRecords: { id: string; workspaceId: string; name: string; key: string; description: string; startDate: Date; targetDate: Date }[] = [];
+  const projectRecords: { id: string; workspaceId: string; name: string; key: string; description: string; startDate: Date; targetDate: Date; createdAt: Date; updatedAt: Date }[] = [];
 
   for (let wsIdx = 0; wsIdx < createdWorkspaces.length; wsIdx++) {
     const ws = createdWorkspaces[wsIdx];
@@ -156,12 +158,14 @@ async function main() {
         description: `Mission-critical ${projectKeys[pIdx]} platform architecture and services for ${ws.name}`,
         startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
         targetDate: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+        createdAt: new Date(),
+        updatedAt: new Date(),
       });
     }
   }
 
   for (const chunk of chunkArray(projectRecords, 50)) {
-    await prisma.project.createMany({ data: chunk, skipDuplicates: true });
+    await prisma.project.createMany({ data: chunk });
   }
   console.log(`   ✓ Seeded ${projectRecords.length} projects.`);
 
@@ -226,7 +230,7 @@ async function main() {
   const taskChunks = chunkArray(taskRecords, 1000);
   let taskCount = 0;
   for (const chunk of taskChunks) {
-    await prisma.task.createMany({ data: chunk, skipDuplicates: true });
+    await prisma.task.createMany({ data: chunk });
     taskCount += chunk.length;
     if (taskCount % 10000 === 0) {
       console.log(`   ... inserted ${taskCount} / ${taskRecords.length} tasks`);
@@ -236,7 +240,7 @@ async function main() {
 
   // 5. Task Dependencies (~10,000 DAG edges, strictly acyclic)
   console.log('5. Generating ~10,000 DAG dependencies (guaranteed cycle-free)...');
-  const dependencyRecords: { id: string; taskId: string; dependsOnTaskId: string; type: DependencyType }[] = [];
+  const dependencyRecords: { id: string; taskId: string; dependsOnTaskId: string; type: DependencyType; createdAt: Date }[] = [];
 
   // Group tasks by project
   const tasksByProject = new Map<string, typeof taskRecords>();
@@ -259,13 +263,14 @@ async function main() {
         taskId: dependentTask.id,
         dependsOnTaskId: prerequisiteTask.id,
         type: DependencyType.BLOCKS,
+        createdAt: new Date(),
       });
     }
   }
 
   console.log(`   Bulk inserting ${dependencyRecords.length} dependencies...`);
   for (const chunk of chunkArray(dependencyRecords, 1000)) {
-    await prisma.taskDependency.createMany({ data: chunk, skipDuplicates: true });
+    await prisma.taskDependency.createMany({ data: chunk });
   }
   console.log(`   ✓ Seeded ${dependencyRecords.length} DAG dependency edges.`);
 
@@ -292,7 +297,7 @@ async function main() {
   console.log(`   Bulk inserting ${commentRecords.length} comments...`);
   let commentCount = 0;
   for (const chunk of chunkArray(commentRecords, 1000)) {
-    await prisma.comment.createMany({ data: chunk, skipDuplicates: true });
+    await prisma.comment.createMany({ data: chunk });
     commentCount += chunk.length;
     if (commentCount % 10000 === 0) {
       console.log(`   ... inserted ${commentCount} / ${commentRecords.length} comments`);
@@ -319,15 +324,15 @@ async function main() {
     });
   }
   for (const chunk of chunkArray(docRecords, 200)) {
-    await prisma.doc.createMany({ data: chunk, skipDuplicates: true });
+    await prisma.doc.createMany({ data: chunk });
   }
   console.log(`   ✓ Seeded ${docRecords.length} docs.`);
 
   // 8. Meetings, Transcripts & Segments (~10,000 chunks)
   console.log('8. Seeding 100 meetings and ~9,500 transcript segments...');
-  const meetingRecords: { id: string; workspaceId: string; projectId: string; title: string; organizerId: string; startsAt: Date; endsAt: Date; status: MeetingStatus }[] = [];
-  const transcriptRecords: { id: string; meetingId: string; rawText: string; summary: string; status: TranscriptStatus }[] = [];
-  const segmentRecords: { id: string; transcriptId: string; speakerName: string; speakerId: string; startMs: number; endMs: number; text: string }[] = [];
+  const meetingRecords: { id: string; workspaceId: string; projectId: string; title: string; organizerId: string; startsAt: Date; endsAt: Date; status: MeetingStatus; createdAt: Date; updatedAt: Date }[] = [];
+  const transcriptRecords: { id: string; meetingId: string; rawText: string; summary: string; status: TranscriptStatus; createdAt: Date; updatedAt: Date }[] = [];
+  const segmentRecords: { id: string; transcriptId: string; speakerName: string; speakerId: string; startMs: number; endMs: number; text: string; createdAt: Date }[] = [];
 
   for (let m = 0; m < 100; m++) {
     const proj = projectRecords[m % projectRecords.length];
@@ -344,6 +349,8 @@ async function main() {
       startsAt: new Date(Date.now() - (100 - m) * 24 * 60 * 60 * 1000),
       endsAt: new Date(Date.now() - (100 - m) * 24 * 60 * 60 * 1000 + 45 * 60 * 1000),
       status: MeetingStatus.COMPLETED,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
 
     transcriptRecords.push({
@@ -352,6 +359,8 @@ async function main() {
       rawText: 'Sprint sync discussion regarding distributed latency, dependency graphs, and automated AI task triage.',
       summary: 'Team achieved target throughput. Action items assigned for Redis cluster failover tuning.',
       status: TranscriptStatus.COMPLETED,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
 
     // 95 segments per meeting (100 * 95 = 9,500 segments)
@@ -365,18 +374,19 @@ async function main() {
         startMs: s * 15000,
         endMs: (s + 1) * 15000,
         text: `Segment ${s + 1}: Discussing deployment milestone, dependency cycle checks, and real-time event propagation for ${proj.key}.`,
+        createdAt: new Date(),
       });
     }
   }
 
   for (const chunk of chunkArray(meetingRecords, 100)) {
-    await prisma.meeting.createMany({ data: chunk, skipDuplicates: true });
+    await prisma.meeting.createMany({ data: chunk });
   }
   for (const chunk of chunkArray(transcriptRecords, 100)) {
-    await prisma.transcript.createMany({ data: chunk, skipDuplicates: true });
+    await prisma.transcript.createMany({ data: chunk });
   }
   for (const chunk of chunkArray(segmentRecords, 1000)) {
-    await prisma.transcriptSegment.createMany({ data: chunk, skipDuplicates: true });
+    await prisma.transcriptSegment.createMany({ data: chunk });
   }
   console.log(`   ✓ Seeded ${meetingRecords.length} meetings, transcripts, and ${segmentRecords.length} transcript segments.`);
 
@@ -402,13 +412,13 @@ async function main() {
   }
 
   for (const chunk of chunkArray(auditLogRecords, 1000)) {
-    await prisma.auditLog.createMany({ data: chunk, skipDuplicates: true });
+    await prisma.auditLog.createMany({ data: chunk });
   }
   console.log(`   ✓ Seeded ${auditLogRecords.length} audit logs.`);
 
   // 10. Search Embeddings (~10,000 items)
   console.log('10. Seeding ~10,000 vector embeddings for hybrid search...');
-  const embeddingRecords: { id: string; workspaceId: string; entityType: string; entityId: string; chunkIndex: number; content: string }[] = [];
+  const embeddingRecords: { id: string; workspaceId: string; entityType: string; entityId: string; chunkIndex: number; content: string; createdAt: Date }[] = [];
 
   for (let e = 0; e < 10000; e++) {
     const task = taskRecords[e];
@@ -419,11 +429,12 @@ async function main() {
       entityId: task.id,
       chunkIndex: 0,
       content: `${task.title} - ${task.description}`,
+      createdAt: new Date(),
     });
   }
 
   for (const chunk of chunkArray(embeddingRecords, 1000)) {
-    await prisma.embedding.createMany({ data: chunk, skipDuplicates: true });
+    await prisma.embedding.createMany({ data: chunk });
   }
   console.log(`   ✓ Seeded ${embeddingRecords.length} search embeddings.`);
 
