@@ -17,6 +17,11 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
+    "docker:prod:build": "docker compose -f docker-compose.prod.yml build",
+    "docker:prod:up": "docker compose -f docker-compose.prod.yml up -d",
+    "docker:prod:down": "docker compose -f docker-compose.prod.yml down",
+    "seed": "npm run seed --workspace=@teamos/api",
+    "seed:large": "npm run seed:large --workspace=@teamos/api",
     "prepare": "husky || exit 0"
   },
   "devDependencies": {

@@ -1,0 +1,128 @@
+name: TeamOS CI/CD Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint-and-typecheck:
+    name: Code Quality & Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Monorepo Dependencies
+        run: npm ci
+
+      - name: Verify Code Formatting
+        run: npm run format:check
+
+      - name: Generate Prisma Client
+        run: npx prisma generate --schema=./apps/api/prisma/schema.prisma
+
+      - name: Build All Workspaces (@teamos/shared, @teamos/api, @teamos/web)
+        run: npm run build
+
+  test-and-verify:
+    name: Database Migrations & Integration Evals
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: test_ci_password_2026
+          POSTGRES_DB: teamos_ci_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      NODE_ENV: test
+      PORT: 5000
+      DATABASE_URL: postgresql://postgres:test_ci_password_2026@localhost:5432/teamos_ci_db
+      REDIS_URL: redis://localhost:6379
+      JWT_ACCESS_SECRET: ci_secret_access_token_min_256_bits_length_for_hmac_sha256
+      JWT_REFRESH_SECRET: ci_secret_refresh_token_min_256_bits_length_for_hmac_sha256
+      CLIENT_URL: http://localhost:3000
+      GITHUB_WEBHOOK_SECRET: ci_test_github_webhook_secret
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Generate Prisma Client
+        run: npx prisma generate --schema=./apps/api/prisma/schema.prisma
+
+      - name: Apply Database Schema to Test PostgreSQL
+        run: npx prisma db push --schema=./apps/api/prisma/schema.prisma --accept-data-loss
+
+      - name: Run Enterprise Seed Script
+        run: npm run seed --workspace=@teamos/api
+
+      - name: Build Shared Types & Packages
+        run: npm run build --workspace=@teamos/shared
+
+      - name: Run AI Tool-Routing Safety Evaluations
+        run: npx tsx apps/api/src/modules/ai/__evals__/ai.eval.ts
+
+  docker-build:
+    name: Container Build Verification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build API Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: apps/api/Dockerfile
+          push: false
+          tags: teamos/api:ci-test
+
+      - name: Build Web Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: apps/web/Dockerfile
+          push: false
+          tags: teamos/web:ci-test
