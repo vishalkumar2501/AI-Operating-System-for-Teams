@@ -2,8 +2,10 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { z } from 'zod';
 
-// Load root .env file
-dotenv.config({ path: path.resolve(process.cwd(), '../../.env') });
+// Load root .env file from various working directories
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+dotenv.config({ path: path.resolve(process.cwd(), '../.env') });
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 // Also fallback to current directory .env if running standalone
 dotenv.config();
 
