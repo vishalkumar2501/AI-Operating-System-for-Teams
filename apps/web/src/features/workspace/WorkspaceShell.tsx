@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink, Outlet, useNavigate, useParams } from 'react-router-dom';
 import {
   FolderKanban,
@@ -9,6 +9,10 @@ import {
   LogOut,
   PanelLeftClose,
   PanelLeft,
+  Calendar,
+  Video,
+  FileText,
+  Search,
 } from 'lucide-react';
 import { useWorkspaces } from './workspace.queries';
 import { useAuthStore } from '@/store/auth.store';
@@ -16,6 +20,7 @@ import { useLogout } from '@/features/auth/auth.queries';
 import { useWorkspacePresence } from '@/features/realtime/useRealtime';
 import { Avatar, Spinner } from '@/components/ui';
 import { NotificationBell } from '@/features/notifications/NotificationBell';
+import { SearchModal } from '@/features/search/SearchModal';
 
 interface NavItem {
   label: string;
@@ -32,6 +37,19 @@ export function WorkspaceShell() {
   const { onlineUsers } = useWorkspacePresence(workspaceId);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [switcherOpen, setSwitcherOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  // Keyboard shortcut Ctrl+K / Cmd+K
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsSearchOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const currentWorkspace = workspaces?.find((ws) => ws.id === workspaceId);
 
@@ -45,6 +63,21 @@ export function WorkspaceShell() {
       label: 'My Tasks',
       to: `/workspaces/${workspaceId}/my-tasks`,
       icon: <CheckSquare className="h-4 w-4" />,
+    },
+    {
+      label: 'Calendar',
+      to: `/workspaces/${workspaceId}/calendar`,
+      icon: <Calendar className="h-4 w-4" />,
+    },
+    {
+      label: 'Meetings',
+      to: `/workspaces/${workspaceId}/meetings`,
+      icon: <Video className="h-4 w-4" />,
+    },
+    {
+      label: 'Docs',
+      to: `/workspaces/${workspaceId}/docs`,
+      icon: <FileText className="h-4 w-4" />,
     },
     {
       label: 'Members',
@@ -206,6 +239,18 @@ export function WorkspaceShell() {
           </div>
 
           <div className="flex items-center gap-3">
+            {/* Spotlight Search trigger */}
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              className="hidden sm:flex items-center gap-2 rounded-lg bg-slate-900 border border-slate-800 px-3 py-1.5 text-xs text-slate-400 hover:text-white hover:border-slate-700 transition-colors"
+            >
+              <Search className="h-3.5 w-3.5" />
+              <span>Search workspace...</span>
+              <kbd className="font-mono text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded border border-slate-700">
+                ⌘K
+              </kbd>
+            </button>
+
             {onlineUsers.length > 0 && (
               <div
                 className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800 text-xs text-slate-300"
@@ -226,6 +271,13 @@ export function WorkspaceShell() {
           <Outlet />
         </main>
       </div>
+
+      {/* Global Spotlight Search Modal */}
+      <SearchModal
+        workspaceId={workspaceId!}
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+      />
     </div>
   );
 }

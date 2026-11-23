@@ -10,6 +10,11 @@ import { AcceptInvitePage } from '@/features/workspace/AcceptInvitePage';
 import { ProjectsPage } from '@/features/projects/ProjectsPage';
 import { ProjectTasksPage } from '@/features/tasks/ProjectTasksPage';
 import { MyTasksPage } from '@/features/tasks/MyTasksPage';
+import { MeetingsPage } from '@/features/meetings/MeetingsPage';
+import { MeetingDetailPage } from '@/features/meetings/MeetingDetailPage';
+import { CalendarPage } from '@/features/calendar/CalendarPage';
+import { DocsPage } from '@/features/docs/DocsPage';
+import { DocEditorPage } from '@/features/docs/DocEditorPage';
 import { SettingsPlaceholder } from '@/features/workspace/SettingsPlaceholder';
 
 export function AppRouter() {
@@ -29,6 +34,11 @@ export function AppRouter() {
             <Route path="projects" element={<ProjectsPage />} />
             <Route path="projects/:projectId" element={<ProjectTasksPage />} />
             <Route path="my-tasks" element={<MyTasksPage />} />
+            <Route path="calendar" element={<CalendarPage />} />
+            <Route path="meetings" element={<MeetingsPage />} />
+            <Route path="meetings/:meetingId" element={<MeetingDetailPage />} />
+            <Route path="docs" element={<DocsPage />} />
+            <Route path="docs/:docId" element={<DocEditorPage />} />
             <Route path="members" element={<MembersPage />} />
             <Route path="settings" element={<SettingsPlaceholder />} />
           </Route>

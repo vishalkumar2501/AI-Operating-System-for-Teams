@@ -8,6 +8,10 @@ import { commentRouter } from '../modules/comments/comment.routes';
 import { notificationRouter } from '../modules/notifications/notification.routes';
 import { meetingRouter } from '../modules/meetings/meeting.routes';
 import { calendarRouter } from '../modules/calendar/calendar.routes';
+import { docRouter } from '../modules/docs/doc.routes';
+import { githubRouter } from '../modules/integrations/github/github.routes';
+import { searchRouter } from '../modules/search/search.routes';
+import { aiRouter } from '../modules/ai/ai.routes';
 import { prisma } from '../lib/prisma';
 import { redis } from '../lib/redis';
 
@@ -56,3 +60,7 @@ apiRouter.use('/', commentRouter);
 apiRouter.use('/', notificationRouter);
 apiRouter.use('/', meetingRouter);
 apiRouter.use('/', calendarRouter);
+apiRouter.use('/', docRouter);
+apiRouter.use('/', githubRouter);
+apiRouter.use('/', searchRouter);
+apiRouter.use('/', aiRouter);
