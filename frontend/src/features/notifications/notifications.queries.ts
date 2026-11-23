@@ -22,7 +22,7 @@ export function useNotifications() {
     queryKey: ['notifications'],
     queryFn: async () => {
       const res = await api.get('/notifications');
-      return res.data;
+      return res.data.data ?? res.data ?? [];
     },
     refetchInterval: 15000, // Poll every 15s in background
   });

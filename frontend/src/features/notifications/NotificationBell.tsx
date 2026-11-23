@@ -1,16 +1,27 @@
 import { useState, useRef, useEffect } from 'react';
 import { Bell, CheckCheck, Clock } from 'lucide-react';
-import { useNotifications, useMarkAsRead, useMarkAllAsRead } from './notifications.queries';
+import {
+  type InAppNotification,
+  useNotifications,
+  useMarkAsRead,
+  useMarkAllAsRead,
+} from './notifications.queries';
 
 export function NotificationBell() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const { data: notifications = [] } = useNotifications();
+  const { data: rawNotifications = [] } = useNotifications();
   const markAsRead = useMarkAsRead();
   const markAllAsRead = useMarkAllAsRead();
 
-  const unreadCount = notifications.filter((n) => !n.readAt).length;
+  const notifications: InAppNotification[] = Array.isArray(rawNotifications)
+    ? rawNotifications
+    : Array.isArray((rawNotifications as any)?.data)
+      ? (rawNotifications as any).data
+      : [];
+
+  const unreadCount = notifications.filter((n: InAppNotification) => !n.readAt).length;
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

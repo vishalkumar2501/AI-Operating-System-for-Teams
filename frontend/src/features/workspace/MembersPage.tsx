@@ -44,7 +44,12 @@ function MemberRow({ member }: { member: WorkspaceMember }) {
         <Badge variant={roleBadgeVariant[member.role] ?? 'default'}>{member.role}</Badge>
       </td>
       <td className="px-4 py-3 text-sm text-slate-500">
-        {new Date(member.joinedAt).toLocaleDateString()}
+        {(() => {
+          const rawDate = member.joinedAt || (member as any).createdAt;
+          if (!rawDate) return 'Recently';
+          const d = new Date(rawDate);
+          return isNaN(d.getTime()) ? 'Recently' : d.toLocaleDateString();
+        })()}
       </td>
     </tr>
   );
