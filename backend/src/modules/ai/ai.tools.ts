@@ -108,7 +108,14 @@ export class AiTools {
       const taskId = input.taskId;
       const current = await prisma.task.findUnique({
         where: { id: taskId },
-        select: { id: true, title: true, status: true, priority: true, assigneeId: true, dueDate: true },
+        select: {
+          id: true,
+          title: true,
+          status: true,
+          priority: true,
+          assigneeId: true,
+          dueDate: true,
+        },
       });
       before = current;
     }
@@ -154,20 +161,15 @@ export class AiTools {
     try {
       switch (action.tool) {
         case 'createTask': {
-          result = await taskRepository.create(
-            input.projectId,
-            workspaceId,
-            approvedBy,
-            {
-              title: input.title,
-              description: input.description,
-              priority: (input.priority as TaskPriority) || 'MEDIUM',
-              status: (input.status as TaskStatus) || 'TODO',
-              assigneeId: input.assigneeId,
-              dueDate: input.dueDate,
-              position: 0,
-            }
-          );
+          result = await taskRepository.create(input.projectId, workspaceId, approvedBy, {
+            title: input.title,
+            description: input.description,
+            priority: (input.priority as TaskPriority) || 'MEDIUM',
+            status: (input.status as TaskStatus) || 'TODO',
+            assigneeId: input.assigneeId,
+            dueDate: input.dueDate,
+            position: 0,
+          });
           break;
         }
 

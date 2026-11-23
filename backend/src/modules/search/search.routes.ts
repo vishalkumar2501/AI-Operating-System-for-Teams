@@ -4,8 +4,4 @@ import { authenticate } from '../../middleware/authenticate';
 
 export const searchRouter = Router({ mergeParams: true });
 
-searchRouter.get(
-  '/workspaces/:workspaceId/search',
-  authenticate,
-  searchController.search
-);
+searchRouter.get('/workspaces/:workspaceId/search', authenticate, searchController.search);

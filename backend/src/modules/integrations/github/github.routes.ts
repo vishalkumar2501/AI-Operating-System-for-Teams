@@ -10,10 +10,6 @@ githubRouter.post('/webhooks/github', (req, res, next) => {
 });
 
 // Authenticated activity feed endpoint
-githubRouter.get(
-  '/workspaces/:workspaceId/git-activity',
-  authenticate,
-  (req, res, next) => {
-    githubController.getActivities(req, res, next);
-  }
-);
+githubRouter.get('/workspaces/:workspaceId/git-activity', authenticate, (req, res, next) => {
+  githubController.getActivities(req, res, next);
+});

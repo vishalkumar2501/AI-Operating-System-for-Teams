@@ -1,15 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import {
-  ArrowLeft,
-  Check,
-  FolderKanban,
-  Eye,
-  Edit3,
-  Columns,
-  Trash2,
-} from 'lucide-react';
+import { ArrowLeft, Check, FolderKanban, Eye, Edit3, Columns, Trash2 } from 'lucide-react';
 import { docsApi } from './docs.api';
 import { useProjects } from '../projects/projects.queries';
 import { Spinner } from '@/components/ui';
@@ -87,11 +79,7 @@ export function DocEditorPage() {
   }
 
   if (!doc) {
-    return (
-      <div className="p-8 text-center bg-slate-950 text-slate-400">
-        Document not found.
-      </div>
-    );
+    return <div className="p-8 text-center bg-slate-950 text-slate-400">Document not found.</div>;
   }
 
   return (
@@ -193,7 +181,9 @@ export function DocEditorPage() {
       <div className="flex-1 flex overflow-hidden">
         {/* Editor Pane */}
         {(viewMode === 'edit' || viewMode === 'split') && (
-          <div className={`flex-1 flex flex-col h-full border-r border-slate-800 bg-slate-950 p-6 overflow-hidden`}>
+          <div
+            className={`flex-1 flex flex-col h-full border-r border-slate-800 bg-slate-950 p-6 overflow-hidden`}
+          >
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
@@ -209,13 +199,25 @@ export function DocEditorPage() {
             <div className="space-y-4">
               {content.split('\n\n').map((block, idx) => {
                 if (block.startsWith('# ')) {
-                  return <h1 key={idx} className="text-2xl font-bold text-white">{block.replace('# ', '')}</h1>;
+                  return (
+                    <h1 key={idx} className="text-2xl font-bold text-white">
+                      {block.replace('# ', '')}
+                    </h1>
+                  );
                 }
                 if (block.startsWith('## ')) {
-                  return <h2 key={idx} className="text-xl font-semibold text-slate-200">{block.replace('## ', '')}</h2>;
+                  return (
+                    <h2 key={idx} className="text-xl font-semibold text-slate-200">
+                      {block.replace('## ', '')}
+                    </h2>
+                  );
                 }
                 if (block.startsWith('### ')) {
-                  return <h3 key={idx} className="text-lg font-medium text-slate-300">{block.replace('### ', '')}</h3>;
+                  return (
+                    <h3 key={idx} className="text-lg font-medium text-slate-300">
+                      {block.replace('### ', '')}
+                    </h3>
+                  );
                 }
                 if (block.startsWith('- ')) {
                   const items = block.split('\n').map((line) => line.replace('- ', ''));
@@ -228,7 +230,10 @@ export function DocEditorPage() {
                   );
                 }
                 return (
-                  <p key={idx} className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap">
+                  <p
+                    key={idx}
+                    className="text-sm text-slate-300 leading-relaxed whitespace-pre-wrap"
+                  >
                     {block}
                   </p>
                 );

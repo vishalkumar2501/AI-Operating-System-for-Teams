@@ -106,7 +106,8 @@ export class MeetingRepository {
           participants: {
             create: allParticipantIds.map((userId) => ({
               userId,
-              rsvp: userId === data.organizerId ? ParticipantRsvp.ACCEPTED : ParticipantRsvp.PENDING,
+              rsvp:
+                userId === data.organizerId ? ParticipantRsvp.ACCEPTED : ParticipantRsvp.PENDING,
             })),
           },
         },

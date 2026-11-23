@@ -42,9 +42,10 @@ export function DocsPage() {
     },
   });
 
-  const filteredDocs = docs?.filter((d) =>
-    d.title.toLowerCase().includes(search.toLowerCase()) ||
-    d.content.toLowerCase().includes(search.toLowerCase())
+  const filteredDocs = docs?.filter(
+    (d) =>
+      d.title.toLowerCase().includes(search.toLowerCase()) ||
+      d.content.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -66,7 +67,11 @@ export function DocsPage() {
           disabled={createMutation.isPending}
           className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 shadow-lg shadow-indigo-600/20 disabled:opacity-50"
         >
-          {createMutation.isPending ? <Spinner className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+          {createMutation.isPending ? (
+            <Spinner className="h-4 w-4" />
+          ) : (
+            <Plus className="h-4 w-4" />
+          )}
           New Document
         </button>
       </div>
@@ -139,8 +144,7 @@ export function DocsPage() {
                   <div className="flex items-center justify-between mb-2">
                     {doc.project ? (
                       <span className="rounded bg-indigo-950/80 border border-indigo-700/50 px-2 py-0.5 text-xs font-semibold text-indigo-300 flex items-center gap-1">
-                        <FolderKanban className="h-3 w-3" />
-                        [{doc.project.key}]
+                        <FolderKanban className="h-3 w-3" />[{doc.project.key}]
                       </span>
                     ) : (
                       <span className="text-xs text-slate-500">Workspace Doc</span>
@@ -180,7 +184,12 @@ export function DocsPage() {
 
                   <div className="flex items-center gap-1">
                     <Calendar className="h-3 w-3" />
-                    <span>{updatedDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>
+                    <span>
+                      {updatedDate.toLocaleDateString(undefined, {
+                        month: 'short',
+                        day: 'numeric',
+                      })}
+                    </span>
                   </div>
                 </div>
               </div>

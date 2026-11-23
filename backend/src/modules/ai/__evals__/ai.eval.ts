@@ -10,29 +10,92 @@ interface EvalTestCase {
 
 const EVAL_TEST_SUITE: EvalTestCase[] = [
   // 1. Risk Detection Evals
-  { prompt: 'What are the main risks and bottlenecks in this sprint?', expectedCategory: 'risks', expectedTool: 'detectRisks' },
-  { prompt: 'Are there any blocked tasks or overdue tickets?', expectedCategory: 'risks', expectedTool: 'detectRisks' },
-  { prompt: 'Check project dependencies for bottleneck issues', expectedCategory: 'risks', expectedTool: 'detectRisks' },
-  { prompt: 'Which assignees are overloaded with tasks due soon?', expectedCategory: 'risks', expectedTool: 'detectRisks' },
+  {
+    prompt: 'What are the main risks and bottlenecks in this sprint?',
+    expectedCategory: 'risks',
+    expectedTool: 'detectRisks',
+  },
+  {
+    prompt: 'Are there any blocked tasks or overdue tickets?',
+    expectedCategory: 'risks',
+    expectedTool: 'detectRisks',
+  },
+  {
+    prompt: 'Check project dependencies for bottleneck issues',
+    expectedCategory: 'risks',
+    expectedTool: 'detectRisks',
+  },
+  {
+    prompt: 'Which assignees are overloaded with tasks due soon?',
+    expectedCategory: 'risks',
+    expectedTool: 'detectRisks',
+  },
 
   // 2. Agenda & Calendar Evals
-  { prompt: 'What is on my agenda for today?', expectedCategory: 'agenda', expectedTool: 'getMyAgenda' },
-  { prompt: 'Show me my upcoming schedule and meetings', expectedCategory: 'agenda', expectedTool: 'getMyAgenda' },
-  { prompt: 'When is my next meeting scheduled?', expectedCategory: 'agenda', expectedTool: 'getMyAgenda' },
+  {
+    prompt: 'What is on my agenda for today?',
+    expectedCategory: 'agenda',
+    expectedTool: 'getMyAgenda',
+  },
+  {
+    prompt: 'Show me my upcoming schedule and meetings',
+    expectedCategory: 'agenda',
+    expectedTool: 'getMyAgenda',
+  },
+  {
+    prompt: 'When is my next meeting scheduled?',
+    expectedCategory: 'agenda',
+    expectedTool: 'getMyAgenda',
+  },
 
   // 3. Project Status & Progress Evals
-  { prompt: 'What is the current project completion status?', expectedCategory: 'status', expectedTool: 'getProjectStatus' },
-  { prompt: 'Show me the sprint progress and ticket counts', expectedCategory: 'status', expectedTool: 'getProjectStatus' },
+  {
+    prompt: 'What is the current project completion status?',
+    expectedCategory: 'status',
+    expectedTool: 'getProjectStatus',
+  },
+  {
+    prompt: 'Show me the sprint progress and ticket counts',
+    expectedCategory: 'status',
+    expectedTool: 'getProjectStatus',
+  },
 
   // 4. Hybrid Search Evals
-  { prompt: 'Search workspace for pgvector indexing documentation', expectedCategory: 'search', expectedTool: 'searchWorkspace' },
-  { prompt: 'Find architecture specs for the Redis cluster cache', expectedCategory: 'search', expectedTool: 'searchWorkspace' },
-  { prompt: 'Search meeting transcripts for discussion about deployment', expectedCategory: 'search', expectedTool: 'searchWorkspace' },
+  {
+    prompt: 'Search workspace for pgvector indexing documentation',
+    expectedCategory: 'search',
+    expectedTool: 'searchWorkspace',
+  },
+  {
+    prompt: 'Find architecture specs for the Redis cluster cache',
+    expectedCategory: 'search',
+    expectedTool: 'searchWorkspace',
+  },
+  {
+    prompt: 'Search meeting transcripts for discussion about deployment',
+    expectedCategory: 'search',
+    expectedTool: 'searchWorkspace',
+  },
 
   // 5. Write Tool Evals (Human-in-the-Loop Proposal Evals)
-  { prompt: 'Create task: Implement rate limiting and DDoS protection', expectedCategory: 'createTask', expectedTool: 'createTask', expectProposal: true },
-  { prompt: 'Add task: Configure Prometheus monitoring metrics', expectedCategory: 'createTask', expectedTool: 'createTask', expectProposal: true },
-  { prompt: 'New task: Setup Kubernetes ingress with TLS cert-manager', expectedCategory: 'createTask', expectedTool: 'createTask', expectProposal: true },
+  {
+    prompt: 'Create task: Implement rate limiting and DDoS protection',
+    expectedCategory: 'createTask',
+    expectedTool: 'createTask',
+    expectProposal: true,
+  },
+  {
+    prompt: 'Add task: Configure Prometheus monitoring metrics',
+    expectedCategory: 'createTask',
+    expectedTool: 'createTask',
+    expectProposal: true,
+  },
+  {
+    prompt: 'New task: Setup Kubernetes ingress with TLS cert-manager',
+    expectedCategory: 'createTask',
+    expectedTool: 'createTask',
+    expectProposal: true,
+  },
 ];
 
 async function runEvaluations() {
@@ -63,14 +126,22 @@ async function runEvaluations() {
     let passed = false;
 
     if (testCase.expectedCategory === 'createTask') {
-      const hasCreateTaskProposal = result.proposedActions.some((a) => a.tool === 'createTask' && a.status === 'PROPOSED');
+      const hasCreateTaskProposal = result.proposedActions.some(
+        (a) => a.tool === 'createTask' && a.status === 'PROPOSED'
+      );
       passed = hasCreateTaskProposal;
     } else if (testCase.expectedCategory === 'risks') {
-      passed = result.response.toLowerCase().includes('risk') || result.response.toLowerCase().includes('bottleneck');
+      passed =
+        result.response.toLowerCase().includes('risk') ||
+        result.response.toLowerCase().includes('bottleneck');
     } else if (testCase.expectedCategory === 'agenda') {
-      passed = result.response.toLowerCase().includes('schedule') || result.response.toLowerCase().includes('agenda');
+      passed =
+        result.response.toLowerCase().includes('schedule') ||
+        result.response.toLowerCase().includes('agenda');
     } else if (testCase.expectedCategory === 'status') {
-      passed = result.response.toLowerCase().includes('progress') || result.response.toLowerCase().includes('completion');
+      passed =
+        result.response.toLowerCase().includes('progress') ||
+        result.response.toLowerCase().includes('completion');
     } else {
       passed = result.response.length > 0;
     }
@@ -99,7 +170,12 @@ async function runEvaluations() {
 }
 
 runEvaluations()
-  .catch(console.error)
-  .finally(async () => {
+  .then(async () => {
     await prisma.$disconnect();
+    process.exit(0);
+  })
+  .catch(async (err) => {
+    console.error('❌ Eval suite error:', err);
+    await prisma.$disconnect();
+    process.exit(1);
   });

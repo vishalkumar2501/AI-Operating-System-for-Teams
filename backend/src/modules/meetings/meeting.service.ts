@@ -1,11 +1,6 @@
 import { meetingRepository } from './meeting.repository';
 import { transcriptService } from './transcript.service';
-import {
-  CreateMeetingDto,
-  UpdateMeetingDto,
-  ParticipantRsvp,
-  MeetingStatus,
-} from '@teamos/shared';
+import { CreateMeetingDto, UpdateMeetingDto, ParticipantRsvp, MeetingStatus } from '@teamos/shared';
 import { createHttpError } from '../../middleware/errorHandler';
 import { prisma } from '../../lib/prisma';
 
@@ -96,12 +91,7 @@ export class MeetingService {
       priority?: 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
     }>
   ) {
-    return transcriptService.convertActionItemsToTasks(
-      meetingId,
-      workspaceId,
-      userId,
-      items
-    );
+    return transcriptService.convertActionItemsToTasks(meetingId, workspaceId, userId, items);
   }
 }
 

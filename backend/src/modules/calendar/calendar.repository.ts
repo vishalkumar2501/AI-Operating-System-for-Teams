@@ -8,7 +8,10 @@ export interface CalendarFeedOptions {
 }
 
 export class CalendarRepository {
-  async getUnifiedFeed(workspaceId: string, options: CalendarFeedOptions): Promise<CalendarFeedItem[]> {
+  async getUnifiedFeed(
+    workspaceId: string,
+    options: CalendarFeedOptions
+  ): Promise<CalendarFeedItem[]> {
     const { from, to, userIds } = options;
 
     // 1. Fetch Meetings
@@ -128,9 +131,7 @@ export class CalendarRepository {
     }
 
     // Sort chronologically
-    return feed.sort(
-      (a, b) => new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime()
-    );
+    return feed.sort((a, b) => new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime());
   }
 
   async createEvent(userId: string, workspaceId: string, data: CreateCalendarEventDto) {

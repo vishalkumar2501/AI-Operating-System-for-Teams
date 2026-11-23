@@ -1,4 +1,10 @@
-import { PrismaClient, WorkspaceRole, TaskStatus, TaskPriority, DependencyType } from '@prisma/client';
+import {
+  PrismaClient,
+  WorkspaceRole,
+  TaskStatus,
+  TaskPriority,
+  DependencyType,
+} from '@prisma/client';
 import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
@@ -77,11 +83,31 @@ async function main() {
   // 4. Seed Projects
   console.log('4. Seeding Projects...');
   const projectDefs = [
-    { name: 'Core Engine & Microservices', key: 'CORE', description: 'PostgreSQL, Redis cluster, distributed event broker' },
-    { name: 'Next-Gen Web Client', key: 'WEB', description: 'React 18 SPA, TanStack Query, Tailwind dark mode' },
-    { name: 'Autonomous AI Operating System', key: 'AI', description: 'Multi-modal LLM reasoning, risk engine & approval loops' },
-    { name: 'Cross-Platform Mobile App', key: 'MOB', description: 'React Native & offline-first SQLite sync engine' },
-    { name: 'Kubernetes Cloud Platform', key: 'OPS', description: 'Terraform, Docker multi-stage builds, Prometheus monitoring' },
+    {
+      name: 'Core Engine & Microservices',
+      key: 'CORE',
+      description: 'PostgreSQL, Redis cluster, distributed event broker',
+    },
+    {
+      name: 'Next-Gen Web Client',
+      key: 'WEB',
+      description: 'React 18 SPA, TanStack Query, Tailwind dark mode',
+    },
+    {
+      name: 'Autonomous AI Operating System',
+      key: 'AI',
+      description: 'Multi-modal LLM reasoning, risk engine & approval loops',
+    },
+    {
+      name: 'Cross-Platform Mobile App',
+      key: 'MOB',
+      description: 'React Native & offline-first SQLite sync engine',
+    },
+    {
+      name: 'Kubernetes Cloud Platform',
+      key: 'OPS',
+      description: 'Terraform, Docker multi-stage builds, Prometheus monitoring',
+    },
   ];
 
   const createdProjects = [];
@@ -171,11 +197,31 @@ async function main() {
     if (projTasks.length >= 6) {
       await prisma.taskDependency.createMany({
         data: [
-          { taskId: projTasks[1].id, dependsOnTaskId: projTasks[0].id, type: DependencyType.BLOCKS },
-          { taskId: projTasks[2].id, dependsOnTaskId: projTasks[1].id, type: DependencyType.BLOCKS },
-          { taskId: projTasks[4].id, dependsOnTaskId: projTasks[2].id, type: DependencyType.BLOCKS },
-          { taskId: projTasks[4].id, dependsOnTaskId: projTasks[3].id, type: DependencyType.BLOCKS },
-          { taskId: projTasks[5].id, dependsOnTaskId: projTasks[4].id, type: DependencyType.BLOCKS },
+          {
+            taskId: projTasks[1].id,
+            dependsOnTaskId: projTasks[0].id,
+            type: DependencyType.BLOCKS,
+          },
+          {
+            taskId: projTasks[2].id,
+            dependsOnTaskId: projTasks[1].id,
+            type: DependencyType.BLOCKS,
+          },
+          {
+            taskId: projTasks[4].id,
+            dependsOnTaskId: projTasks[2].id,
+            type: DependencyType.BLOCKS,
+          },
+          {
+            taskId: projTasks[4].id,
+            dependsOnTaskId: projTasks[3].id,
+            type: DependencyType.BLOCKS,
+          },
+          {
+            taskId: projTasks[5].id,
+            dependsOnTaskId: projTasks[4].id,
+            type: DependencyType.BLOCKS,
+          },
         ],
         skipDuplicates: true,
       });
@@ -190,7 +236,8 @@ async function main() {
       organizerId: owner.id,
       projectId: createdProjects[0].id,
       title: 'Q4 Architecture Sync & AI Operating System Roadmap',
-      description: 'Reviewing real-time socket cluster, vector search indexing, and autonomous risk detection.',
+      description:
+        'Reviewing real-time socket cluster, vector search indexing, and autonomous risk detection.',
       startsAt: new Date(Date.now() + 2 * 3600 * 1000),
       endsAt: new Date(Date.now() + 3 * 3600 * 1000),
       meetingUrl: 'https://meet.google.com/teamos-sync',
@@ -202,17 +249,37 @@ async function main() {
       },
       transcript: {
         create: {
-          rawText: 'Vishal: We have pushed Phase 1 through Phase 7 into production. Sarah: The dependency graph canvas and critical path calculations are verified.',
-          summary: 'Team reviewed the entire TeamOS stack. All 8 phases are operational with sub-second response times.',
+          rawText:
+            'Vishal: We have pushed Phase 1 through Phase 7 into production. Sarah: The dependency graph canvas and critical path calculations are verified.',
+          summary:
+            'Team reviewed the entire TeamOS stack. All 8 phases are operational with sub-second response times.',
           actionItems: [
-            { title: 'Deploy Docker Compose cluster with persistent volumes', assigneeName: 'Vishal Kumar', suggestedPriority: 'HIGH' },
-            { title: 'Validate Reciprocal Rank Fusion query benchmarks', assigneeName: 'Sarah Chen', suggestedPriority: 'MEDIUM' },
+            {
+              title: 'Deploy Docker Compose cluster with persistent volumes',
+              assigneeName: 'Vishal Kumar',
+              suggestedPriority: 'HIGH',
+            },
+            {
+              title: 'Validate Reciprocal Rank Fusion query benchmarks',
+              assigneeName: 'Sarah Chen',
+              suggestedPriority: 'MEDIUM',
+            },
           ],
           status: 'COMPLETED',
           segments: {
             create: [
-              { startMs: 0, endMs: 15000, speakerName: 'Vishal Kumar', text: 'Welcome team. All core architectural phases are completed and verified.' },
-              { startMs: 16000, endMs: 32000, speakerName: 'Sarah Chen', text: 'The dependency graph canvas renders smoothly with automatic cycle detection.' },
+              {
+                startMs: 0,
+                endMs: 15000,
+                speakerName: 'Vishal Kumar',
+                text: 'Welcome team. All core architectural phases are completed and verified.',
+              },
+              {
+                startMs: 16000,
+                endMs: 32000,
+                speakerName: 'Sarah Chen',
+                text: 'The dependency graph canvas renders smoothly with automatic cycle detection.',
+              },
             ],
           },
         },
@@ -229,14 +296,16 @@ async function main() {
         authorId: owner.id,
         projectId: createdProjects[0].id,
         title: 'TeamOS System Architecture & Design Blueprint',
-        content: '# TeamOS System Architecture\n\n## 1. Overview\nTeamOS is an enterprise AI Operating System for teams, integrating project management with autonomous risk intelligence.',
+        content:
+          '# TeamOS System Architecture\n\n## 1. Overview\nTeamOS is an enterprise AI Operating System for teams, integrating project management with autonomous risk intelligence.',
       },
       {
         workspaceId: workspace.id,
         authorId: createdUsers[1].id,
         projectId: createdProjects[2].id,
         title: 'Hybrid Search: PostgreSQL FTS + pgvector with RRF',
-        content: '# Hybrid Search Engine\n\nCombines keyword full-text indexing and pgvector embeddings using reciprocal rank fusion.',
+        content:
+          '# Hybrid Search Engine\n\nCombines keyword full-text indexing and pgvector embeddings using reciprocal rank fusion.',
       },
     ],
   });

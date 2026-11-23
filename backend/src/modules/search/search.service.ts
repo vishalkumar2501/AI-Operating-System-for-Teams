@@ -17,9 +17,10 @@ export class SearchService {
     const cleanQuery = query.trim().toLowerCase();
     if (!cleanQuery) return [];
 
-    const allowedTypes = entityTypes && entityTypes.length > 0
-      ? entityTypes
-      : ['TASK', 'DOC', 'COMMENT', 'TRANSCRIPT'];
+    const allowedTypes =
+      entityTypes && entityTypes.length > 0
+        ? entityTypes
+        : ['TASK', 'DOC', 'COMMENT', 'TRANSCRIPT'];
 
     // -------------------------------------------------------------------------
     // 1. Lexical Search (Postgres FTS / Keyword matching across entities)

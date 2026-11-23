@@ -197,27 +197,13 @@ export type AgentActionStatus = z.infer<typeof AgentActionStatusEnum>;
 // ============================================================================
 // Phase 5: Meetings & Calendar
 // ============================================================================
-export const MeetingStatusEnum = z.enum([
-  'SCHEDULED',
-  'IN_PROGRESS',
-  'COMPLETED',
-  'CANCELLED',
-]);
+export const MeetingStatusEnum = z.enum(['SCHEDULED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED']);
 export type MeetingStatus = z.infer<typeof MeetingStatusEnum>;
 
-export const ParticipantRsvpEnum = z.enum([
-  'PENDING',
-  'ACCEPTED',
-  'DECLINED',
-  'TENTATIVE',
-]);
+export const ParticipantRsvpEnum = z.enum(['PENDING', 'ACCEPTED', 'DECLINED', 'TENTATIVE']);
 export type ParticipantRsvp = z.infer<typeof ParticipantRsvpEnum>;
 
-export const TranscriptStatusEnum = z.enum([
-  'PROCESSING',
-  'COMPLETED',
-  'FAILED',
-]);
+export const TranscriptStatusEnum = z.enum(['PROCESSING', 'COMPLETED', 'FAILED']);
 export type TranscriptStatus = z.infer<typeof TranscriptStatusEnum>;
 
 export const CreateMeetingSchema = z.object({
@@ -444,10 +430,7 @@ export const ActionApprovalSchema = z.object({
 export type ActionApprovalDto = z.infer<typeof ActionApprovalSchema>;
 
 export type RiskType =
-  | 'OVERDUE_CHAIN'
-  | 'BLOCKED_CRITICAL_PATH'
-  | 'OVERLOADED_ASSIGNEE'
-  | 'STALE_TASK';
+  'OVERDUE_CHAIN' | 'BLOCKED_CRITICAL_PATH' | 'OVERLOADED_ASSIGNEE' | 'STALE_TASK';
 
 export interface ProjectRisk {
   id: string;

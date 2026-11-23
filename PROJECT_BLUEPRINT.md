@@ -33,6 +33,7 @@ Yeh file AI coding agent ke liye **single source of truth** hai. Agent ko is fil
 **Problem:** Teams ka kaam 5-6 tools mein bikhra hota hai (tickets, chat, calendar, docs, GitHub, meetings). Kisi ko poori picture nahi dikhti.
 
 **Solution:** Ek workspace jahan sab connected hai, aur AI:
+
 - Roz ka summary deta hai ("aaj tumhare 4 tasks, 2 overdue").
 - Meeting transcript se **action items nikaal kar tasks banata hai** (approval ke baad).
 - Project ke **risk detect** karta hai (blocked dependencies, overdue chain, overloaded member).
@@ -44,14 +45,14 @@ Yeh file AI coding agent ke liye **single source of truth** hai. Agent ko is fil
 
 ## 2. Success Metrics (resume ke liye numbers)
 
-| Metric | Target |
-|---|---|
-| Workspace objects indexed (tasks, comments, docs, transcripts) | **100K+** |
-| Search / list API p95 latency | **< 1 second** |
-| Realtime event delivery (comment, presence) | **< 300 ms** |
-| AI agent actions with audit trail | **100%** |
-| AI write-actions requiring human approval | **100%** |
-| Test coverage (services layer) | **70%+** |
+| Metric                                                         | Target         |
+| -------------------------------------------------------------- | -------------- |
+| Workspace objects indexed (tasks, comments, docs, transcripts) | **100K+**      |
+| Search / list API p95 latency                                  | **< 1 second** |
+| Realtime event delivery (comment, presence)                    | **< 300 ms**   |
+| AI agent actions with audit trail                              | **100%**       |
+| AI write-actions requiring human approval                      | **100%**       |
+| Test coverage (services layer)                                 | **70%+**       |
 
 Yeh numbers **seed script + k6/autocannon load test** se actually measure karke README mein screenshot/table ke saath dikhane hain. Bina measure kiye claim mat karo.
 
@@ -60,6 +61,7 @@ Yeh numbers **seed script + k6/autocannon load test** se actually measure karke 
 ## 3. Tech Stack
 
 ### Frontend
+
 - **React 18 + Vite + TypeScript**
 - **Tailwind CSS** + **shadcn/ui** (clean, professional UI)
 - **TanStack Query** (server state), **Zustand** (UI state)
@@ -70,9 +72,10 @@ Yeh numbers **seed script + k6/autocannon load test** se actually measure karke 
 - **dnd-kit** (kanban drag & drop)
 
 ### Backend
+
 - **Node.js + Express + TypeScript**
 - **PostgreSQL** (primary DB) + **pgvector** extension (vector search)
-  - *Note:* MERN comfort ke liye MongoDB bhi chalega, but Postgres better hai kyunki relations (task dependencies, RBAC) + pgvector ek hi DB mein mil jata hai. Is project mein **Postgres + Prisma** default hai.
+  - _Note:_ MERN comfort ke liye MongoDB bhi chalega, but Postgres better hai kyunki relations (task dependencies, RBAC) + pgvector ek hi DB mein mil jata hai. Is project mein **Postgres + Prisma** default hai.
 - **Prisma ORM**
 - **Redis** — caching, presence, rate limiting, pub/sub, BullMQ backend
 - **BullMQ** — background queues (embeddings, notifications, AI jobs, email sync)
@@ -80,18 +83,21 @@ Yeh numbers **seed script + k6/autocannon load test** se actually measure karke 
 - **Zod** (validation), **Pino** (logging), **Helmet, CORS, express-rate-limit**
 
 ### Auth
+
 - **JWT access token (15 min) + refresh token (httpOnly cookie, rotation)**
 - **Google OAuth** (login + Calendar/Gmail connect)
 - **RBAC:** `OWNER`, `ADMIN`, `MEMBER`, `GUEST`
 - **Workspace invite flow** — sirf invited/authorized user hi join kar sakta hai
 
 ### AI
+
 - **LLM provider-agnostic interface** (`LLMProvider`): Anthropic Claude / OpenAI / Gemini — env se switch ho.
 - **Embeddings** + **pgvector** semantic search
 - **Tool-calling agent** (structured JSON, Zod-validated tool inputs)
 - **Meeting transcription:** Whisper API (ya browser Web Speech API for demo)
 
 ### DevOps / Quality
+
 - **Docker + docker-compose** (api, web, postgres, redis)
 - **GitHub Actions** CI (lint, typecheck, test, build)
 - **Vitest / Jest + Supertest** (backend tests), **Playwright** (1–2 e2e flows)
@@ -127,6 +133,7 @@ Yeh numbers **seed script + k6/autocannon load test** se actually measure karke 
 ```
 
 **Key flows**
+
 - **Write path:** API → DB transaction → audit log → emit event → (queue: embed + notify) → websocket broadcast.
 - **Read path:** API → Redis cache check → DB (indexed query) → cache set.
 - **AI path:** user prompt → retrieve context (SQL + vector search) → LLM → proposed action → **approval card** → user approve → execute → audit.
@@ -238,6 +245,7 @@ Har table mein `id (uuid)`, `createdAt`, `updatedAt`. Har workspace-scoped table
 - **Embedding**: workspaceId, entityType, entityId, chunkIndex, content, `vector(1536)`, metadata JSON
 
 ### Indexes (performance ke liye mandatory)
+
 - `Task(workspaceId, projectId, status)`, `Task(assigneeId, dueDate)`, `Task(workspaceId, updatedAt)`
 - `Comment(taskId, createdAt)`
 - `AuditLog(workspaceId, createdAt)`, `AuditLog(entityType, entityId)`
@@ -245,6 +253,7 @@ Har table mein `id (uuid)`, `createdAt`, `updatedAt`. Har workspace-scoped table
 - Full-text search: Postgres `tsvector` GIN index on task title/description, doc content
 
 ### Rules
+
 - Pagination **cursor-based** (offset nahi) lists pe.
 - N+1 queries avoid karo (Prisma `include`/`select` soch ke).
 - Soft delete (`deletedAt`) tasks/projects pe.
@@ -254,6 +263,7 @@ Har table mein `id (uuid)`, `createdAt`, `updatedAt`. Har workspace-scoped table
 ## 7. Features — Phase by Phase
 
 ### Phase 1 — Foundation (Week 1)
+
 - Monorepo setup, TS, ESLint, Prettier, Husky, Docker compose (Postgres + Redis).
 - Express app skeleton, global error handler, request-id, Pino logger.
 - Prisma schema v1 + migrations.
@@ -264,6 +274,7 @@ Har table mein `id (uuid)`, `createdAt`, `updatedAt`. Har workspace-scoped table
 - **Done when:** user signup → workspace banaye → teammate invite kare → teammate join kare.
 
 ### Phase 2 — Projects & Tasks (Week 2)
+
 - Project CRUD.
 - Task CRUD with full detail: title, description (rich text), assignee, subscribers, priority, status, start/due date, labels, attachments (S3/Cloudinary), subtasks, parent task.
 - Views: **List**, **Kanban (drag-drop)**, **My Tasks**.
@@ -273,6 +284,7 @@ Har table mein `id (uuid)`, `createdAt`, `updatedAt`. Har workspace-scoped table
 - **Done when:** Lark jaisa "Record a video" task banao → subscriber add karo → deadline set karo → subscriber ko notification mile.
 
 ### Phase 3 — Dependency Graph (Week 3)
+
 - `TaskDependency` API: add/remove (A blocks B).
 - **Cycle detection** (DFS/topological check) — cycle bane to 400 error.
 - React Flow graph: nodes = tasks, edges = dependencies, color by status, blocked tasks highlighted.
@@ -281,6 +293,7 @@ Har table mein `id (uuid)`, `createdAt`, `updatedAt`. Har workspace-scoped table
 - **Done when:** 20 tasks ka graph render ho, critical path highlight ho, cycle reject ho.
 
 ### Phase 4 — Realtime (Week 4)
+
 - Socket.IO with **Redis adapter**.
 - Rooms: `workspace:{id}`, `project:{id}`, `task:{id}`.
 - **Real-time comments** (optimistic UI + server confirm), `@mentions` → notification.
@@ -290,6 +303,7 @@ Har table mein `id (uuid)`, `createdAt`, `updatedAt`. Har workspace-scoped table
 - **Done when:** do browsers mein ek comment dusre mein <300ms mein dikhe.
 
 ### Phase 5 — Calendar, Meetings, Transcripts (Week 5)
+
 - Calendar view (day/week/month): tasks (due dates) + meetings + Google events.
 - **Team calendar:** apne subscribed members ka schedule dekho; free/busy.
 - Google Calendar OAuth sync (read) via worker; conflict detection.
@@ -299,6 +313,7 @@ Har table mein `id (uuid)`, `createdAt`, `updatedAt`. Har workspace-scoped table
 - **Done when:** meeting audio upload → transcript + summary + action-item suggestions dikhe.
 
 ### Phase 6 — Docs, Code Activity, Search (Week 6)
+
 - Docs: create/edit (TipTap editor), link tasks in docs.
 - **GitHub integration:** OAuth app / webhook; PR/commit mein task key (`WEB-42`) mile to task se auto-link; PR merged → task `DONE` suggest.
 - Activity feed per project (tasks + commits + meetings + comments).
@@ -306,8 +321,10 @@ Har table mein `id (uuid)`, `createdAt`, `updatedAt`. Har workspace-scoped table
 - Embedding pipeline: entity create/update → BullMQ job → chunk → embed → store.
 - **Done when:** "login bug ka kya hua" type query pe relevant task + PR + meeting note aaye.
 
-### Phase 7 — AI Layer (Week 7) — *sabse important*
+### Phase 7 — AI Layer (Week 7) — _sabse important_
+
 Section 9 padho. Summary:
+
 - **AI Assistant panel** (chat) — Messenger jaisa.
 - Read tools: daily summary, project status, search, "meri aaj ki agenda".
 - **Risk detection engine** (scheduled job): overdue chains, blocked critical path, overloaded assignee, stale tasks, deadline slip prediction.
@@ -316,6 +333,7 @@ Section 9 padho. Summary:
 - Full audit trail (`actorType = AI_AGENT`, approvalId, approver).
 
 ### Phase 8 — Scale, Polish, Ship (Week 8)
+
 - **Seed script:** 100K+ objects (tasks, comments, embeddings, audit logs) with `@faker-js/faker`.
 - **Load test:** autocannon/k6 — list, search, task detail, create. Results `docs/benchmarks.md` mein.
 - Redis caching (project summary, user task list, permission checks) + invalidation strategy.
@@ -366,6 +384,7 @@ GET    /health
 ```
 
 **Standard response format:**
+
 ```json
 { "success": true, "data": {}, "meta": { "nextCursor": "..." } }
 { "success": false, "error": { "code": "VALIDATION_ERROR", "message": "...", "details": [] } }
@@ -376,9 +395,11 @@ GET    /health
 ## 9. AI Agent Design (core differentiator)
 
 ### 9.1 Principle
+
 > **AI suggest karta hai, insaan approve karta hai, system audit karta hai.**
 
 ### 9.2 Context building (RAG)
+
 1. User query aaya → intent classify (question / search / action).
 2. **Structured context:** SQL se user ke tasks, projects, deadlines (hamesha accurate).
 3. **Semantic context:** pgvector se top-k relevant chunks (docs, comments, transcripts).
@@ -386,32 +407,36 @@ GET    /health
 5. Context ko token budget ke andar trim karke LLM ko do.
 
 ### 9.3 Tools (Zod-validated)
-| Tool | Type | Approval |
-|---|---|---|
-| `searchWorkspace` | read | no |
-| `getMyAgenda` | read | no |
-| `getProjectStatus` | read | no |
-| `summarizeMeeting` | read | no |
-| `detectRisks` | read | no |
-| `createTask` | write | **yes** |
-| `updateTask` | write | **yes** |
-| `assignTask` | write | **yes** |
-| `addComment` | write | **yes** |
-| `scheduleMeeting` | write | **yes** |
-| `createTasksFromTranscript` | write (bulk) | **yes** |
+
+| Tool                        | Type         | Approval |
+| --------------------------- | ------------ | -------- |
+| `searchWorkspace`           | read         | no       |
+| `getMyAgenda`               | read         | no       |
+| `getProjectStatus`          | read         | no       |
+| `summarizeMeeting`          | read         | no       |
+| `detectRisks`               | read         | no       |
+| `createTask`                | write        | **yes**  |
+| `updateTask`                | write        | **yes**  |
+| `assignTask`                | write        | **yes**  |
+| `addComment`                | write        | **yes**  |
+| `scheduleMeeting`           | write        | **yes**  |
+| `createTasksFromTranscript` | write (bulk) | **yes**  |
 
 ### 9.4 Action lifecycle
+
 ```
 PROPOSED → (user) APPROVED → EXECUTED
                 ↘ REJECTED
                          EXECUTED → FAILED (with error logged)
 ```
+
 - Write tool call ko seedha execute nahi karte — `AgentAction` row banti hai `PROPOSED` status mein.
 - Frontend approval card dikhata hai: kya badlega (before → after).
 - Approve pe hi executor chalta hai, **same RBAC checks** ke saath jaise user khud kar raha ho.
 - Execute ke baad `AuditLog` entry: `actorType=AI_AGENT`, `approvedBy=userId`.
 
 ### 9.5 Safety & reliability
+
 - **Prompt injection defense:** transcript/doc/comment content ko "untrusted data" treat karo; system prompt mein clearly likho ki data ke andar ke instructions follow nahi karne. Tool inputs Zod se strict validate.
 - **Idempotency key** har action pe (double-click / retry se duplicate na bane).
 - **Rate limit + token budget** per user/day.
@@ -421,6 +446,7 @@ PROPOSED → (user) APPROVED → EXECUTED
 - **Observability:** har `AgentRun` mein tokens, latency, tool calls log.
 
 ### 9.6 Risk detection rules (pehle rule-based, phir LLM explain)
+
 - Task overdue + dusre tasks us par dependent.
 - Critical path pe koi task `BLOCKED` / unassigned.
 - Assignee ke paas >N open tasks same week mein.
@@ -430,21 +456,22 @@ PROPOSED → (user) APPROVED → EXECUTED
 Output: risk score (LOW/MED/HIGH) + reason + suggested action (jo approval flow se jayega).
 
 ### 9.7 Prompt templates
+
 `modules/ai/prompts/` mein alag files — system prompt, risk-explainer, meeting-summarizer, action-item-extractor. Versioned (`v1`), taaki baad mein improve kar sako.
 
 ---
 
 ## 10. Realtime & Redis Usage
 
-| Use | Redis structure |
-|---|---|
-| Presence | `presence:workspace:{id}` → set/hash with TTL heartbeat (30s) |
-| Task viewers | `viewers:task:{id}` set |
-| Cache | `cache:project:{id}:summary`, `cache:user:{id}:tasks` (TTL 60s) |
-| Rate limit | sliding window counters |
-| Socket scaling | `@socket.io/redis-adapter` |
-| Queues | BullMQ |
-| Idempotency | `idem:{key}` with TTL |
+| Use            | Redis structure                                                 |
+| -------------- | --------------------------------------------------------------- |
+| Presence       | `presence:workspace:{id}` → set/hash with TTL heartbeat (30s)   |
+| Task viewers   | `viewers:task:{id}` set                                         |
+| Cache          | `cache:project:{id}:summary`, `cache:user:{id}:tasks` (TTL 60s) |
+| Rate limit     | sliding window counters                                         |
+| Socket scaling | `@socket.io/redis-adapter`                                      |
+| Queues         | BullMQ                                                          |
+| Idempotency    | `idem:{key}` with TTL                                           |
 
 **Cache invalidation rule:** write hone pe related keys delete karo (service layer mein, ek jagah). Cache kabhi source of truth nahi.
 
@@ -452,19 +479,20 @@ Output: risk score (LOW/MED/HIGH) + reason + suggested action (jo approval flow 
 
 ## 11. Queues (BullMQ)
 
-| Queue | Job |
-|---|---|
-| `embeddings` | entity chunk + embed + upsert |
-| `notifications` | in-app + email fan-out |
-| `transcription` | audio → text → segments → summary |
-| `ai-jobs` | risk scan, action extraction, daily digest |
-| `integrations` | google calendar sync, github backfill |
+| Queue           | Job                                        |
+| --------------- | ------------------------------------------ |
+| `embeddings`    | entity chunk + embed + upsert              |
+| `notifications` | in-app + email fan-out                     |
+| `transcription` | audio → text → segments → summary          |
+| `ai-jobs`       | risk scan, action extraction, daily digest |
+| `integrations`  | google calendar sync, github backfill      |
 
 Har job: retries (3, exponential), dead-letter handling, `jobId` dedupe, logging.
 
 ---
 
 ## 12. Security Checklist
+
 - Passwords: **argon2/bcrypt**.
 - Refresh token rotation + reuse detection; httpOnly + secure + sameSite cookies.
 - **Workspace isolation:** har query mein `workspaceId` filter (repository level enforce).
@@ -477,6 +505,7 @@ Har job: retries (3, exponential), dead-letter handling, `jobId` dedupe, logging
 ---
 
 ## 13. Testing Strategy
+
 - **Unit:** services (dependency cycle detection, critical path, risk rules, RBAC).
 - **Integration:** Supertest + test DB (auth flow, task CRUD, approval flow).
 - **E2E (Playwright):** signup→create project→create task→comment realtime; AI propose→approve.
@@ -487,6 +516,7 @@ Har job: retries (3, exponential), dead-letter handling, `jobId` dedupe, logging
 ---
 
 ## 14. Performance Plan (< 1s target)
+
 1. Correct indexes (Section 6).
 2. Cursor pagination.
 3. Redis caching hot reads.
@@ -498,7 +528,9 @@ Har job: retries (3, exponential), dead-letter handling, `jobId` dedupe, logging
 ---
 
 ## 15. Seed Data (100K+ objects)
+
 `prisma/seed.ts`:
+
 - 5 workspaces, 200 users, 50 projects
 - ~40,000 tasks, ~40,000 comments, ~10,000 docs/transcript chunks, ~10,000+ audit logs
 - Realistic dependencies (DAG, no cycles)
@@ -525,6 +557,7 @@ npm run dev            # web + api + workers
 ---
 
 ## 17. Git & Commit Discipline (recruiters commit history dekhte hain)
+
 - Branches: `main`, `feat/<name>`.
 - Chhote, meaningful commits (Conventional Commits).
 - Har phase ek PR jaisa (self-review description ke saath).
@@ -534,6 +567,7 @@ npm run dev            # web + api + workers
 ---
 
 ## 18. README.md mein kya hona chahiye (final deliverable)
+
 1. One-line pitch + live demo link + demo video (2–3 min).
 2. Screenshots / GIFs (board, dependency graph, realtime, AI approval).
 3. Architecture diagram + data flow.
@@ -547,6 +581,7 @@ npm run dev            # web + api + workers
 ---
 
 ## 19. Demo Script (interview / video ke liye, 3 min)
+
 1. Signup → workspace → teammate invite.
 2. Project banao, 5 tasks, dependencies jodo → graph dikhao, critical path highlight.
 3. Do browsers: realtime comment + presence.
@@ -559,6 +594,7 @@ npm run dev            # web + api + workers
 ---
 
 ## 20. Resume Bullets (numbers apne measure kiye hue daalna)
+
 - Built **TeamOS**, an AI-native team workspace (MERN + PostgreSQL/pgvector, Redis, BullMQ, Socket.IO) combining tasks, dependency graphs, meetings, docs and code activity.
 - Designed a **tool-calling AI agent with human-in-the-loop approvals** and a full audit trail; 100% of AI write actions are approved and logged.
 - Implemented **hybrid search (full-text + vector)** over **100K+ indexed objects** with **p95 latency under 1s** via indexing and Redis caching.
@@ -568,6 +604,7 @@ npm run dev            # web + api + workers
 ---
 
 ## 21. Final Definition of Done
+
 - [ ] Sab 8 phases complete, app deployed.
 - [ ] CI green, tests pass, lint clean.
 - [ ] 100K+ seed data + benchmark report.
@@ -579,4 +616,5 @@ npm run dev            # web + api + workers
 ---
 
 ## 22. Agent ko last instruction
+
 Ab **Phase 1** se shuru karo. Har phase ke end mein mujhe batao: kya bana, kya test hua, aur next phase ke liye kya plan hai. Agar koi requirement unclear ho to apni best judgment se simple option lo, `docs/decisions.md` mein likho, aur aage badho — bina kaam roke.

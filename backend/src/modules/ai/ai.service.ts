@@ -45,15 +45,24 @@ export class AiService {
     const cleanPrompt = prompt.toLowerCase();
 
     // 2. Intelligent tool routing & intent determination
-    if (cleanPrompt.includes('risk') || cleanPrompt.includes('bottleneck') || cleanPrompt.includes('blocked')) {
+    if (
+      cleanPrompt.includes('risk') ||
+      cleanPrompt.includes('bottleneck') ||
+      cleanPrompt.includes('blocked')
+    ) {
       // Intent: Detect Risks
-      const risks = await aiTools.executeReadTool('detectRisks', { projectId: context?.projectId }, toolCtx);
+      const risks = await aiTools.executeReadTool(
+        'detectRisks',
+        { projectId: context?.projectId },
+        toolCtx
+      );
 
       if (risks.length === 0) {
         responseText =
           'I analyzed your workspace and project dependencies. Great news: **no active risks or bottlenecks were detected**!';
       } else {
-        responseText = `I detected **${risks.length} project risk(s)**:\n\n` +
+        responseText =
+          `I detected **${risks.length} project risk(s)**:\n\n` +
           risks
             .map(
               (r: any, idx: number) =>
@@ -75,7 +84,11 @@ export class AiService {
           }
         }
       }
-    } else if (cleanPrompt.includes('create task') || cleanPrompt.includes('add task') || cleanPrompt.includes('new task')) {
+    } else if (
+      cleanPrompt.includes('create task') ||
+      cleanPrompt.includes('add task') ||
+      cleanPrompt.includes('new task')
+    ) {
       // Intent: Create Task
       let defaultProjectId = context?.projectId;
       if (!defaultProjectId) {
@@ -87,8 +100,12 @@ export class AiService {
 
       if (defaultProjectId) {
         // Extract title from prompt
-        const match = prompt.match(/(?:create|add|new)\s+task\s*(?::|named|called)?\s*["']?([^"'\n]+)["']?/i);
-        const taskTitle = match ? match[1].trim() : prompt.replace(/(?:create|add|new)\s+task/i, '').trim() || 'New AI Proposed Task';
+        const match = prompt.match(
+          /(?:create|add|new)\s+task\s*(?::|named|called)?\s*["']?([^"'\n]+)["']?/i
+        );
+        const taskTitle = match
+          ? match[1].trim()
+          : prompt.replace(/(?:create|add|new)\s+task/i, '').trim() || 'New AI Proposed Task';
 
         const action = await aiTools.proposeWriteTool(
           agentRun.id,
@@ -97,7 +114,11 @@ export class AiService {
             projectId: defaultProjectId,
             title: taskTitle,
             description: `Created via TeamOS AI assistant on ${new Date().toLocaleDateString()}`,
-            priority: cleanPrompt.includes('urgent') ? 'URGENT' : cleanPrompt.includes('high') ? 'HIGH' : 'MEDIUM',
+            priority: cleanPrompt.includes('urgent')
+              ? 'URGENT'
+              : cleanPrompt.includes('high')
+                ? 'HIGH'
+                : 'MEDIUM',
             status: 'TODO',
           },
           toolCtx
@@ -106,12 +127,18 @@ export class AiService {
 
         responseText = `I have drafted an action to create task **"${taskTitle}"**. Please review the details on the approval card below to execute.`;
       } else {
-        responseText = 'Please select or create a project first so I know where to place the new task.';
+        responseText =
+          'Please select or create a project first so I know where to place the new task.';
       }
-    } else if (cleanPrompt.includes('agenda') || cleanPrompt.includes('schedule') || cleanPrompt.includes('upcoming')) {
+    } else if (
+      cleanPrompt.includes('agenda') ||
+      cleanPrompt.includes('schedule') ||
+      cleanPrompt.includes('upcoming')
+    ) {
       // Intent: Get Agenda
       const agenda = await aiTools.executeReadTool('getMyAgenda', {}, toolCtx);
-      responseText = `Here is your upcoming schedule:\n\n` +
+      responseText =
+        `Here is your upcoming schedule:\n\n` +
         agenda
           .slice(0, 5)
           .map(
@@ -121,13 +148,22 @@ export class AiService {
           .join('\n');
     } else if (cleanPrompt.includes('status') || cleanPrompt.includes('progress')) {
       // Intent: Project Status
-      const status = await aiTools.executeReadTool('getProjectStatus', { projectId: context?.projectId }, toolCtx);
+      const status = await aiTools.executeReadTool(
+        'getProjectStatus',
+        { projectId: context?.projectId },
+        toolCtx
+      );
       responseText = `**Project Progress Overview:**\n- Completion: **${status.completionPercentage}%**\n- Completed Tasks: ${status.completedTasks} / ${status.totalTasks}\n- In Progress: ${status.inProgressTasks}\n- Blocked: ${status.blockedTasks}`;
     } else {
       // Intent: General search / assistance
-      const searchRes = await aiTools.executeReadTool('searchWorkspace', { query: prompt, limit: 3 }, toolCtx);
+      const searchRes = await aiTools.executeReadTool(
+        'searchWorkspace',
+        { query: prompt, limit: 3 },
+        toolCtx
+      );
       if (searchRes.length > 0) {
-        responseText = `Based on related items in your workspace:\n\n` +
+        responseText =
+          `Based on related items in your workspace:\n\n` +
           searchRes.map((r: any) => `- **[${r.entityType}] ${r.title}**: ${r.snippet}`).join('\n') +
           `\n\nHow would you like me to help further?`;
       } else {

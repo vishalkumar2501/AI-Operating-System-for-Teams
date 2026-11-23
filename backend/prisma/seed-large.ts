@@ -1,4 +1,13 @@
-import { PrismaClient, WorkspaceRole, TaskStatus, TaskPriority, DependencyType, ActorType, MeetingStatus, TranscriptStatus } from '@prisma/client';
+import {
+  PrismaClient,
+  WorkspaceRole,
+  TaskStatus,
+  TaskPriority,
+  DependencyType,
+  ActorType,
+  MeetingStatus,
+  TranscriptStatus,
+} from '@prisma/client';
 import bcrypt from 'bcrypt';
 import crypto from 'node:crypto';
 
@@ -14,18 +23,38 @@ function chunkArray<T>(items: T[], size: number): T[][] {
 }
 
 const ACTION_VERBS = [
-  'Implement', 'Refactor', 'Optimize', 'Fix race condition in', 'Add integration tests for',
-  'Migrate schema for', 'Add Prometheus metrics to', 'Benchmark', 'Upgrade dependencies for',
-  'Add RBAC guard to', 'Configure SSL termination for', 'Deploy canary release of',
-  'Implement distributed lock for', 'Profile memory allocation in', 'Add retry policy to'
+  'Implement',
+  'Refactor',
+  'Optimize',
+  'Fix race condition in',
+  'Add integration tests for',
+  'Migrate schema for',
+  'Add Prometheus metrics to',
+  'Benchmark',
+  'Upgrade dependencies for',
+  'Add RBAC guard to',
+  'Configure SSL termination for',
+  'Deploy canary release of',
+  'Implement distributed lock for',
+  'Profile memory allocation in',
+  'Add retry policy to',
 ];
 
 const SYSTEM_COMPONENTS = [
-  'Redis cluster failover', 'pgvector hybrid search scan', 'WebSocket heartbeat daemon',
-  'DAG cycle detector', 'JWT refresh token rotation', 'audio diarization pipeline',
-  'TanStack query cache invalidation', 'CPM critical path engine', 'distributed rate limiter',
-  'GitHub webhook signature validator', 'Kanban drag-and-drop state machine',
-  'BullMQ job concurrency broker', 'Elastic vector index shard', 'Audit log immutability ledger'
+  'Redis cluster failover',
+  'pgvector hybrid search scan',
+  'WebSocket heartbeat daemon',
+  'DAG cycle detector',
+  'JWT refresh token rotation',
+  'audio diarization pipeline',
+  'TanStack query cache invalidation',
+  'CPM critical path engine',
+  'distributed rate limiter',
+  'GitHub webhook signature validator',
+  'Kanban drag-and-drop state machine',
+  'BullMQ job concurrency broker',
+  'Elastic vector index shard',
+  'Audit log immutability ledger',
 ];
 
 const COMMENT_TEMPLATES = [
@@ -36,7 +65,7 @@ const COMMENT_TEMPLATES = [
   'Reproduced edge case on Windows environment. Root cause was CRLF line ending in parser.',
   'Refactored to Kahn topological sort algorithm; time complexity reduced to O(V + E).',
   'Critical path analysis indicates this task cannot be delayed without impacting target release.',
-  'Merged hotfix and tagged release v2.4.1.'
+  'Merged hotfix and tagged release v2.4.1.',
 ];
 
 async function main() {
@@ -80,10 +109,59 @@ async function main() {
     { name: 'OpenAI — Autonomous Systems', slug: 'openai-autonomous' },
   ];
 
-  const firstNames = ['Vishal', 'Sarah', 'Alex', 'Elena', 'David', 'Priya', 'Marcus', 'Chloe', 'Liam', 'Hana', 'Carlos', 'Fatima', 'Dmitry', 'Aoi', 'Mateo', 'Zoe', 'Lucas', 'Maya', 'Nia', 'Kenji'];
-  const lastNames = ['Kumar', 'Chen', 'Rivera', 'Rostova', 'Kim', 'Sharma', 'Vance', 'Dubois', 'O’Connor', 'Tanaka', 'Silva', 'Al-Mansoor', 'Ivanov', 'Sato', 'Morales', 'Zhang', 'Müller', 'Patel', 'Nkosi', 'Takahashi'];
+  const firstNames = [
+    'Vishal',
+    'Sarah',
+    'Alex',
+    'Elena',
+    'David',
+    'Priya',
+    'Marcus',
+    'Chloe',
+    'Liam',
+    'Hana',
+    'Carlos',
+    'Fatima',
+    'Dmitry',
+    'Aoi',
+    'Mateo',
+    'Zoe',
+    'Lucas',
+    'Maya',
+    'Nia',
+    'Kenji',
+  ];
+  const lastNames = [
+    'Kumar',
+    'Chen',
+    'Rivera',
+    'Rostova',
+    'Kim',
+    'Sharma',
+    'Vance',
+    'Dubois',
+    'O’Connor',
+    'Tanaka',
+    'Silva',
+    'Al-Mansoor',
+    'Ivanov',
+    'Sato',
+    'Morales',
+    'Zhang',
+    'Müller',
+    'Patel',
+    'Nkosi',
+    'Takahashi',
+  ];
 
-  const userRecords: { id: string; name: string; email: string; passwordHash: string; createdAt: Date; updatedAt: Date }[] = [];
+  const userRecords: {
+    id: string;
+    name: string;
+    email: string;
+    passwordHash: string;
+    createdAt: Date;
+    updatedAt: Date;
+  }[] = [];
   for (let i = 1; i <= 200; i++) {
     const fn = firstNames[i % firstNames.length];
     const ln = lastNames[(i * 3) % lastNames.length];
@@ -120,11 +198,19 @@ async function main() {
   console.log(`   ✓ Seeded ${createdWorkspaces.length} workspaces.`);
 
   // Create Workspace Memberships
-  const memberRecords: { id: string; workspaceId: string; userId: string; role: WorkspaceRole; createdAt: Date; updatedAt: Date }[] = [];
+  const memberRecords: {
+    id: string;
+    workspaceId: string;
+    userId: string;
+    role: WorkspaceRole;
+    createdAt: Date;
+    updatedAt: Date;
+  }[] = [];
   for (const ws of createdWorkspaces) {
     for (let uIdx = 0; uIdx < userRecords.length; uIdx++) {
       const u = userRecords[uIdx];
-      const role = uIdx === 0 ? WorkspaceRole.OWNER : (uIdx < 5 ? WorkspaceRole.ADMIN : WorkspaceRole.MEMBER);
+      const role =
+        uIdx === 0 ? WorkspaceRole.OWNER : uIdx < 5 ? WorkspaceRole.ADMIN : WorkspaceRole.MEMBER;
       memberRecords.push({
         id: crypto.randomUUID(),
         workspaceId: ws.id,
@@ -143,7 +229,17 @@ async function main() {
   // 3. Projects (50 total, 10 per workspace)
   console.log('3. Seeding 50 enterprise engineering projects...');
   const projectKeys = ['CORE', 'WEB', 'AI', 'MOB', 'OPS', 'DATA', 'SEC', 'API', 'EDGE', 'DIST'];
-  const projectRecords: { id: string; workspaceId: string; name: string; key: string; description: string; startDate: Date; targetDate: Date; createdAt: Date; updatedAt: Date }[] = [];
+  const projectRecords: {
+    id: string;
+    workspaceId: string;
+    name: string;
+    key: string;
+    description: string;
+    startDate: Date;
+    targetDate: Date;
+    createdAt: Date;
+    updatedAt: Date;
+  }[] = [];
 
   for (let wsIdx = 0; wsIdx < createdWorkspaces.length; wsIdx++) {
     const ws = createdWorkspaces[wsIdx];
@@ -189,13 +285,22 @@ async function main() {
   }[] = [];
 
   const statuses = [
-    TaskStatus.DONE, TaskStatus.DONE, TaskStatus.DONE,
-    TaskStatus.IN_PROGRESS, TaskStatus.IN_PROGRESS,
-    TaskStatus.TODO, TaskStatus.TODO,
+    TaskStatus.DONE,
+    TaskStatus.DONE,
+    TaskStatus.DONE,
+    TaskStatus.IN_PROGRESS,
+    TaskStatus.IN_PROGRESS,
+    TaskStatus.TODO,
+    TaskStatus.TODO,
     TaskStatus.BACKLOG,
-    TaskStatus.BLOCKED
+    TaskStatus.BLOCKED,
   ];
-  const priorities = [TaskPriority.LOW, TaskPriority.MEDIUM, TaskPriority.HIGH, TaskPriority.URGENT];
+  const priorities = [
+    TaskPriority.LOW,
+    TaskPriority.MEDIUM,
+    TaskPriority.HIGH,
+    TaskPriority.URGENT,
+  ];
 
   const TASKS_PER_PROJECT = 800;
   for (const proj of projectRecords) {
@@ -240,7 +345,13 @@ async function main() {
 
   // 5. Task Dependencies (~10,000 DAG edges, strictly acyclic)
   console.log('5. Generating ~10,000 DAG dependencies (guaranteed cycle-free)...');
-  const dependencyRecords: { id: string; taskId: string; dependsOnTaskId: string; type: DependencyType; createdAt: Date }[] = [];
+  const dependencyRecords: {
+    id: string;
+    taskId: string;
+    dependsOnTaskId: string;
+    type: DependencyType;
+    createdAt: Date;
+  }[] = [];
 
   // Group tasks by project
   const tasksByProject = new Map<string, typeof taskRecords>();
@@ -276,7 +387,15 @@ async function main() {
 
   // 6. Comments (~40,000 comments attached to tasks)
   console.log('6. Generating ~40,000 comments across tasks...');
-  const commentRecords: { id: string; taskId: string; authorId: string; body: string; mentions: string[]; createdAt: Date; updatedAt: Date }[] = [];
+  const commentRecords: {
+    id: string;
+    taskId: string;
+    authorId: string;
+    body: string;
+    mentions: string[];
+    createdAt: Date;
+    updatedAt: Date;
+  }[] = [];
 
   for (let i = 0; i < taskRecords.length; i++) {
     const task = taskRecords[i];
@@ -307,7 +426,16 @@ async function main() {
 
   // 7. Docs (500 architecture & spec docs)
   console.log('7. Seeding 500 architecture & specification docs...');
-  const docRecords: { id: string; workspaceId: string; projectId: string; title: string; content: string; authorId: string; createdAt: Date; updatedAt: Date }[] = [];
+  const docRecords: {
+    id: string;
+    workspaceId: string;
+    projectId: string;
+    title: string;
+    content: string;
+    authorId: string;
+    createdAt: Date;
+    updatedAt: Date;
+  }[] = [];
 
   for (let i = 0; i < 500; i++) {
     const proj = projectRecords[i % projectRecords.length];
@@ -330,9 +458,37 @@ async function main() {
 
   // 8. Meetings, Transcripts & Segments (~10,000 chunks)
   console.log('8. Seeding 100 meetings and ~9,500 transcript segments...');
-  const meetingRecords: { id: string; workspaceId: string; projectId: string; title: string; organizerId: string; startsAt: Date; endsAt: Date; status: MeetingStatus; createdAt: Date; updatedAt: Date }[] = [];
-  const transcriptRecords: { id: string; meetingId: string; rawText: string; summary: string; status: TranscriptStatus; createdAt: Date; updatedAt: Date }[] = [];
-  const segmentRecords: { id: string; transcriptId: string; speakerName: string; speakerId: string; startMs: number; endMs: number; text: string; createdAt: Date }[] = [];
+  const meetingRecords: {
+    id: string;
+    workspaceId: string;
+    projectId: string;
+    title: string;
+    organizerId: string;
+    startsAt: Date;
+    endsAt: Date;
+    status: MeetingStatus;
+    createdAt: Date;
+    updatedAt: Date;
+  }[] = [];
+  const transcriptRecords: {
+    id: string;
+    meetingId: string;
+    rawText: string;
+    summary: string;
+    status: TranscriptStatus;
+    createdAt: Date;
+    updatedAt: Date;
+  }[] = [];
+  const segmentRecords: {
+    id: string;
+    transcriptId: string;
+    speakerName: string;
+    speakerId: string;
+    startMs: number;
+    endMs: number;
+    text: string;
+    createdAt: Date;
+  }[] = [];
 
   for (let m = 0; m < 100; m++) {
     const proj = projectRecords[m % projectRecords.length];
@@ -356,8 +512,10 @@ async function main() {
     transcriptRecords.push({
       id: transcriptId,
       meetingId,
-      rawText: 'Sprint sync discussion regarding distributed latency, dependency graphs, and automated AI task triage.',
-      summary: 'Team achieved target throughput. Action items assigned for Redis cluster failover tuning.',
+      rawText:
+        'Sprint sync discussion regarding distributed latency, dependency graphs, and automated AI task triage.',
+      summary:
+        'Team achieved target throughput. Action items assigned for Redis cluster failover tuning.',
       status: TranscriptStatus.COMPLETED,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -388,13 +546,30 @@ async function main() {
   for (const chunk of chunkArray(segmentRecords, 1000)) {
     await prisma.transcriptSegment.createMany({ data: chunk });
   }
-  console.log(`   ✓ Seeded ${meetingRecords.length} meetings, transcripts, and ${segmentRecords.length} transcript segments.`);
+  console.log(
+    `   ✓ Seeded ${meetingRecords.length} meetings, transcripts, and ${segmentRecords.length} transcript segments.`
+  );
 
   // 9. Audit Logs (~12,000 logs)
   console.log('9. Seeding ~12,000 enterprise audit logs...');
-  const auditLogRecords: { id: string; workspaceId: string; actorType: ActorType; actorId: string; action: string; entityType: string; entityId: string; createdAt: Date }[] = [];
+  const auditLogRecords: {
+    id: string;
+    workspaceId: string;
+    actorType: ActorType;
+    actorId: string;
+    action: string;
+    entityType: string;
+    entityId: string;
+    createdAt: Date;
+  }[] = [];
 
-  const actions = ['TASK_CREATED', 'TASK_STATUS_UPDATED', 'DEPENDENCY_ADDED', 'AI_ACTION_APPROVED', 'DOC_PUBLISHED'];
+  const actions = [
+    'TASK_CREATED',
+    'TASK_STATUS_UPDATED',
+    'DEPENDENCY_ADDED',
+    'AI_ACTION_APPROVED',
+    'DOC_PUBLISHED',
+  ];
   for (let a = 0; a < 12000; a++) {
     const ws = createdWorkspaces[a % createdWorkspaces.length];
     const user = userRecords[a % userRecords.length];
@@ -418,7 +593,15 @@ async function main() {
 
   // 10. Search Embeddings (~10,000 items)
   console.log('10. Seeding ~10,000 vector embeddings for hybrid search...');
-  const embeddingRecords: { id: string; workspaceId: string; entityType: string; entityId: string; chunkIndex: number; content: string; createdAt: Date }[] = [];
+  const embeddingRecords: {
+    id: string;
+    workspaceId: string;
+    entityType: string;
+    entityId: string;
+    chunkIndex: number;
+    content: string;
+    createdAt: Date;
+  }[] = [];
 
   for (let e = 0; e < 10000; e++) {
     const task = taskRecords[e];
@@ -439,10 +622,20 @@ async function main() {
   console.log(`   ✓ Seeded ${embeddingRecords.length} search embeddings.`);
 
   const durationSec = ((Date.now() - startTime) / 1000).toFixed(2);
-  const totalObjects = userRecords.length + createdWorkspaces.length + memberRecords.length +
-    projectRecords.length + taskRecords.length + dependencyRecords.length + commentRecords.length +
-    docRecords.length + meetingRecords.length + transcriptRecords.length + segmentRecords.length +
-    auditLogRecords.length + embeddingRecords.length;
+  const totalObjects =
+    userRecords.length +
+    createdWorkspaces.length +
+    memberRecords.length +
+    projectRecords.length +
+    taskRecords.length +
+    dependencyRecords.length +
+    commentRecords.length +
+    docRecords.length +
+    meetingRecords.length +
+    transcriptRecords.length +
+    segmentRecords.length +
+    auditLogRecords.length +
+    embeddingRecords.length;
 
   console.log('\n============================================================');
   console.log(`🎉 Enterprise Large Seed Complete in ${durationSec}s!`);

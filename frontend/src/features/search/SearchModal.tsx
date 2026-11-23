@@ -131,9 +131,7 @@ export function SearchModal({ workspaceId, isOpen, onClose }: SearchModalProps) 
                           {r.entityType}
                         </span>
                       </div>
-                      <p className="text-xs text-slate-400 truncate mt-0.5 max-w-md">
-                        {r.snippet}
-                      </p>
+                      <p className="text-xs text-slate-400 truncate mt-0.5 max-w-md">{r.snippet}</p>
                     </div>
                   </div>
 

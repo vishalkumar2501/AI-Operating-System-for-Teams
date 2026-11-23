@@ -51,8 +51,8 @@ export function ApprovalCard({ workspaceId, action, onResolved }: ApprovalCardPr
             status === 'EXECUTED'
               ? 'bg-emerald-950 text-emerald-400 border border-emerald-800/50'
               : status === 'REJECTED'
-              ? 'bg-rose-950 text-rose-400 border border-rose-800/50'
-              : 'bg-amber-950 text-amber-300 border border-amber-800/50 animate-pulse'
+                ? 'bg-rose-950 text-rose-400 border border-rose-800/50'
+                : 'bg-amber-950 text-amber-300 border border-amber-800/50 animate-pulse'
           }`}
         >
           {status}

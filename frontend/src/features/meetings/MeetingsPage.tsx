@@ -133,8 +133,8 @@ export function MeetingsPage() {
                       meeting.status === 'COMPLETED'
                         ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-800/40'
                         : meeting.status === 'IN_PROGRESS'
-                        ? 'bg-amber-950/80 text-amber-400 border border-amber-800/40 animate-pulse'
-                        : 'bg-blue-950/80 text-blue-400 border border-blue-800/40'
+                          ? 'bg-amber-950/80 text-amber-400 border border-amber-800/40 animate-pulse'
+                          : 'bg-blue-950/80 text-blue-400 border border-blue-800/40'
                     }`}
                   >
                     {meeting.status}

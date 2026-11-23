@@ -3,9 +3,10 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy workspace package manifests
-COPY package.json package-lock.json* ./
+# Copy workspace package manifests & root configs
+COPY package.json package-lock.json* tsconfig.base.json ./
 COPY shared/package.json ./shared/
+COPY backend/package.json ./backend/
 COPY frontend/package.json ./frontend/
 
 # Install dependencies

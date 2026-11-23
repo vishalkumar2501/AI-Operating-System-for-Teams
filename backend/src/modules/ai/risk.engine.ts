@@ -32,7 +32,13 @@ export class RiskEngine {
         blocking: {
           select: {
             task: {
-              select: { id: true, number: true, title: true, status: true, project: { select: { key: true } } },
+              select: {
+                id: true,
+                number: true,
+                title: true,
+                status: true,
+                project: { select: { key: true } },
+              },
             },
           },
         },
@@ -103,7 +109,10 @@ export class RiskEngine {
     // -------------------------------------------------------------------------
     // 3. OVERLOADED_ASSIGNEE Detection
     // -------------------------------------------------------------------------
-    const workloadMap = new Map<string, { assigneeName: string; taskIds: string[]; count: number }>();
+    const workloadMap = new Map<
+      string,
+      { assigneeName: string; taskIds: string[]; count: number }
+    >();
     const in7Days = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
 
     for (const t of tasks) {

@@ -73,7 +73,10 @@ export class GithubService {
       },
     });
 
-    logger.info({ keyWithNumber, parts, where, matchedTaskId: task?.id, taskWorkspaceId: task?.workspaceId }, 'findTaskByKeyWithNumber result');
+    logger.info(
+      { keyWithNumber, parts, where, matchedTaskId: task?.id, taskWorkspaceId: task?.workspaceId },
+      'findTaskByKeyWithNumber result'
+    );
     return task;
   }
 
@@ -116,7 +119,10 @@ export class GithubService {
           }
         }
 
-        logger.info({ targetWorkspaceId, queryWorkspaceId: workspaceId, repoName, linkedTaskId }, 'Creating GitActivity for commit');
+        logger.info(
+          { targetWorkspaceId, queryWorkspaceId: workspaceId, repoName, linkedTaskId },
+          'Creating GitActivity for commit'
+        );
 
         await prisma.gitActivity.create({
           data: {
@@ -178,9 +184,13 @@ export class GithubService {
 
       // Auto-resolution logic: If PR is merged and closes/fixes task, mark task as DONE
       if (isMerged && matchedTask) {
-        const closingPattern = /(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved)\s+([A-Z0-9]+-\d+)/i;
+        const closingPattern =
+          /(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved)\s+([A-Z0-9]+-\d+)/i;
         if (closingPattern.test(textToScan)) {
-          logger.info({ taskId: matchedTask.id, prNumber: pr.number }, 'Auto-resolving task linked to merged PR');
+          logger.info(
+            { taskId: matchedTask.id, prNumber: pr.number },
+            'Auto-resolving task linked to merged PR'
+          );
           await taskRepository.update(matchedTask.id, {
             status: 'DONE',
             completedAt: new Date().toISOString(),

@@ -17,12 +17,12 @@ All benchmark metrics in this document are **directly measured** against the liv
 
 ## Measured Performance Results
 
-| Endpoint / Feature | Throughput (Req/sec) | Average Latency | p99 Latency | Total Requests | Error Count |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **Health Check Baseline** (`GET /api/v1/health`) | **2,561 req/sec** | **7.3 ms** | **32 ms** | 12,802 | **0 (0.00%)** |
-| **Project Tasks Query** (`GET /api/v1/projects/:id/tasks`) | **5,503 req/sec** | **2.2 ms** | **9 ms** | 27,511 | **0 (0.00%)** |
-| **Unified Calendar Feed** (`GET /api/v1/workspaces/:id/calendar`) | **5,240 req/sec** | **2.3 ms** | **12 ms** | 26,195 | **0 (0.00%)** |
-| **Hybrid Search (FTS + pgvector RRF)** (`GET /api/v1/workspaces/:id/search?q=vector`) | **5,900 req/sec** | **1.3 ms** | **5 ms** | 29,494 | **0 (0.00%)** |
+| Endpoint / Feature                                                                    | Throughput (Req/sec) | Average Latency | p99 Latency | Total Requests |  Error Count  |
+| :------------------------------------------------------------------------------------ | :------------------: | :-------------: | :---------: | :------------: | :-----------: |
+| **Health Check Baseline** (`GET /api/v1/health`)                                      |  **2,561 req/sec**   |   **7.3 ms**    |  **32 ms**  |     12,802     | **0 (0.00%)** |
+| **Project Tasks Query** (`GET /api/v1/projects/:id/tasks`)                            |  **5,503 req/sec**   |   **2.2 ms**    |  **9 ms**   |     27,511     | **0 (0.00%)** |
+| **Unified Calendar Feed** (`GET /api/v1/workspaces/:id/calendar`)                     |  **5,240 req/sec**   |   **2.3 ms**    |  **12 ms**  |     26,195     | **0 (0.00%)** |
+| **Hybrid Search (FTS + pgvector RRF)** (`GET /api/v1/workspaces/:id/search?q=vector`) |  **5,900 req/sec**   |   **1.3 ms**    |  **5 ms**   |     29,494     | **0 (0.00%)** |
 
 ---
 

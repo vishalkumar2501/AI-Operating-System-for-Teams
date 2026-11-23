@@ -1,13 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import {
-  Sparkles,
-  X,
-  Send,
-  AlertTriangle,
-  Calendar,
-  FolderKanban,
-} from 'lucide-react';
+import { Sparkles, X, Send, AlertTriangle, Calendar, FolderKanban } from 'lucide-react';
 import { aiApi } from './ai.api';
 import { ApprovalCard } from './ApprovalCard';
 import { ProposedAction } from '@teamos/shared';
@@ -51,8 +44,7 @@ export function AiAssistantDrawer({
   }, [messages]);
 
   const chatMutation = useMutation({
-    mutationFn: (promptText: string) =>
-      aiApi.chat(workspaceId, promptText, { projectId }),
+    mutationFn: (promptText: string) => aiApi.chat(workspaceId, promptText, { projectId }),
     onSuccess: (data) => {
       setMessages((prev) => [
         ...prev,
@@ -157,11 +149,7 @@ export function AiAssistantDrawer({
             {m.proposedActions && m.proposedActions.length > 0 && (
               <div className="w-full mt-3 space-y-2">
                 {m.proposedActions.map((action) => (
-                  <ApprovalCard
-                    key={action.id}
-                    workspaceId={workspaceId}
-                    action={action}
-                  />
+                  <ApprovalCard key={action.id} workspaceId={workspaceId} action={action} />
                 ))}
               </div>
             )}

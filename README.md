@@ -199,6 +199,7 @@ npm run docker:prod:down
 ## 🔄 CI/CD Pipeline
 
 Automated GitHub Actions workflow (`.github/workflows/ci.yml`) runs on every push and pull request to `main`:
+
 1. **Code Quality & Typecheck**: ESLint, Prettier format verification, Prisma client generation, TypeScript compilation across all monorepo workspaces (`@teamos/shared`, `@teamos/api`, `@teamos/web`).
 2. **Database Migrations & Integration Evals**: Ephemeral PostgreSQL 16 (`pgvector`) & Redis 7 services, Prisma schema synchronization, database seed verification, and automated AI tool-routing safety evaluations.
 3. **Container Build Verification**: Multi-stage Docker builds for API and Web images.

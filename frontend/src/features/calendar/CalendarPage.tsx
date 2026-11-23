@@ -158,12 +158,10 @@ export function CalendarPage() {
                   const dayDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
                   const dayStr = dayDate.toISOString().split('T')[0];
                   const isSelected = selectedDay === dayStr;
-                  const isToday =
-                    new Date().toISOString().split('T')[0] === dayStr;
+                  const isToday = new Date().toISOString().split('T')[0] === dayStr;
 
                   // Find items on this day
-                  const dayItems =
-                    feed?.filter((item) => item.startsAt.startsWith(dayStr)) || [];
+                  const dayItems = feed?.filter((item) => item.startsAt.startsWith(dayStr)) || [];
 
                   return (
                     <div
@@ -176,17 +174,13 @@ export function CalendarPage() {
                       <div className="flex items-center justify-between mb-1.5">
                         <span
                           className={`text-xs font-semibold rounded-full h-5 w-5 flex items-center justify-center ${
-                            isToday
-                              ? 'bg-indigo-600 text-white font-bold'
-                              : 'text-slate-400'
+                            isToday ? 'bg-indigo-600 text-white font-bold' : 'text-slate-400'
                           }`}
                         >
                           {day}
                         </span>
                         {dayItems.length > 0 && (
-                          <span className="text-[10px] text-slate-500">
-                            {dayItems.length}
-                          </span>
+                          <span className="text-[10px] text-slate-500">{dayItems.length}</span>
                         )}
                       </div>
 

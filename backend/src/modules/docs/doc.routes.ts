@@ -6,11 +6,7 @@ import { CreateDocSchema, UpdateDocSchema } from '@teamos/shared';
 
 export const docRouter = Router({ mergeParams: true });
 
-docRouter.get(
-  '/workspaces/:workspaceId/docs',
-  authenticate,
-  docController.getDocs
-);
+docRouter.get('/workspaces/:workspaceId/docs', authenticate, docController.getDocs);
 
 docRouter.post(
   '/workspaces/:workspaceId/docs',
@@ -19,11 +15,7 @@ docRouter.post(
   docController.createDoc
 );
 
-docRouter.get(
-  '/workspaces/:workspaceId/docs/:docId',
-  authenticate,
-  docController.getDoc
-);
+docRouter.get('/workspaces/:workspaceId/docs/:docId', authenticate, docController.getDoc);
 
 docRouter.patch(
   '/workspaces/:workspaceId/docs/:docId',
@@ -32,8 +24,4 @@ docRouter.patch(
   docController.updateDoc
 );
 
-docRouter.delete(
-  '/workspaces/:workspaceId/docs/:docId',
-  authenticate,
-  docController.deleteDoc
-);
+docRouter.delete('/workspaces/:workspaceId/docs/:docId', authenticate, docController.deleteDoc);

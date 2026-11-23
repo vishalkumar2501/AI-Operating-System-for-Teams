@@ -39,22 +39,27 @@ export class TranscriptService {
       }> = [];
 
       // Check if Whisper/LLM key is available and file exists
-      if (audioFilePath && fs.existsSync(audioFilePath) && (env.WHISPER_API_KEY || env.LLM_API_KEY)) {
+      if (
+        audioFilePath &&
+        fs.existsSync(audioFilePath) &&
+        (env.WHISPER_API_KEY || env.LLM_API_KEY)
+      ) {
         // Production Whisper transcription
         logger.info('Calling Whisper API for speech-to-text');
         // If needed, can make multipart request to Whisper API
         rawText = `Transcript processed via Whisper for file: ${path.basename(audioFilePath)}`;
       } else if (customText) {
         rawText = customText;
-        segments = [
-          { speakerName: 'Organizer', startMs: 0, endMs: 30000, text: customText }
-        ];
+        segments = [{ speakerName: 'Organizer', startMs: 0, endMs: 30000, text: customText }];
       } else {
         // Smart fallback mock dialogue for local development & demonstration
         logger.info('Generating structured team meeting transcript and action items');
         const meeting = await meetingRepository.findById(meetingId);
         const organizerName = meeting?.organizer.name || 'Alex';
-        const participantNames = meeting?.participants.map(p => p.user.name) || ['Vishal', 'Sarah'];
+        const participantNames = meeting?.participants.map((p) => p.user.name) || [
+          'Vishal',
+          'Sarah',
+        ];
 
         segments = [
           {
@@ -67,7 +72,7 @@ export class TranscriptService {
             speakerName: participantNames[0] || 'Vishal',
             startMs: 13000,
             endMs: 28000,
-            text: "The PostgreSQL and pgvector integration is complete. I will finish Dockerizing the background workers and set up Redis caching by Thursday.",
+            text: 'The PostgreSQL and pgvector integration is complete. I will finish Dockerizing the background workers and set up Redis caching by Thursday.',
           },
           {
             speakerName: participantNames[1] || 'Sarah',

@@ -13,11 +13,7 @@ aiRouter.post(
   aiController.chat
 );
 
-aiRouter.get(
-  '/workspaces/:workspaceId/ai/risks',
-  authenticate,
-  aiController.getRisks
-);
+aiRouter.get('/workspaces/:workspaceId/ai/risks', authenticate, aiController.getRisks);
 
 aiRouter.post(
   '/workspaces/:workspaceId/ai/actions/:actionId/approve',

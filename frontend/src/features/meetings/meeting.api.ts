@@ -50,15 +50,10 @@ export const meetingApi = {
     await apiClient.delete(`/workspaces/${workspaceId}/meetings/${meetingId}`);
   },
 
-  async updateRsvp(
-    workspaceId: string,
-    meetingId: string,
-    rsvp: ParticipantRsvp
-  ): Promise<any> {
-    const res = await apiClient.post(
-      `/workspaces/${workspaceId}/meetings/${meetingId}/rsvp`,
-      { rsvp }
-    );
+  async updateRsvp(workspaceId: string, meetingId: string, rsvp: ParticipantRsvp): Promise<any> {
+    const res = await apiClient.post(`/workspaces/${workspaceId}/meetings/${meetingId}/rsvp`, {
+      rsvp,
+    });
     return res.data.data;
   },
 

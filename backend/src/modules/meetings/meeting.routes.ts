@@ -3,19 +3,11 @@ import { meetingController } from './meeting.controller';
 import { authenticate } from '../../middleware/authenticate';
 import { validate } from '../../middleware/validate';
 import { upload } from '../../middleware/upload';
-import {
-  CreateMeetingSchema,
-  UpdateMeetingSchema,
-  UpdateRsvpSchema,
-} from '@teamos/shared';
+import { CreateMeetingSchema, UpdateMeetingSchema, UpdateRsvpSchema } from '@teamos/shared';
 
 export const meetingRouter = Router({ mergeParams: true });
 
-meetingRouter.get(
-  '/workspaces/:workspaceId/meetings',
-  authenticate,
-  meetingController.getMeetings
-);
+meetingRouter.get('/workspaces/:workspaceId/meetings', authenticate, meetingController.getMeetings);
 
 meetingRouter.post(
   '/workspaces/:workspaceId/meetings',

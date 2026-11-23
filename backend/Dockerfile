@@ -6,8 +6,8 @@ WORKDIR /app
 # Install build dependencies
 RUN apk add --no-cache libc6-compat openssl
 
-# Copy workspace package manifests
-COPY package.json package-lock.json* ./
+# Copy workspace package manifests & root configs
+COPY package.json package-lock.json* tsconfig.base.json ./
 COPY shared/package.json ./shared/
 COPY backend/package.json ./backend/
 COPY frontend/package.json ./frontend/

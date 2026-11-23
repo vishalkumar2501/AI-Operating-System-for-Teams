@@ -67,11 +67,7 @@ export function MeetingDetailPage() {
   }
 
   if (!meeting) {
-    return (
-      <div className="p-8 text-center bg-slate-950 text-slate-400">
-        Meeting not found.
-      </div>
-    );
+    return <div className="p-8 text-center bg-slate-950 text-slate-400">Meeting not found.</div>;
   }
 
   const transcript = meeting.transcript;
@@ -84,9 +80,7 @@ export function MeetingDetailPage() {
   };
 
   const handleConvertSelected = () => {
-    const itemsToConvert = actionItems.filter((_, idx) =>
-      selectedActionIndexes.includes(idx)
-    );
+    const itemsToConvert = actionItems.filter((_, idx) => selectedActionIndexes.includes(idx));
     if (itemsToConvert.length === 0) return;
     convertMutation.mutate(itemsToConvert);
   };
@@ -141,8 +135,15 @@ export function MeetingDetailPage() {
               </span>
               <span className="flex items-center gap-1.5">
                 <Clock className="h-4 w-4 text-slate-500" />
-                {new Date(meeting.startsAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}{' '}
-                - {new Date(meeting.endsAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                {new Date(meeting.startsAt).toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}{' '}
+                -{' '}
+                {new Date(meeting.endsAt).toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
               </span>
               <span className="flex items-center gap-1.5">
                 <Users className="h-4 w-4 text-slate-500" />
@@ -182,7 +183,9 @@ export function MeetingDetailPage() {
             <div className="flex items-center justify-between pb-4 border-b border-slate-800">
               <div className="flex items-center gap-2">
                 <FileAudio className="h-5 w-5 text-indigo-400" />
-                <h2 className="text-base font-semibold text-white">Audio Transcript & Diarization</h2>
+                <h2 className="text-base font-semibold text-white">
+                  Audio Transcript & Diarization
+                </h2>
               </div>
 
               {!transcript && (
@@ -205,7 +208,9 @@ export function MeetingDetailPage() {
               <div className="py-12 text-center">
                 <Spinner className="h-8 w-8 text-indigo-500 mx-auto mb-2" />
                 <p className="text-sm text-slate-300 font-medium">Processing audio with AI...</p>
-                <p className="text-xs text-slate-500">Transcribing speech and extracting key decisions</p>
+                <p className="text-xs text-slate-500">
+                  Transcribing speech and extracting key decisions
+                </p>
               </div>
             )}
 
@@ -235,9 +240,7 @@ export function MeetingDetailPage() {
                         <div className="text-xs font-semibold text-indigo-400">
                           {seg.speakerName || 'Speaker'}
                         </div>
-                        <p className="text-sm text-slate-300 mt-0.5 leading-relaxed">
-                          {seg.text}
-                        </p>
+                        <p className="text-sm text-slate-300 mt-0.5 leading-relaxed">{seg.text}</p>
                       </div>
                     </div>
                   ))
@@ -337,7 +340,9 @@ export function MeetingDetailPage() {
           <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
             <div className="flex items-center gap-2 mb-3">
               <Users className="h-5 w-5 text-indigo-400" />
-              <h2 className="text-base font-semibold text-white">Participants ({meeting.participants.length})</h2>
+              <h2 className="text-base font-semibold text-white">
+                Participants ({meeting.participants.length})
+              </h2>
             </div>
 
             <div className="space-y-2">
@@ -356,8 +361,8 @@ export function MeetingDetailPage() {
                       p.rsvp === 'ACCEPTED'
                         ? 'bg-emerald-950/80 text-emerald-400'
                         : p.rsvp === 'DECLINED'
-                        ? 'bg-rose-950/80 text-rose-400'
-                        : 'bg-slate-800 text-slate-400'
+                          ? 'bg-rose-950/80 text-rose-400'
+                          : 'bg-slate-800 text-slate-400'
                     }`}
                   >
                     {p.rsvp}

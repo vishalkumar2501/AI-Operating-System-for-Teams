@@ -7,10 +7,7 @@ export class DocController {
       const workspaceId = req.params['workspaceId'] as string;
       const { projectId } = req.query;
 
-      const docs = await docService.getDocs(
-        workspaceId,
-        projectId as string | undefined
-      );
+      const docs = await docService.getDocs(workspaceId, projectId as string | undefined);
 
       res.status(200).json({ success: true, data: docs });
     } catch (err) {
