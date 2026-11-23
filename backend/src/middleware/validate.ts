@@ -28,8 +28,13 @@ export function validateQuery<T>(schema: ZodSchema<T>): RequestHandler {
     if (!result.success) {
       return next(result.error);
     }
-    // Cast is safe: Zod has already parsed and coerced the values
-    req.query = result.data as typeof req.query;
+    // In Express 5, req.query is a getter. Use Object.defineProperty to safely override.
+    Object.defineProperty(req, 'query', {
+      value: result.data,
+      writable: true,
+      configurable: true,
+      enumerable: true,
+    });
     next();
   };
 }
