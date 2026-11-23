@@ -9,7 +9,7 @@
   "scripts": {
     "dev:api": "npm run dev --workspace=@teamos/api",
     "dev:web": "npm run dev --workspace=@teamos/web",
-    "dev": "npm run dev --workspaces --if-present",
+    "dev": "concurrently -k -p \"[{name}]\" -n \"api,web\" -c \"cyan.bold,green.bold\" \"npm run dev:api\" \"npm run dev:web\"",
     "build": "npm run build --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
