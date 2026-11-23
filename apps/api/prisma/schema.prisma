@@ -65,6 +65,11 @@ model User {
   comments     Comment[]
   auditLogs    AuditLog[]
   notifications Notification[]
+  organizedMeetings Meeting[]         @relation("OrganizedMeetings")
+  meetingParticipations MeetingParticipant[]
+  calendarEvents    CalendarEvent[]
+  docs              Doc[]
+  transcriptSegments TranscriptSegment[]
   createdAt    DateTime          @default(now())
   updatedAt    DateTime          @updatedAt
   deletedAt    DateTime?
@@ -83,6 +88,11 @@ model Workspace {
   projects    Project[]
   tasks       Task[]
   auditLogs   AuditLog[]
+  meetings        Meeting[]
+  calendarEvents  CalendarEvent[]
+  docs            Doc[]
+  gitActivities   GitActivity[]
+  embeddings      Embedding[]
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
   deletedAt   DateTime?
@@ -132,6 +142,9 @@ model Project {
   startDate   DateTime?
   targetDate  DateTime?
   tasks       Task[]
+  meetings    Meeting[]
+  docs        Doc[]
+  gitActivities GitActivity[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
@@ -168,6 +181,8 @@ model Task {
   attachments     Attachment[]
   dependencies    TaskDependency[] @relation("TaskBlockedBy")
   blocking        TaskDependency[] @relation("TaskBlocks")
+  calendarEvents  CalendarEvent[]
+  gitActivities   GitActivity[]
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   deletedAt       DateTime?
@@ -296,4 +311,183 @@ model Notification {
   @@index([userId, readAt])
   @@index([userId, createdAt])
 }
+
+// ============================================================================
+// Phase 5: Calendar, Meetings & Transcripts
+// ============================================================================
+enum MeetingStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum ParticipantRsvp {
+  PENDING
+  ACCEPTED
+  DECLINED
+  TENTATIVE
+}
+
+enum TranscriptStatus {
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum CalendarEventSource {
+  INTERNAL
+  GOOGLE
+}
+
+model Meeting {
+  id           String               @id @default(uuid())
+  workspaceId  String
+  workspace    Workspace            @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  projectId    String?
+  project      Project?             @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  title        String
+  description  String?
+  startsAt     DateTime
+  endsAt       DateTime
+  organizerId  String
+  organizer    User                 @relation("OrganizedMeetings", fields: [organizerId], references: [id], onDelete: Cascade)
+  status       MeetingStatus        @default(SCHEDULED)
+  meetingUrl   String?
+  recordingUrl String?
+  participants MeetingParticipant[]
+  transcript   Transcript?
+  calendarEvents CalendarEvent[]
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+
+  @@index([workspaceId, startsAt])
+  @@index([projectId])
+}
+
+model MeetingParticipant {
+  id        String          @id @default(uuid())
+  meetingId String
+  meeting   Meeting         @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rsvp      ParticipantRsvp @default(PENDING)
+  createdAt DateTime        @default(now())
+
+  @@unique([meetingId, userId])
+}
+
+model Transcript {
+  id          String              @id @default(uuid())
+  meetingId   String              @unique
+  meeting     Meeting             @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  rawText     String
+  summary     String?
+  actionItems Json?               // Extracted action items: [{ title, assignee, deadline }]
+  status      TranscriptStatus    @default(PROCESSING)
+  segments    TranscriptSegment[]
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+}
+
+model TranscriptSegment {
+  id           String     @id @default(uuid())
+  transcriptId String
+  transcript   Transcript @relation(fields: [transcriptId], references: [id], onDelete: Cascade)
+  speakerName  String?
+  speakerId    String?
+  speaker      User?      @relation(fields: [speakerId], references: [id], onDelete: SetNull)
+  startMs      Int
+  endMs        Int
+  text         String
+  createdAt    DateTime   @default(now())
+
+  @@index([transcriptId, startMs])
+}
+
+model CalendarEvent {
+  id          String              @id @default(uuid())
+  userId      String
+  user        User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspaceId String?
+  workspace   Workspace?          @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  source      CalendarEventSource @default(INTERNAL)
+  externalId  String?             // e.g. Google Calendar event ID
+  title       String
+  description String?
+  startsAt    DateTime
+  endsAt      DateTime
+  meetingId   String?
+  meeting     Meeting?            @relation(fields: [meetingId], references: [id], onDelete: SetNull)
+  taskId      String?
+  task        Task?               @relation(fields: [taskId], references: [id], onDelete: SetNull)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  @@index([userId, startsAt, endsAt])
+  @@index([workspaceId, startsAt])
+}
+
+// ============================================================================
+// Phase 6: Docs, GitHub Activity & Hybrid Search
+// ============================================================================
+enum GitActivityType {
+  PR
+  COMMIT
+  ISSUE
+}
+
+model Doc {
+  id          String    @id @default(uuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  projectId   String?
+  project     Project?  @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  title       String
+  content     String    // JSON or Markdown
+  authorId    String
+  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  @@index([workspaceId, updatedAt])
+  @@index([projectId])
+}
+
+model GitActivity {
+  id           String          @id @default(uuid())
+  workspaceId  String
+  workspace    Workspace       @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  projectId    String?
+  project      Project?        @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  repo         String          // e.g. "vishalkumar2501/AI-Operating-System-for-Teams"
+  type         GitActivityType
+  externalId   String          // e.g. PR #42 or commit SHA
+  title        String
+  author       String          // GitHub username
+  url          String
+  linkedTaskId String?
+  linkedTask   Task?           @relation(fields: [linkedTaskId], references: [id], onDelete: SetNull)
+  state        String          // e.g. "open", "merged", "closed"
+  createdAt    DateTime        @default(now())
+
+  @@index([workspaceId, createdAt])
+  @@index([linkedTaskId])
+}
+
+model Embedding {
+  id          String   @id @default(uuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  entityType  String   // "TASK", "DOC", "COMMENT", "TRANSCRIPT"
+  entityId    String
+  chunkIndex  Int      @default(0)
+  content     String
+  metadata    Json?
+  createdAt   DateTime @default(now())
+
+  @@index([workspaceId, entityType, entityId])
+}
+
 

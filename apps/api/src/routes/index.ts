@@ -6,6 +6,8 @@ import { taskRouter } from '../modules/tasks/task.routes';
 import { dependencyRouter } from '../modules/dependencies/dependency.routes';
 import { commentRouter } from '../modules/comments/comment.routes';
 import { notificationRouter } from '../modules/notifications/notification.routes';
+import { meetingRouter } from '../modules/meetings/meeting.routes';
+import { calendarRouter } from '../modules/calendar/calendar.routes';
 import { prisma } from '../lib/prisma';
 import { redis } from '../lib/redis';
 
@@ -52,3 +54,5 @@ apiRouter.use('/', taskRouter);
 apiRouter.use('/', dependencyRouter);
 apiRouter.use('/', commentRouter);
 apiRouter.use('/', notificationRouter);
+apiRouter.use('/', meetingRouter);
+apiRouter.use('/', calendarRouter);
