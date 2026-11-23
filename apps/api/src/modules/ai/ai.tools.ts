@@ -39,8 +39,22 @@ export class AiTools {
         });
 
       case 'getProjectStatus': {
-        const projectId = input.projectId || ctx.projectId;
-        if (!projectId) throw new Error('projectId is required for getProjectStatus');
+        let projectId = input.projectId || ctx.projectId;
+        if (!projectId) {
+          const firstProj = await prisma.project.findFirst({
+            where: { workspaceId: ctx.workspaceId, deletedAt: null },
+          });
+          projectId = firstProj?.id;
+        }
+        if (!projectId) {
+          return {
+            totalTasks: 0,
+            completedTasks: 0,
+            blockedTasks: 0,
+            inProgressTasks: 0,
+            completionPercentage: 0,
+          };
+        }
 
         const tasks = await prisma.task.findMany({
           where: { projectId, deletedAt: null },
@@ -90,7 +104,7 @@ export class AiTools {
     let after: any = { ...input };
 
     // Inspect existing state for diff display
-    if (tool === 'updateTask' || tool === 'assignTask') {
+    if ((tool === 'updateTask' || tool === 'assignTask') && input.taskId) {
       const taskId = input.taskId;
       const current = await prisma.task.findUnique({
         where: { id: taskId },
