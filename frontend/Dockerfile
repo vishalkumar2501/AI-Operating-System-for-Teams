@@ -5,14 +5,14 @@ WORKDIR /app
 
 # Copy workspace package manifests
 COPY package.json package-lock.json* ./
-COPY packages/shared/package.json ./packages/shared/
+COPY shared/package.json ./shared/
 COPY frontend/package.json ./frontend/
 
 # Install dependencies
 RUN npm ci
 
 # Copy shared package source and build it
-COPY packages/shared/ ./packages/shared/
+COPY shared/ ./shared/
 RUN npm run build --workspace=@teamos/shared
 
 # Copy frontend source

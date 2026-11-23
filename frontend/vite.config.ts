@@ -8,7 +8,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      '@teamos/shared': path.resolve(__dirname, '../packages/shared/src/index.ts'),
+      '@teamos/shared': path.resolve(__dirname, '../shared/src/index.ts'),
     },
   },
   server: {

@@ -5,7 +5,7 @@
   "workspaces": [
     "frontend",
     "backend",
-    "packages/*"
+    "shared"
   ],
   "scripts": {
     "dev:api": "npm run dev --workspace=@teamos/api",
@@ -22,8 +22,7 @@
     "docker:prod:up": "docker compose -f docker-compose.prod.yml up -d",
     "docker:prod:down": "docker compose -f docker-compose.prod.yml down",
     "seed": "npm run seed --workspace=@teamos/api",
-    "seed:large": "npm run seed:large --workspace=@teamos/api",
-    "prepare": "husky || exit 0"
+    "seed:large": "npm run seed:large --workspace=@teamos/api"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

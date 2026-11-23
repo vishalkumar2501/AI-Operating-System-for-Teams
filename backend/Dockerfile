@@ -8,7 +8,7 @@ RUN apk add --no-cache libc6-compat openssl
 
 # Copy workspace package manifests
 COPY package.json package-lock.json* ./
-COPY packages/shared/package.json ./packages/shared/
+COPY shared/package.json ./shared/
 COPY backend/package.json ./backend/
 COPY frontend/package.json ./frontend/
 
@@ -16,7 +16,7 @@ COPY frontend/package.json ./frontend/
 RUN npm ci
 
 # Copy shared package source and build it
-COPY packages/shared/ ./packages/shared/
+COPY shared/ ./shared/
 RUN npm run build --workspace=@teamos/shared
 
 # Copy Backend source and Prisma schema
@@ -43,8 +43,8 @@ RUN addgroup --system --gid 1001 nodejs && \
 # Copy necessary files from builder
 COPY --from=builder /app/package.json /app/package-lock.json* ./
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/packages/shared/dist ./packages/shared/dist
-COPY --from=builder /app/packages/shared/package.json ./packages/shared/package.json
+COPY --from=builder /app/shared/dist ./shared/dist
+COPY --from=builder /app/shared/package.json ./shared/package.json
 COPY --from=builder /app/backend/dist ./backend/dist
 COPY --from=builder /app/backend/prisma ./backend/prisma
 COPY --from=builder /app/backend/package.json ./backend/package.json
