@@ -31,7 +31,7 @@ jobs:
         run: npm run format:check
 
       - name: Generate Prisma Client
-        run: npx prisma generate --schema=./apps/api/prisma/schema.prisma
+        run: npx prisma generate --schema=./backend/prisma/schema.prisma
 
       - name: Build All Workspaces (@teamos/shared, @teamos/api, @teamos/web)
         run: npm run build
@@ -87,10 +87,10 @@ jobs:
         run: npm ci
 
       - name: Generate Prisma Client
-        run: npx prisma generate --schema=./apps/api/prisma/schema.prisma
+        run: npx prisma generate --schema=./backend/prisma/schema.prisma
 
       - name: Apply Database Schema to Test PostgreSQL
-        run: npx prisma db push --schema=./apps/api/prisma/schema.prisma --accept-data-loss
+        run: npx prisma db push --schema=./backend/prisma/schema.prisma --accept-data-loss
 
       - name: Run Enterprise Seed Script
         run: npm run seed --workspace=@teamos/api
@@ -99,7 +99,7 @@ jobs:
         run: npm run build --workspace=@teamos/shared
 
       - name: Run AI Tool-Routing Safety Evaluations
-        run: npx tsx apps/api/src/modules/ai/__evals__/ai.eval.ts
+        run: npx tsx backend/src/modules/ai/__evals__/ai.eval.ts
 
   docker-build:
     name: Container Build Verification
@@ -115,7 +115,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: apps/api/Dockerfile
+          file: backend/Dockerfile
           push: false
           tags: teamos/api:ci-test
 
@@ -123,6 +123,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: apps/web/Dockerfile
+          file: frontend/Dockerfile
           push: false
           tags: teamos/web:ci-test

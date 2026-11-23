@@ -6,7 +6,7 @@ WORKDIR /app
 # Copy workspace package manifests
 COPY package.json package-lock.json* ./
 COPY packages/shared/package.json ./packages/shared/
-COPY apps/web/package.json ./apps/web/
+COPY frontend/package.json ./frontend/
 
 # Install dependencies
 RUN npm ci
@@ -15,8 +15,8 @@ RUN npm ci
 COPY packages/shared/ ./packages/shared/
 RUN npm run build --workspace=@teamos/shared
 
-# Copy web source
-COPY apps/web/ ./apps/web/
+# Copy frontend source
+COPY frontend/ ./frontend/
 
 # Build Web application
 ARG VITE_API_URL=/api
@@ -33,10 +33,10 @@ FROM nginx:1.27-alpine AS runner
 RUN rm -rf /usr/share/nginx/html/*
 
 # Copy built static files from builder
-COPY --from=builder /app/apps/web/dist /usr/share/nginx/html
+COPY --from=builder /app/frontend/dist /usr/share/nginx/html
 
 # Copy custom nginx configuration
-COPY apps/web/nginx.conf /etc/nginx/conf.d/default.conf
+COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
