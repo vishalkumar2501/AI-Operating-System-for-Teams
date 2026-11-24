@@ -144,9 +144,7 @@ export function CreateMeetingModal({ workspaceId, isOpen, onClose }: CreateMeeti
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-text-3 mb-1">
-              Meeting Link (URL)
-            </label>
+            <label className="block text-xs font-medium text-text-3 mb-1">Meeting Link (URL)</label>
             <input
               type="url"
               value={meetingUrl}

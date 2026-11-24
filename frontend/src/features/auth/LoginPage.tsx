@@ -134,7 +134,10 @@ export function LoginPage() {
 
         <p className="mt-5 text-center text-sm text-text-3">
           Don&apos;t have an account?{' '}
-          <Link to="/register" className="text-accent hover:underline transition-colors font-medium">
+          <Link
+            to="/register"
+            className="text-accent hover:underline transition-colors font-medium"
+          >
             Create one
           </Link>
         </p>

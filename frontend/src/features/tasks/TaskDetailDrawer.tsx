@@ -481,9 +481,7 @@ export function TaskDetailDrawer({
                           <span className="font-mono text-[11px] text-text-3">
                             {b.task.project.key}-{b.task.number}
                           </span>
-                          <span className="font-medium text-text truncate">
-                            {b.task.title}
-                          </span>
+                          <span className="font-medium text-text truncate">{b.task.title}</span>
                         </div>
                         <span className="text-[10px] bg-surface-3 text-text-2 px-1.5 py-0.5 rounded">
                           {b.task.status}

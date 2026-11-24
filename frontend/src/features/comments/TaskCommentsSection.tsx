@@ -97,9 +97,7 @@ export function TaskCommentsSection({ taskId, typingUsers, sendTyping }: TaskCom
             <Spinner />
           </div>
         ) : comments.length === 0 ? (
-          <p className="text-xs text-text-3 italic py-2">
-            No comments yet. Start the discussion!
-          </p>
+          <p className="text-xs text-text-3 italic py-2">No comments yet. Start the discussion!</p>
         ) : (
           comments.map((comment) => {
             const isAuthor = comment.authorId === user?.id;
@@ -118,7 +116,11 @@ export function TaskCommentsSection({ taskId, typingUsers, sendTyping }: TaskCom
                   <div className="flex items-center justify-between gap-2 mb-1">
                     <span className="font-semibold text-text truncate">
                       {comment.author.name || comment.author.email}
-                      {isAuthor && <span className="ml-1 text-[10px] text-primary dark:text-accent font-medium">(You)</span>}
+                      {isAuthor && (
+                        <span className="ml-1 text-[10px] text-primary dark:text-accent font-medium">
+                          (You)
+                        </span>
+                      )}
                     </span>
                     <span className="text-[10px] text-text-3 shrink-0">
                       {new Date(comment.createdAt).toLocaleTimeString([], {

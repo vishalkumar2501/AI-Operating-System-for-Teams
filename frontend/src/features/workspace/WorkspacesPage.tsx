@@ -18,7 +18,9 @@ function WorkspaceCard({ workspace }: { workspace: Workspace }) {
         <Building2 className="h-6 w-6" />
       </div>
       <div className="min-w-0">
-        <p className="font-semibold text-text truncate group-hover:text-accent transition-colors">{workspace.name}</p>
+        <p className="font-semibold text-text truncate group-hover:text-accent transition-colors">
+          {workspace.name}
+        </p>
         <p className="text-sm text-text-3 truncate">{workspace.slug}</p>
       </div>
     </button>

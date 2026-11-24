@@ -27,9 +27,11 @@ function applyTheme(theme: ThemeMode): 'light' | 'dark' {
 }
 
 export const useThemeStore = create<ThemeState>((set, get) => {
-  const initialTheme = (typeof window !== 'undefined'
-    ? (localStorage.getItem('teamos_theme') as ThemeMode) || 'system'
-    : 'system') as ThemeMode;
+  const initialTheme = (
+    typeof window !== 'undefined'
+      ? (localStorage.getItem('teamos_theme') as ThemeMode) || 'system'
+      : 'system'
+  ) as ThemeMode;
 
   const initialResolved = applyTheme(initialTheme);
 

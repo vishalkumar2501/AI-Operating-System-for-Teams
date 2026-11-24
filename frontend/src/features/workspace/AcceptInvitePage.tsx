@@ -84,8 +84,8 @@ export function AcceptInvitePage() {
           <>
             <h1 className="text-lg font-bold text-text">You&apos;re invited!</h1>
             <p className="mt-2 text-sm text-text-3">
-              Join <span className="font-semibold text-text">{inviteInfo.workspaceName}</span>{' '}
-              as <span className="font-semibold text-text">{inviteInfo.role}</span>.
+              Join <span className="font-semibold text-text">{inviteInfo.workspaceName}</span> as{' '}
+              <span className="font-semibold text-text">{inviteInfo.role}</span>.
             </p>
             <Button
               className="mt-6 w-full"

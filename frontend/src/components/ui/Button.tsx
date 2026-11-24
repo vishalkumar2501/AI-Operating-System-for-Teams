@@ -16,14 +16,12 @@ const variantClasses: Record<ButtonVariant, string> = {
     'bg-primary text-on-primary hover:opacity-90 active:opacity-100 focus-visible:ring-ring font-semibold shadow-sm',
   secondary:
     'bg-surface-2 text-text hover:bg-surface-3 focus-visible:ring-ring border border-border',
-  ghost:
-    'bg-transparent text-text-2 hover:bg-surface-2 hover:text-text focus-visible:ring-ring',
+  ghost: 'bg-transparent text-text-2 hover:bg-surface-2 hover:text-text focus-visible:ring-ring',
   destructive:
     'bg-semantic-danger-subtle text-semantic-danger hover:bg-semantic-danger/20 border border-semantic-danger-border focus-visible:ring-semantic-danger',
   accent:
     'bg-accent text-on-accent hover:bg-accent-hover active:bg-accent-pressed focus-visible:ring-ring font-semibold shadow-sm',
-  ai:
-    'bg-ai-bg text-ai-text hover:bg-accent-hover border border-ai-border font-semibold shadow-sm',
+  ai: 'bg-ai-bg text-ai-text hover:bg-accent-hover border border-ai-border font-semibold shadow-sm',
 };
 
 const sizeClasses: Record<ButtonSize, string> = {

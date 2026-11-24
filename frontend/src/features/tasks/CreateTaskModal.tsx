@@ -112,9 +112,7 @@ export function CreateTaskModal({
           </div>
 
           <div>
-            <label className="block text-xs font-medium text-text-2 mb-1.5">
-              Estimate (hours)
-            </label>
+            <label className="block text-xs font-medium text-text-2 mb-1.5">Estimate (hours)</label>
             <input
               type="number"
               step="0.5"

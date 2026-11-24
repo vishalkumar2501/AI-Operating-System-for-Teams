@@ -116,11 +116,7 @@ export function WorkspaceShell() {
         {/* Logo + collapse */}
         <div className="flex items-center justify-between px-3.5 py-3 border-b border-border h-14">
           <div className="flex items-center gap-2 overflow-hidden">
-            {sidebarOpen ? (
-              <Logo variant="full" size="sm" />
-            ) : (
-              <Logo variant="mark" size="sm" />
-            )}
+            {sidebarOpen ? <Logo variant="full" size="sm" /> : <Logo variant="mark" size="sm" />}
           </div>
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -242,9 +238,7 @@ export function WorkspaceShell() {
               Workspaces
             </span>
             <span>/</span>
-            <span className="text-text font-medium">
-              {currentWorkspace?.name ?? 'Loading...'}
-            </span>
+            <span className="text-text font-medium">{currentWorkspace?.name ?? 'Loading...'}</span>
           </div>
 
           <div className="flex items-center gap-3">

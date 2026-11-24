@@ -230,10 +230,7 @@ export function DocEditorPage() {
                   );
                 }
                 return (
-                  <p
-                    key={idx}
-                    className="text-sm text-text-2 leading-relaxed whitespace-pre-wrap"
-                  >
+                  <p key={idx} className="text-sm text-text-2 leading-relaxed whitespace-pre-wrap">
                     {block}
                   </p>
                 );

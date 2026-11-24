@@ -318,7 +318,9 @@ export function MeetingDetailPage() {
                             <span>Due: {new Date(item.deadline).toLocaleDateString()}</span>
                           )}
                           {item.suggestedPriority && (
-                            <span className="text-semantic-warning font-medium">{item.suggestedPriority}</span>
+                            <span className="text-semantic-warning font-medium">
+                              {item.suggestedPriority}
+                            </span>
                           )}
                         </div>
                       </div>

@@ -1,13 +1,6 @@
 import React from 'react';
 
-type BadgeVariant =
-  | 'success'
-  | 'warning'
-  | 'info'
-  | 'destructive'
-  | 'default'
-  | 'ai'
-  | 'accent';
+type BadgeVariant = 'success' | 'warning' | 'info' | 'destructive' | 'default' | 'ai' | 'accent';
 
 interface BadgeProps {
   variant?: BadgeVariant;

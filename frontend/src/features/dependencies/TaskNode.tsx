@@ -12,11 +12,27 @@ export type TaskNodeType = Node<TaskNodeData, 'taskNode'>;
 
 const statusColors: Record<TaskStatus, { bg: string; text: string; border: string }> = {
   BACKLOG: { bg: 'bg-surface-2', text: 'text-text-3', border: 'border-border' },
-  TODO: { bg: 'bg-semantic-info-subtle', text: 'text-semantic-info', border: 'border-semantic-info-border' },
+  TODO: {
+    bg: 'bg-semantic-info-subtle',
+    text: 'text-semantic-info',
+    border: 'border-semantic-info-border',
+  },
   IN_PROGRESS: { bg: 'bg-accent-subtle', text: 'text-accent', border: 'border-accent/30' },
-  IN_REVIEW: { bg: 'bg-semantic-warning-subtle', text: 'text-semantic-warning', border: 'border-semantic-warning-border' },
-  DONE: { bg: 'bg-semantic-success-subtle', text: 'text-semantic-success', border: 'border-semantic-success-border' },
-  BLOCKED: { bg: 'bg-semantic-danger-subtle', text: 'text-semantic-danger', border: 'border-semantic-danger-border' },
+  IN_REVIEW: {
+    bg: 'bg-semantic-warning-subtle',
+    text: 'text-semantic-warning',
+    border: 'border-semantic-warning-border',
+  },
+  DONE: {
+    bg: 'bg-semantic-success-subtle',
+    text: 'text-semantic-success',
+    border: 'border-semantic-success-border',
+  },
+  BLOCKED: {
+    bg: 'bg-semantic-danger-subtle',
+    text: 'text-semantic-danger',
+    border: 'border-semantic-danger-border',
+  },
 };
 
 const priorityColors: Record<string, string> = {
