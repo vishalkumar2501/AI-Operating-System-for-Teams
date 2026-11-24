@@ -39,7 +39,7 @@ export function WorkspaceShell() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   const logout = useLogout();
-  const { theme, isDark, setTheme, toggleTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const { data: workspaces } = useWorkspaces();
   const { onlineUsers } = useWorkspacePresence(workspaceId);
   const [sidebarOpen, setSidebarOpen] = useState(true);
