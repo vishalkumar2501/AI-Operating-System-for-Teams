@@ -154,7 +154,5 @@ export function SearchModal({ workspaceId, isOpen, onClose }: SearchModalProps) 
         </div>
       </div>
     </div>
-      </div>
-    </div>
   );
 }
