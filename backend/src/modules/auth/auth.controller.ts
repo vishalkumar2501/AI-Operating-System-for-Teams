@@ -8,19 +8,21 @@ const REFRESH_COOKIE_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 /** Set the httpOnly refresh-token cookie so JS can't read it. */
 function setRefreshCookie(res: Response, token: string): void {
+  const isProd = env.NODE_ENV === 'production';
   res.cookie(REFRESH_COOKIE_NAME, token, {
     httpOnly: true,
-    secure: env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'lax',
     maxAge: REFRESH_COOKIE_MAX_AGE_MS,
   });
 }
 
 function clearRefreshCookie(res: Response): void {
+  const isProd = env.NODE_ENV === 'production';
   res.clearCookie(REFRESH_COOKIE_NAME, {
     httpOnly: true,
-    secure: env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'lax',
   });
 }
 

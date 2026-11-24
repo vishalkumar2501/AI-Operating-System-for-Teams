@@ -13,6 +13,9 @@ import { apiRouter } from './routes/index';
 
 const app = express();
 
+// Trust reverse proxies (Render, Railway, Cloudflare) for HTTPS detection and secure cookies
+app.set('trust proxy', 1);
+
 // ---------------------------------------------------------------------------
 // Static file uploads directory
 // ---------------------------------------------------------------------------
