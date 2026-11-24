@@ -13,7 +13,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="flex flex-col gap-1.5">
         {label && (
-          <label htmlFor={inputId} className="text-sm font-medium text-slate-300">
+          <label htmlFor={inputId} className="text-sm font-medium text-text-2">
             {label}
           </label>
         )}
@@ -22,20 +22,21 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           id={inputId}
           {...props}
           className={`
-            w-full rounded-lg border bg-slate-900 px-3 py-2 text-sm text-slate-100
-            placeholder:text-slate-500
+            w-full rounded-lg border bg-surface-2 px-3 py-2 text-sm text-text
+            placeholder:text-text-3
             transition-colors duration-150
-            focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 focus:ring-offset-slate-950
+            focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 focus:ring-offset-bg
             disabled:cursor-not-allowed disabled:opacity-50
-            ${error ? 'border-red-500/70' : 'border-slate-700 hover:border-slate-600'}
+            ${error ? 'border-semantic-danger' : 'border-border hover:border-border-strong'}
             ${className}
           `}
         />
-        {error && <p className="text-xs text-red-400">{error}</p>}
-        {hint && !error && <p className="text-xs text-slate-500">{hint}</p>}
+        {error && <p className="text-xs text-semantic-danger">{error}</p>}
+        {hint && !error && <p className="text-xs text-text-3">{hint}</p>}
       </div>
     );
   }
 );
 
 Input.displayName = 'Input';
+export default Input;

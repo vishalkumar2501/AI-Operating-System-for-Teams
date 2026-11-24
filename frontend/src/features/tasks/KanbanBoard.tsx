@@ -12,11 +12,11 @@ interface KanbanBoardProps {
 }
 
 const COLUMNS: Array<{ status: TaskStatus; label: string; accent: string }> = [
-  { status: 'BACKLOG', label: 'Backlog', accent: 'border-t-slate-500' },
-  { status: 'TODO', label: 'To Do', accent: 'border-t-indigo-500' },
-  { status: 'IN_PROGRESS', label: 'In Progress', accent: 'border-t-amber-500' },
-  { status: 'IN_REVIEW', label: 'In Review', accent: 'border-t-purple-500' },
-  { status: 'DONE', label: 'Done', accent: 'border-t-emerald-500' },
+  { status: 'BACKLOG', label: 'Backlog', accent: 'border-t-text-3' },
+  { status: 'TODO', label: 'To Do', accent: 'border-t-semantic-info' },
+  { status: 'IN_PROGRESS', label: 'In Progress', accent: 'border-t-accent' },
+  { status: 'IN_REVIEW', label: 'In Review', accent: 'border-t-semantic-warning' },
+  { status: 'DONE', label: 'Done', accent: 'border-t-semantic-success' },
 ];
 
 function KanbanColumn({
@@ -39,21 +39,21 @@ function KanbanColumn({
   return (
     <div
       ref={setNodeRef}
-      className={`flex flex-col rounded-xl bg-slate-900/60 border border-slate-800 ${accent} border-t-2 min-w-[280px] max-w-[320px] flex-1 ${
-        isOver ? 'ring-2 ring-indigo-500/50 bg-slate-900/90' : ''
+      className={`flex flex-col rounded-xl bg-surface-1 border border-border ${accent} border-t-2 min-w-[280px] max-w-[320px] flex-1 shadow-card ${
+        isOver ? 'ring-2 ring-ring bg-surface-2' : ''
       }`}
     >
       {/* Column Header */}
-      <div className="p-3.5 flex items-center justify-between border-b border-slate-800/80">
+      <div className="p-3.5 flex items-center justify-between border-b border-border">
         <div className="flex items-center gap-2">
-          <h3 className="text-xs font-semibold text-slate-200 uppercase tracking-wider">{label}</h3>
-          <span className="text-xs font-medium text-slate-500 bg-slate-800 px-1.5 py-0.5 rounded-full">
+          <h3 className="text-xs font-semibold text-text uppercase tracking-wider">{label}</h3>
+          <span className="text-xs font-medium text-text-3 bg-surface-2 px-1.5 py-0.5 rounded-full border border-border">
             {tasks.length}
           </span>
         </div>
         <button
           onClick={() => onOpenCreate(status)}
-          className="text-slate-500 hover:text-slate-200 transition-colors p-1 rounded hover:bg-slate-800"
+          className="text-text-3 hover:text-text transition-colors p-1 rounded hover:bg-surface-2 cursor-pointer"
           title={`Add task to ${label}`}
         >
           <Plus className="h-3.5 w-3.5" />
@@ -61,13 +61,13 @@ function KanbanColumn({
       </div>
 
       {/* Cards List */}
-      <div className="p-2.5 flex-1 space-y-2.5 overflow-y-auto max-h-[calc(100vh-280px)] min-h-[160px]">
+      <div className="p-2.5 flex-1 space-y-2.5 overflow-y-auto max-h-[calc(100vh-280px)] min-h-[160px] scrollbar-thin">
         {tasks.map((task) => (
           <TaskCard key={task.id} task={task} onClick={() => onTaskClick(task)} />
         ))}
 
         {tasks.length === 0 && (
-          <div className="h-full flex items-center justify-center p-6 text-center text-xs text-slate-600 border border-dashed border-slate-800/60 rounded-lg">
+          <div className="h-full flex items-center justify-center p-6 text-center text-xs text-text-3 border border-dashed border-border rounded-lg">
             Drop tasks here
           </div>
         )}
@@ -97,7 +97,7 @@ export function KanbanBoard({
 
   return (
     <DndContext onDragEnd={handleDragEnd}>
-      <div className="flex gap-4 overflow-x-auto pb-6 pt-2">
+      <div className="flex gap-4 overflow-x-auto pb-6 pt-2 scrollbar-thin">
         {COLUMNS.map((col) => (
           <KanbanColumn
             key={col.status}
@@ -113,3 +113,4 @@ export function KanbanBoard({
     </DndContext>
   );
 }
+export default KanbanBoard;

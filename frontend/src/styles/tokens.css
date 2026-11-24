@@ -1,0 +1,109 @@
+/* TeamOS Design System Tokens */
+
+:root {
+  /* LIGHT THEME TOKENS */
+  --bg: #ffffff;
+  --surface-1: #ffffff;
+  --surface-2: #f5f5f3;
+  --surface-3: #ebebe8;
+  --border: #e6e6e2;
+  --border-strong: #d2d2cc;
+  --text: #0b0b0c;
+  --text-2: #55555c;
+  --text-3: #8a8a92;
+
+  /* Primary Button / Active in Light Mode: Solid Blue (#0A6CFF) */
+  --primary: #0a6cff;
+  --primary-hover: #0858d6;
+  --primary-pressed: #0647b3;
+  --on-primary: #ffffff;
+  --primary-subtle: #e6f0ff;
+  --ring: #0a6cff;
+
+  /* Accent aliases for Light Mode */
+  --accent: #0a6cff;
+  --accent-hover: #0858d6;
+  --accent-pressed: #0647b3;
+  --on-accent: #ffffff;
+  --accent-subtle: #e6f0ff;
+
+  /* AI Highlight in Light Mode */
+  --ai-bg: #e4f222;
+  --ai-text: #0b0b0c;
+  --ai-subtle: #f8fcc9;
+  --ai-border: #d3e015;
+
+  /* Semantic / Status Colors */
+  --success: #12945a;
+  --success-subtle: rgba(18, 148, 90, 0.12);
+  --success-border: rgba(18, 148, 90, 0.25);
+  --info: #1f6fd1;
+  --info-subtle: rgba(31, 111, 209, 0.12);
+  --info-border: rgba(31, 111, 209, 0.25);
+  --warning: #d9730d;
+  --warning-subtle: rgba(217, 115, 13, 0.12);
+  --warning-border: rgba(217, 115, 13, 0.25);
+  --danger: #d13d3d;
+  --danger-subtle: rgba(209, 61, 61, 0.12);
+  --danger-border: rgba(209, 61, 61, 0.25);
+  --neutral: #6b6b75;
+  --neutral-subtle: rgba(107, 107, 117, 0.12);
+  --neutral-border: rgba(107, 107, 117, 0.25);
+
+  /* Shadows */
+  --shadow-card: 0 1px 2px rgba(11, 11, 12, 0.06), 0 4px 12px rgba(11, 11, 12, 0.05);
+}
+
+.dark {
+  /* DARK THEME TOKENS */
+  --bg: #0b0b0c;
+  --surface-1: #141415;
+  --surface-2: #1b1b1d;
+  --surface-3: #242427;
+  --border: #2a2a2e;
+  --border-strong: #3a3a40;
+  --text: #f5f5f2;
+  --text-2: #a3a3a8;
+  --text-3: #6e6e75;
+
+  /* Primary Button / Active in Dark Mode: Neon Yellow-Lime (#E4F222) */
+  --primary: #e4f222;
+  --primary-hover: #f0ff4d;
+  --primary-pressed: #cbd91a;
+  --on-primary: #0b0b0c;
+  --primary-subtle: rgba(228, 242, 34, 0.12);
+  --ring: #e4f222;
+
+  /* Accent in Dark Mode */
+  --accent: #e4f222;
+  --accent-hover: #f0ff4d;
+  --accent-pressed: #cbd91a;
+  --on-accent: #0b0b0c;
+  --accent-subtle: rgba(228, 242, 34, 0.12);
+
+  /* AI Highlight in Dark Mode */
+  --ai-bg: #e4f222;
+  --ai-text: #0b0b0c;
+  --ai-subtle: rgba(228, 242, 34, 0.12);
+  --ai-border: #e4f222;
+
+  /* Semantic / Status Colors */
+  --success: #3dd68c;
+  --success-subtle: rgba(61, 214, 140, 0.12);
+  --success-border: rgba(61, 214, 140, 0.25);
+  --info: #5ba8ff;
+  --info-subtle: rgba(91, 168, 255, 0.12);
+  --info-border: rgba(91, 168, 255, 0.25);
+  --warning: #ff9f43;
+  --warning-subtle: rgba(255, 159, 67, 0.12);
+  --warning-border: rgba(255, 159, 67, 0.25);
+  --danger: #ff6b6b;
+  --danger-subtle: rgba(255, 107, 107, 0.12);
+  --danger-border: rgba(255, 107, 107, 0.25);
+  --neutral: #8b8b96;
+  --neutral-subtle: rgba(139, 139, 150, 0.12);
+  --neutral-border: rgba(139, 139, 150, 0.25);
+
+  /* Shadows */
+  --shadow-card: none;
+}

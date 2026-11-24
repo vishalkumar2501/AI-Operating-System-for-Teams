@@ -22,12 +22,12 @@ export function ProjectsPage() {
   );
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-6">
+    <div className="space-y-6 max-w-7xl">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-100 tracking-tight">Projects</h1>
-          <p className="text-sm text-slate-400 mt-0.5">
+          <h1 className="text-2xl font-bold text-text tracking-tight">Projects</h1>
+          <p className="text-sm text-text-2 mt-0.5">
             Manage your workspace projects, task roadmaps, and team deliverables.
           </p>
         </div>
@@ -39,13 +39,13 @@ export function ProjectsPage() {
 
       {/* Search and Filters */}
       <div className="relative max-w-md">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-3" />
         <input
           type="text"
           placeholder="Search projects by name or key..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full pl-9 pr-4 py-2 bg-slate-900 border border-slate-800 rounded-lg text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+          className="w-full pl-9 pr-4 py-2 bg-surface-2 border border-border rounded-lg text-sm text-text placeholder:text-text-3 focus:outline-none focus:border-ring focus:ring-1 focus:ring-ring transition-colors"
         />
       </div>
 
@@ -55,10 +55,10 @@ export function ProjectsPage() {
           <Spinner />
         </div>
       ) : filteredProjects.length === 0 ? (
-        <div className="text-center py-16 border border-dashed border-slate-800 rounded-xl bg-slate-900/30">
-          <FolderKanban className="h-10 w-10 text-slate-500 mx-auto mb-3" />
-          <h3 className="text-base font-semibold text-slate-200">No projects found</h3>
-          <p className="text-sm text-slate-400 mt-1 max-w-sm mx-auto">
+        <div className="text-center py-16 border border-dashed border-border rounded-xl bg-surface-1">
+          <FolderKanban className="h-10 w-10 text-text-3 mx-auto mb-3" />
+          <h3 className="text-base font-semibold text-text">No projects found</h3>
+          <p className="text-sm text-text-3 mt-1 max-w-sm mx-auto">
             {search
               ? 'Try clearing your search query'
               : 'Get started by creating your first project to organize tasks.'}
@@ -76,32 +76,32 @@ export function ProjectsPage() {
             <div
               key={project.id}
               onClick={() => navigate(`/workspaces/${workspaceId}/projects/${project.id}`)}
-              className="p-5 bg-slate-900 border border-slate-800 rounded-xl hover:border-indigo-500/50 hover:bg-slate-900/90 transition-all cursor-pointer group flex flex-col justify-between"
+              className="p-5 bg-surface-1 border border-border rounded-xl hover:border-accent hover:bg-surface-2 transition-all cursor-pointer group shadow-card flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <Badge variant="info" className="font-mono text-xs">
+                  <Badge variant="accent" className="font-mono text-xs">
                     {project.key}
                   </Badge>
-                  <span className="text-xs text-slate-500 flex items-center gap-1">
+                  <span className="text-xs text-text-3 flex items-center gap-1">
                     <Calendar className="h-3 w-3" />
                     {new Date(project.createdAt).toLocaleDateString()}
                   </span>
                 </div>
-                <h3 className="text-base font-semibold text-slate-100 group-hover:text-indigo-400 transition-colors">
+                <h3 className="text-base font-semibold text-text group-hover:text-accent transition-colors">
                   {project.name}
                 </h3>
-                <p className="text-xs text-slate-400 mt-1 line-clamp-2 leading-relaxed">
+                <p className="text-xs text-text-3 mt-1 line-clamp-2 leading-relaxed">
                   {project.description || 'No description provided.'}
                 </p>
               </div>
 
-              <div className="mt-5 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
+              <div className="mt-5 pt-3 border-t border-border flex items-center justify-between text-xs text-text-3">
                 <span className="flex items-center gap-1.5">
-                  <CheckSquare className="h-3.5 w-3.5 text-slate-500" />
+                  <CheckSquare className="h-3.5 w-3.5 text-text-3" />
                   {project._count?.tasks ?? 0} active tasks
                 </span>
-                <span className="text-indigo-400 font-medium group-hover:translate-x-0.5 transition-transform">
+                <span className="text-accent font-medium group-hover:translate-x-0.5 transition-transform">
                   Open board &rarr;
                 </span>
               </div>
@@ -120,3 +120,4 @@ export function ProjectsPage() {
     </div>
   );
 }
+export default ProjectsPage;

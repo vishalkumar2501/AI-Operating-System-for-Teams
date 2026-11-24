@@ -58,16 +58,16 @@ export function AcceptInvitePage() {
   if (!isAuthenticated) return null;
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4">
-      <div className="w-full max-w-sm rounded-xl border border-slate-800 bg-slate-900 p-8 text-center shadow-xl">
-        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-indigo-600/20 mx-auto mb-5">
+    <div className="flex min-h-screen items-center justify-center bg-bg px-4">
+      <div className="w-full max-w-sm rounded-xl border border-border bg-surface-1 p-8 text-center shadow-xl">
+        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary-subtle dark:bg-accent-subtle mx-auto mb-5">
           <span className="text-2xl">✉️</span>
         </div>
 
         {loadError ? (
           <>
-            <h1 className="text-lg font-bold text-slate-100">Invalid invitation</h1>
-            <p className="mt-2 text-sm text-slate-400">{loadError}</p>
+            <h1 className="text-lg font-bold text-text">Invalid invitation</h1>
+            <p className="mt-2 text-sm text-text-3">{loadError}</p>
             <Button
               className="mt-6 w-full"
               variant="secondary"
@@ -82,10 +82,10 @@ export function AcceptInvitePage() {
           </div>
         ) : (
           <>
-            <h1 className="text-lg font-bold text-slate-100">You&apos;re invited!</h1>
-            <p className="mt-2 text-sm text-slate-400">
-              Join <span className="font-semibold text-slate-200">{inviteInfo.workspaceName}</span>{' '}
-              as <span className="font-semibold text-slate-200">{inviteInfo.role}</span>.
+            <h1 className="text-lg font-bold text-text">You&apos;re invited!</h1>
+            <p className="mt-2 text-sm text-text-3">
+              Join <span className="font-semibold text-text">{inviteInfo.workspaceName}</span>{' '}
+              as <span className="font-semibold text-text">{inviteInfo.role}</span>.
             </p>
             <Button
               className="mt-6 w-full"

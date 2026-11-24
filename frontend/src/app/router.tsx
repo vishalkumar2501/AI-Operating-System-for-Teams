@@ -52,10 +52,10 @@ export function AppRouter() {
         <Route
           path="*"
           element={
-            <div className="flex h-screen items-center justify-center bg-slate-950 text-slate-400">
+            <div className="flex h-screen items-center justify-center bg-bg text-text-3">
               <div className="text-center">
-                <p className="text-6xl font-bold text-slate-700">404</p>
-                <p className="mt-2 text-lg">Page not found</p>
+                <p className="text-6xl font-bold text-border-strong">404</p>
+                <p className="mt-2 text-lg text-text-2">Page not found</p>
               </div>
             </div>
           }

@@ -32,18 +32,18 @@ type InviteFormValues = z.infer<typeof inviteSchema>;
 
 function MemberRow({ member }: { member: WorkspaceMember }) {
   return (
-    <tr className="border-b border-slate-800/60 hover:bg-slate-800/20 transition-colors">
+    <tr className="border-b border-border/60 hover:bg-surface-2/60 transition-colors">
       <td className="px-4 py-3">
         <div className="flex items-center gap-3">
           <Avatar name={member.user.name} src={member.user.avatarUrl} size="sm" />
-          <span className="text-sm font-medium text-slate-200">{member.user.name}</span>
+          <span className="text-sm font-medium text-text">{member.user.name}</span>
         </div>
       </td>
-      <td className="px-4 py-3 text-sm text-slate-400">{member.user.email}</td>
+      <td className="px-4 py-3 text-sm text-text-2">{member.user.email}</td>
       <td className="px-4 py-3">
         <Badge variant={roleBadgeVariant[member.role] ?? 'default'}>{member.role}</Badge>
       </td>
-      <td className="px-4 py-3 text-sm text-slate-500">
+      <td className="px-4 py-3 text-sm text-text-3">
         {(() => {
           const rawDate = member.joinedAt || (member as any).createdAt;
           if (!rawDate) return 'Recently';
@@ -57,15 +57,15 @@ function MemberRow({ member }: { member: WorkspaceMember }) {
 
 function InviteRow({ invite }: { invite: WorkspaceInvite }) {
   return (
-    <tr className="border-b border-slate-800/60">
-      <td className="px-4 py-3 text-sm text-slate-300">{invite.email}</td>
+    <tr className="border-b border-border/60 hover:bg-surface-2/60 transition-colors">
+      <td className="px-4 py-3 text-sm text-text">{invite.email}</td>
       <td className="px-4 py-3">
         <Badge variant={roleBadgeVariant[invite.role] ?? 'default'}>{invite.role}</Badge>
       </td>
       <td className="px-4 py-3">
         <Badge variant="warning">PENDING</Badge>
       </td>
-      <td className="px-4 py-3 text-sm text-slate-500">
+      <td className="px-4 py-3 text-sm text-text-3">
         Expires {new Date(invite.expiresAt).toLocaleDateString()}
       </td>
     </tr>
@@ -123,10 +123,10 @@ function InviteMemberModal({
         />
 
         <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium text-slate-300">Role</label>
+          <label className="text-sm font-medium text-text-2">Role</label>
           <select
             {...register('role')}
-            className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-1 focus:ring-offset-slate-950"
+            className="w-full rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm text-text focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1 focus:ring-offset-bg"
           >
             <option value="MEMBER">Member</option>
             <option value="ADMIN">Admin</option>
@@ -154,12 +154,12 @@ export function MembersPage() {
   const { data: invites, isLoading: invitesLoading } = useWorkspaceInvites(workspaceId);
 
   return (
-    <div>
+    <div className="space-y-6">
       {/* Page header */}
-      <div className="mb-6 flex items-center justify-between">
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-bold text-slate-100">Members</h1>
-          <p className="mt-0.5 text-sm text-slate-400">Manage who has access to this workspace</p>
+          <h1 className="text-xl font-bold text-text">Members</h1>
+          <p className="mt-0.5 text-sm text-text-2">Manage who has access to this workspace</p>
         </div>
         <Button leftIcon={<Plus className="h-4 w-4" />} onClick={() => setShowInvite(true)}>
           Invite member
@@ -167,9 +167,9 @@ export function MembersPage() {
       </div>
 
       {/* Members table */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900 overflow-hidden mb-6">
-        <div className="px-4 py-3 border-b border-slate-800">
-          <h2 className="text-sm font-medium text-slate-300">
+      <div className="rounded-xl border border-border bg-surface-1 overflow-hidden shadow-card">
+        <div className="px-4 py-3 border-b border-border">
+          <h2 className="text-sm font-medium text-text">
             Members{members ? ` (${members.length})` : ''}
           </h2>
         </div>
@@ -179,16 +179,16 @@ export function MembersPage() {
             <Spinner />
           </div>
         ) : !members || members.length === 0 ? (
-          <div className="py-12 text-center text-slate-500 text-sm">No members found.</div>
+          <div className="py-12 text-center text-text-3 text-sm">No members found.</div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-slate-800 text-left">
-                  <th className="px-4 py-2.5 text-xs font-medium text-slate-500">Name</th>
-                  <th className="px-4 py-2.5 text-xs font-medium text-slate-500">Email</th>
-                  <th className="px-4 py-2.5 text-xs font-medium text-slate-500">Role</th>
-                  <th className="px-4 py-2.5 text-xs font-medium text-slate-500">Joined</th>
+                <tr className="border-b border-border text-left">
+                  <th className="px-4 py-2.5 text-xs font-medium text-text-3">Name</th>
+                  <th className="px-4 py-2.5 text-xs font-medium text-text-3">Email</th>
+                  <th className="px-4 py-2.5 text-xs font-medium text-text-3">Role</th>
+                  <th className="px-4 py-2.5 text-xs font-medium text-text-3">Joined</th>
                 </tr>
               </thead>
               <tbody>
@@ -202,10 +202,10 @@ export function MembersPage() {
       </div>
 
       {/* Pending invites */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900 overflow-hidden">
-        <div className="px-4 py-3 border-b border-slate-800 flex items-center gap-2">
-          <Mail className="h-4 w-4 text-slate-500" />
-          <h2 className="text-sm font-medium text-slate-300">
+      <div className="rounded-xl border border-border bg-surface-1 overflow-hidden shadow-card">
+        <div className="px-4 py-3 border-b border-border flex items-center gap-2">
+          <Mail className="h-4 w-4 text-text-3" />
+          <h2 className="text-sm font-medium text-text">
             Pending invites{invites ? ` (${invites.length})` : ''}
           </h2>
         </div>
@@ -215,16 +215,16 @@ export function MembersPage() {
             <Spinner />
           </div>
         ) : !invites || invites.length === 0 ? (
-          <div className="py-8 text-center text-slate-500 text-sm">No pending invitations.</div>
+          <div className="py-8 text-center text-text-3 text-sm">No pending invitations.</div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-slate-800 text-left">
-                  <th className="px-4 py-2.5 text-xs font-medium text-slate-500">Email</th>
-                  <th className="px-4 py-2.5 text-xs font-medium text-slate-500">Role</th>
-                  <th className="px-4 py-2.5 text-xs font-medium text-slate-500">Status</th>
-                  <th className="px-4 py-2.5 text-xs font-medium text-slate-500">Expires</th>
+                <tr className="border-b border-border text-left">
+                  <th className="px-4 py-2.5 text-xs font-medium text-text-3">Email</th>
+                  <th className="px-4 py-2.5 text-xs font-medium text-text-3">Role</th>
+                  <th className="px-4 py-2.5 text-xs font-medium text-text-3">Status</th>
+                  <th className="px-4 py-2.5 text-xs font-medium text-text-3">Expires</th>
                 </tr>
               </thead>
               <tbody>
@@ -245,3 +245,4 @@ export function MembersPage() {
     </div>
   );
 }
+export default MembersPage;

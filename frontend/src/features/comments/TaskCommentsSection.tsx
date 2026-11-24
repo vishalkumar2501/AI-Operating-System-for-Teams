@@ -83,11 +83,11 @@ export function TaskCommentsSection({ taskId, typingUsers, sendTyping }: TaskCom
     <div className="space-y-3 pt-2">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h4 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-300">
-          <MessageSquare className="h-4 w-4 text-slate-400" />
+        <h4 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-2">
+          <MessageSquare className="h-4 w-4 text-text-3" />
           Comments ({comments.length})
         </h4>
-        <span className="text-[11px] text-slate-500">Realtime synced</span>
+        <span className="text-[11px] text-text-3">Realtime synced</span>
       </div>
 
       {/* Comments List */}
@@ -97,7 +97,7 @@ export function TaskCommentsSection({ taskId, typingUsers, sendTyping }: TaskCom
             <Spinner />
           </div>
         ) : comments.length === 0 ? (
-          <p className="text-xs text-slate-500 italic py-2">
+          <p className="text-xs text-text-3 italic py-2">
             No comments yet. Start the discussion!
           </p>
         ) : (
@@ -106,7 +106,7 @@ export function TaskCommentsSection({ taskId, typingUsers, sendTyping }: TaskCom
             return (
               <div
                 key={comment.id}
-                className="group relative flex gap-2.5 rounded-xl border border-slate-800/80 bg-slate-950/70 p-3 text-xs transition-colors hover:border-slate-700"
+                className="group relative flex gap-2.5 rounded-xl border border-border bg-surface-2 p-3 text-xs transition-colors hover:border-border-strong"
               >
                 <Avatar
                   name={comment.author.name || comment.author.email}
@@ -116,11 +116,11 @@ export function TaskCommentsSection({ taskId, typingUsers, sendTyping }: TaskCom
 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-2 mb-1">
-                    <span className="font-semibold text-slate-200 truncate">
+                    <span className="font-semibold text-text truncate">
                       {comment.author.name || comment.author.email}
-                      {isAuthor && <span className="ml-1 text-[10px] text-indigo-400">(You)</span>}
+                      {isAuthor && <span className="ml-1 text-[10px] text-primary dark:text-accent font-medium">(You)</span>}
                     </span>
-                    <span className="text-[10px] text-slate-500 shrink-0">
+                    <span className="text-[10px] text-text-3 shrink-0">
                       {new Date(comment.createdAt).toLocaleTimeString([], {
                         hour: '2-digit',
                         minute: '2-digit',
@@ -128,7 +128,7 @@ export function TaskCommentsSection({ taskId, typingUsers, sendTyping }: TaskCom
                     </span>
                   </div>
 
-                  <p className="text-slate-300 whitespace-pre-wrap break-words leading-relaxed">
+                  <p className="text-text whitespace-pre-wrap break-words leading-relaxed">
                     {comment.body}
                   </p>
                 </div>
@@ -137,7 +137,7 @@ export function TaskCommentsSection({ taskId, typingUsers, sendTyping }: TaskCom
                 {isAuthor && (
                   <button
                     onClick={() => deleteComment.mutate(comment.id)}
-                    className="opacity-0 group-hover:opacity-100 p-1 text-slate-500 hover:text-rose-400 transition-opacity absolute top-2 right-2"
+                    className="opacity-0 group-hover:opacity-100 p-1 text-text-3 hover:text-semantic-danger transition-opacity absolute top-2 right-2"
                     title="Delete comment"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
@@ -152,11 +152,11 @@ export function TaskCommentsSection({ taskId, typingUsers, sendTyping }: TaskCom
 
       {/* Typing Indicator */}
       {typingUsers.length > 0 && (
-        <div className="flex items-center gap-1.5 text-[11px] text-indigo-400 italic animate-pulse">
+        <div className="flex items-center gap-1.5 text-[11px] text-primary dark:text-accent italic animate-pulse">
           <span className="flex gap-0.5">
-            <span className="h-1 w-1 rounded-full bg-indigo-400 animate-bounce" />
-            <span className="h-1 w-1 rounded-full bg-indigo-400 animate-bounce [animation-delay:0.2s]" />
-            <span className="h-1 w-1 rounded-full bg-indigo-400 animate-bounce [animation-delay:0.4s]" />
+            <span className="h-1 w-1 rounded-full bg-primary dark:bg-accent animate-bounce" />
+            <span className="h-1 w-1 rounded-full bg-primary dark:bg-accent animate-bounce [animation-delay:0.2s]" />
+            <span className="h-1 w-1 rounded-full bg-primary dark:bg-accent animate-bounce [animation-delay:0.4s]" />
           </span>
           <span>
             {typingUsers.join(', ')} {typingUsers.length === 1 ? 'is' : 'are'} typing...
@@ -172,7 +172,7 @@ export function TaskCommentsSection({ taskId, typingUsers, sendTyping }: TaskCom
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           placeholder="Write a comment... (Press Enter to send)"
-          className="w-full resize-none rounded-xl border border-slate-800 bg-slate-950 p-3 pr-10 text-xs text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+          className="w-full resize-none rounded-xl border border-border bg-surface-1 p-3 pr-10 text-xs text-text placeholder-text-3 focus:border-primary dark:focus:border-accent focus:outline-none focus:ring-1 focus:ring-primary dark:focus:ring-accent transition-colors"
         />
         <Button
           type="submit"

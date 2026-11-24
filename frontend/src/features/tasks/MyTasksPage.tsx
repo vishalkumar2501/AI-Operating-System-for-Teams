@@ -14,11 +14,11 @@ export function MyTasksPage() {
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-100 tracking-tight flex items-center gap-2.5">
-          <CheckSquare className="h-6 w-6 text-indigo-400" />
+        <h1 className="text-2xl font-bold text-text tracking-tight flex items-center gap-2.5">
+          <CheckSquare className="h-6 w-6 text-primary dark:text-accent" />
           My Tasks
         </h1>
-        <p className="text-sm text-slate-400 mt-1">
+        <p className="text-sm text-text-3 mt-1">
           Everything assigned to you across all projects in this workspace.
         </p>
       </div>

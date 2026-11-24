@@ -50,22 +50,22 @@ export function MeetingsPage() {
   });
 
   return (
-    <div className="flex-1 overflow-y-auto p-6 bg-slate-950 text-slate-100">
+    <div className="flex-1 overflow-y-auto p-6 bg-bg text-text">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <Video className="h-6 w-6 text-indigo-400" />
+          <h1 className="text-2xl font-bold text-text flex items-center gap-2">
+            <Video className="h-6 w-6 text-primary dark:text-accent" />
             Meetings & Audio Sync
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm text-text-3 mt-1">
             Schedule team syncs, upload audio recordings, and let AI extract summary & action items.
           </p>
         </div>
 
         <button
           onClick={() => setIsModalOpen(true)}
-          className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 shadow-lg shadow-indigo-600/20"
+          className="inline-flex items-center gap-2 rounded-lg bg-primary dark:bg-accent px-4 py-2 text-sm font-semibold text-on-primary dark:text-on-accent hover:opacity-90 shadow-sm transition-colors"
         >
           <Plus className="h-4 w-4" />
           Schedule Meeting
@@ -73,15 +73,15 @@ export function MeetingsPage() {
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex gap-2 border-b border-slate-800 pb-3 mb-6">
+      <div className="flex gap-2 border-b border-border pb-3 mb-6">
         {(['upcoming', 'past', 'all'] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setFilter(tab)}
             className={`rounded-lg px-3 py-1.5 text-xs font-medium capitalize transition-colors ${
               filter === tab
-                ? 'bg-slate-800 text-indigo-400 border border-indigo-500/30'
-                : 'text-slate-400 hover:text-white hover:bg-slate-900'
+                ? 'bg-surface-3 text-text font-semibold border border-border'
+                : 'text-text-3 hover:text-text hover:bg-surface-2'
             }`}
           >
             {tab} Meetings
@@ -92,13 +92,13 @@ export function MeetingsPage() {
       {/* Content */}
       {isLoading ? (
         <div className="flex h-64 items-center justify-center">
-          <Spinner className="h-8 w-8 text-indigo-500" />
+          <Spinner className="h-8 w-8 text-primary dark:text-accent" />
         </div>
       ) : !filteredMeetings || filteredMeetings.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-800 p-12 text-center bg-slate-900/40">
-          <Video className="h-12 w-12 text-slate-600 mb-3" />
-          <h3 className="text-lg font-medium text-white">No meetings found</h3>
-          <p className="text-sm text-slate-400 mt-1 max-w-sm">
+        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border p-12 text-center bg-surface-1">
+          <Video className="h-12 w-12 text-text-3 mb-3" />
+          <h3 className="text-lg font-medium text-text">No meetings found</h3>
+          <p className="text-sm text-text-3 mt-1 max-w-sm">
             {filter === 'upcoming'
               ? 'No upcoming meetings scheduled. Click "Schedule Meeting" to create one.'
               : 'No past meetings recorded in this workspace.'}
@@ -116,25 +116,25 @@ export function MeetingsPage() {
             return (
               <div
                 key={meeting.id}
-                className="flex flex-col rounded-xl border border-slate-800 bg-slate-900/70 p-5 shadow-sm hover:border-slate-700 transition-all hover:shadow-md cursor-pointer"
+                className="flex flex-col rounded-xl border border-border bg-surface-1 p-5 shadow-sm hover:border-border-strong transition-all hover:shadow-md cursor-pointer group"
                 onClick={() => navigate(`/workspaces/${workspaceId}/meetings/${meeting.id}`)}
               >
                 {/* Top Badge & Project */}
                 <div className="flex items-center justify-between gap-2 mb-3">
                   {meeting.project ? (
-                    <span className="rounded bg-indigo-950/80 border border-indigo-700/50 px-2 py-0.5 text-xs font-semibold text-indigo-300">
+                    <span className="rounded bg-surface-2 border border-border px-2 py-0.5 text-xs font-semibold text-text">
                       [{meeting.project.key}] {meeting.project.name}
                     </span>
                   ) : (
-                    <span className="text-xs text-slate-500">General Workspace</span>
+                    <span className="text-xs text-text-3">General Workspace</span>
                   )}
                   <span
                     className={`rounded-full px-2 py-0.5 text-[10px] font-semibold tracking-wider uppercase ${
                       meeting.status === 'COMPLETED'
-                        ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-800/40'
+                        ? 'bg-semantic-success/15 text-semantic-success border border-semantic-success/30'
                         : meeting.status === 'IN_PROGRESS'
-                          ? 'bg-amber-950/80 text-amber-400 border border-amber-800/40 animate-pulse'
-                          : 'bg-blue-950/80 text-blue-400 border border-blue-800/40'
+                          ? 'bg-semantic-warning/15 text-semantic-warning border border-semantic-warning/30 animate-pulse'
+                          : 'bg-surface-2 text-text-2 border border-border'
                     }`}
                   >
                     {meeting.status}
@@ -142,14 +142,14 @@ export function MeetingsPage() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-base font-semibold text-white group-hover:text-indigo-300 transition-colors line-clamp-1 mb-2">
+                <h3 className="text-base font-semibold text-text group-hover:text-primary dark:group-hover:text-accent transition-colors line-clamp-1 mb-2">
                   {meeting.title}
                 </h3>
 
                 {/* Timing */}
-                <div className="space-y-1.5 text-xs text-slate-400 mb-4">
+                <div className="space-y-1.5 text-xs text-text-3 mb-4">
                   <div className="flex items-center gap-2">
-                    <Calendar className="h-3.5 w-3.5 text-slate-500" />
+                    <Calendar className="h-3.5 w-3.5 text-text-3" />
                     <span>
                       {startsDate.toLocaleDateString(undefined, {
                         weekday: 'short',
@@ -159,7 +159,7 @@ export function MeetingsPage() {
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Clock className="h-3.5 w-3.5 text-slate-500" />
+                    <Clock className="h-3.5 w-3.5 text-text-3" />
                     <span>
                       {startsDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} -{' '}
                       {endsDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -169,21 +169,21 @@ export function MeetingsPage() {
 
                 {/* Transcript badge if processed */}
                 {meeting.transcript && (
-                  <div className="mb-4 flex items-center gap-2 rounded-lg bg-emerald-950/40 border border-emerald-800/30 px-3 py-1.5 text-xs text-emerald-300">
+                  <div className="mb-4 flex items-center gap-2 rounded-lg bg-ai-bg/15 border border-ai-border/40 px-3 py-1.5 text-xs text-ai-text dark:text-accent font-medium">
                     <FileAudio className="h-3.5 w-3.5" />
                     <span>AI Transcript & Actions Ready</span>
                   </div>
                 )}
 
                 {/* Footer: Organizer, Participants & Actions */}
-                <div className="mt-auto pt-3 border-t border-slate-800/80 flex items-center justify-between">
+                <div className="mt-auto pt-3 border-t border-border flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Avatar
                       name={meeting.organizer.name}
                       src={meeting.organizer.avatarUrl}
                       className="h-6 w-6 text-[10px]"
                     />
-                    <span className="text-xs text-slate-400 truncate max-w-[100px]">
+                    <span className="text-xs text-text-3 truncate max-w-[100px]">
                       {isOrganizer ? 'You (Host)' : meeting.organizer.name}
                     </span>
                   </div>
@@ -195,7 +195,7 @@ export function MeetingsPage() {
                         href={meeting.meetingUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1 text-xs text-indigo-400 hover:text-indigo-300 bg-indigo-950/60 hover:bg-indigo-900/60 border border-indigo-700/40 px-2 py-1 rounded-md"
+                        className="inline-flex items-center gap-1 text-xs text-primary dark:text-accent hover:opacity-80 bg-surface-2 border border-border px-2 py-1 rounded-md font-medium transition-colors"
                       >
                         <ExternalLink className="h-3 w-3" />
                         Join
@@ -209,8 +209,8 @@ export function MeetingsPage() {
                           onClick={() =>
                             rsvpMutation.mutate({ meetingId: meeting.id, rsvp: 'ACCEPTED' })
                           }
-                          className={`p-1 rounded hover:bg-slate-800 ${
-                            myRsvp === 'ACCEPTED' ? 'text-emerald-400' : 'text-slate-500'
+                          className={`p-1 rounded hover:bg-surface-2 transition-colors ${
+                            myRsvp === 'ACCEPTED' ? 'text-semantic-success' : 'text-text-3'
                           }`}
                         >
                           <CheckCircle2 className="h-4 w-4" />
@@ -220,8 +220,8 @@ export function MeetingsPage() {
                           onClick={() =>
                             rsvpMutation.mutate({ meetingId: meeting.id, rsvp: 'DECLINED' })
                           }
-                          className={`p-1 rounded hover:bg-slate-800 ${
-                            myRsvp === 'DECLINED' ? 'text-rose-400' : 'text-slate-500'
+                          className={`p-1 rounded hover:bg-surface-2 transition-colors ${
+                            myRsvp === 'DECLINED' ? 'text-semantic-danger' : 'text-text-3'
                           }`}
                         >
                           <XCircle className="h-4 w-4" />

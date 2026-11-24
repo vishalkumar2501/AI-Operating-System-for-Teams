@@ -1,3 +1,4 @@
+import React from 'react';
 import { Loader2 } from 'lucide-react';
 
 interface SpinnerProps {
@@ -14,7 +15,7 @@ const sizeClasses = {
 export function Spinner({ size = 'md', className = '' }: SpinnerProps) {
   return (
     <Loader2
-      className={`${sizeClasses[size]} animate-spin text-indigo-400 ${className}`}
+      className={`${sizeClasses[size]} animate-spin text-accent ${className}`}
       aria-label="Loading"
     />
   );
@@ -22,8 +23,9 @@ export function Spinner({ size = 'md', className = '' }: SpinnerProps) {
 
 export function FullPageSpinner() {
   return (
-    <div className="flex h-screen items-center justify-center bg-slate-950">
+    <div className="flex h-screen items-center justify-center bg-bg">
       <Spinner size="lg" />
     </div>
   );
 }
+export default Spinner;

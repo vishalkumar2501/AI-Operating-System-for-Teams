@@ -1,3 +1,5 @@
+import React from 'react';
+
 interface AvatarProps {
   name?: string | null;
   src?: string | null;
@@ -21,18 +23,17 @@ function getInitials(name?: string | null): string {
     .join('');
 }
 
-function getColor(name?: string | null): string {
-  const colors = [
-    'bg-indigo-600',
-    'bg-violet-600',
-    'bg-sky-600',
-    'bg-emerald-600',
-    'bg-amber-600',
-    'bg-rose-600',
+function getAvatarStyle(name?: string | null): string {
+  const styles = [
+    'bg-surface-3 text-text border border-border-strong',
+    'bg-semantic-info-subtle text-semantic-info border border-semantic-info-border',
+    'bg-semantic-success-subtle text-semantic-success border border-semantic-success-border',
+    'bg-semantic-warning-subtle text-semantic-warning border border-semantic-warning-border',
+    'bg-accent-subtle text-accent border border-accent/30',
   ];
-  if (!name) return colors[0];
-  const idx = name.charCodeAt(0) % colors.length;
-  return colors[idx];
+  if (!name) return styles[0];
+  const idx = name.charCodeAt(0) % styles.length;
+  return styles[idx];
 }
 
 export function Avatar({ name, src, size = 'md', className = '' }: AvatarProps) {
@@ -41,16 +42,17 @@ export function Avatar({ name, src, size = 'md', className = '' }: AvatarProps) 
       <img
         src={src}
         alt={name ?? 'avatar'}
-        className={`${sizeClasses[size]} rounded-full object-cover ring-2 ring-slate-800 ${className}`}
+        className={`${sizeClasses[size]} rounded-full object-cover ring-2 ring-border ${className}`}
       />
     );
   }
 
   return (
     <div
-      className={`${sizeClasses[size]} ${getColor(name)} flex items-center justify-center rounded-full font-semibold text-white ring-2 ring-slate-800 ${className}`}
+      className={`${sizeClasses[size]} ${getAvatarStyle(name)} flex items-center justify-center rounded-full font-semibold ring-1 ring-border ${className}`}
     >
       {getInitials(name)}
     </div>
   );
 }
+export default Avatar;

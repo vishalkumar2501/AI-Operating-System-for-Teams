@@ -5,3 +5,4 @@ export { Badge } from './Badge';
 export { Avatar } from './Avatar';
 export { Spinner, FullPageSpinner } from './Spinner';
 export { ToastProvider, useToast } from './Toast';
+export { Logo } from '../brand/Logo';

@@ -205,23 +205,23 @@ export function TaskDetailDrawer({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden bg-slate-950/60 backdrop-blur-sm flex justify-end">
-      <div className="w-full max-w-2xl bg-slate-900 border-l border-slate-800 h-full flex flex-col shadow-2xl animate-in slide-in-from-right duration-200">
+    <div className="fixed inset-0 z-50 overflow-hidden bg-bg/80 backdrop-blur-sm flex justify-end">
+      <div className="w-full max-w-2xl bg-surface-1 border-l border-border h-full flex flex-col shadow-2xl animate-in slide-in-from-right duration-200">
         {/* Drawer Header */}
-        <div className="p-4 px-6 border-b border-slate-800 flex items-center justify-between">
+        <div className="p-4 px-6 border-b border-border flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="font-mono text-sm font-semibold text-indigo-400">
+            <span className="font-mono text-sm font-semibold text-primary dark:text-accent">
               {task ? `${task.project.key}-${task.number}` : '...'}
             </span>
             <Button
               variant="ghost"
               size="sm"
               onClick={handleToggleSubscribe}
-              className="text-xs text-slate-400 hover:text-slate-200 flex items-center gap-1.5"
+              className="text-xs text-text-3 hover:text-text flex items-center gap-1.5"
             >
               {isSubscribed ? (
                 <>
-                  <BellOff className="h-3.5 w-3.5 text-indigo-400" />
+                  <BellOff className="h-3.5 w-3.5 text-primary dark:text-accent" />
                   <span>Subscribed</span>
                 </>
               ) : (
@@ -236,11 +236,11 @@ export function TaskDetailDrawer({
           <div className="flex items-center gap-2">
             {otherViewers.length > 0 && (
               <div
-                className="flex items-center gap-1.5 mr-2 rounded-full bg-slate-950/80 px-2 py-1 border border-slate-800"
+                className="flex items-center gap-1.5 mr-2 rounded-full bg-surface-2 px-2 py-1 border border-border"
                 title={`Currently viewing: ${otherViewers.map((v) => v.name).join(', ')}`}
               >
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-[10px] text-slate-400 font-medium hidden sm:inline">
+                <span className="h-1.5 w-1.5 rounded-full bg-semantic-success animate-pulse" />
+                <span className="text-[10px] text-text-3 font-medium hidden sm:inline">
                   Viewing:
                 </span>
                 <div className="flex -space-x-1.5 overflow-hidden">
@@ -250,7 +250,7 @@ export function TaskDetailDrawer({
                       name={v.name}
                       src={v.avatarUrl || undefined}
                       size="sm"
-                      className="ring-2 ring-slate-900 !h-5 !w-5 text-[9px]"
+                      className="ring-2 ring-surface-1 !h-5 !w-5 text-[9px]"
                     />
                   ))}
                 </div>
@@ -258,14 +258,14 @@ export function TaskDetailDrawer({
             )}
             <button
               onClick={handleDeleteTask}
-              className="p-1.5 text-slate-500 hover:text-rose-400 hover:bg-slate-800 rounded transition-colors"
+              className="p-1.5 text-text-3 hover:text-semantic-danger hover:bg-surface-2 rounded transition-colors"
               title="Delete task"
             >
               <Trash2 className="h-4 w-4" />
             </button>
             <button
               onClick={onClose}
-              className="p-1.5 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded transition-colors"
+              className="p-1.5 text-text-3 hover:text-text hover:bg-surface-2 rounded transition-colors"
             >
               <X className="h-5 w-5" />
             </button>
@@ -289,19 +289,19 @@ export function TaskDetailDrawer({
                     updateTask.mutate({ id: taskId, data: { title: e.target.value.trim() } });
                   }
                 }}
-                className="w-full text-xl font-bold bg-transparent border-0 text-slate-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 rounded px-1 py-0.5"
+                className="w-full text-xl font-bold bg-transparent border-0 text-text focus:outline-none focus:ring-1 focus:ring-primary dark:focus:ring-accent rounded px-1 py-0.5"
               />
             </div>
 
             {/* Properties Grid */}
-            <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-slate-950/60 border border-slate-800/80 text-sm">
+            <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-surface-2 border border-border text-sm">
               {/* Status */}
               <div>
-                <label className="text-xs font-medium text-slate-400 block mb-1">Status</label>
+                <label className="text-xs font-medium text-text-3 block mb-1">Status</label>
                 <select
                   value={task.status}
                   onChange={(e) => handleStatusChange(e.target.value as TaskStatus)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-surface-1 border border-border rounded-lg px-2.5 py-1.5 text-xs text-text focus:outline-none focus:border-primary dark:focus:border-accent"
                 >
                   <option value="BACKLOG">Backlog</option>
                   <option value="TODO">To Do</option>
@@ -314,11 +314,11 @@ export function TaskDetailDrawer({
 
               {/* Priority */}
               <div>
-                <label className="text-xs font-medium text-slate-400 block mb-1">Priority</label>
+                <label className="text-xs font-medium text-text-3 block mb-1">Priority</label>
                 <select
                   value={task.priority}
                   onChange={(e) => handlePriorityChange(e.target.value as TaskPriority)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-surface-1 border border-border rounded-lg px-2.5 py-1.5 text-xs text-text focus:outline-none focus:border-primary dark:focus:border-accent"
                 >
                   <option value="LOW">Low</option>
                   <option value="MEDIUM">Medium</option>
@@ -329,11 +329,11 @@ export function TaskDetailDrawer({
 
               {/* Assignee */}
               <div>
-                <label className="text-xs font-medium text-slate-400 block mb-1">Assignee</label>
+                <label className="text-xs font-medium text-text-3 block mb-1">Assignee</label>
                 <select
                   value={task.assigneeId || ''}
                   onChange={(e) => handleAssigneeChange(e.target.value)}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-surface-1 border border-border rounded-lg px-2.5 py-1.5 text-xs text-text focus:outline-none focus:border-primary dark:focus:border-accent"
                 >
                   <option value="">Unassigned</option>
                   {members.map((m) => (
@@ -346,19 +346,19 @@ export function TaskDetailDrawer({
 
               {/* Due Date */}
               <div>
-                <label className="text-xs font-medium text-slate-400 block mb-1">Due Date</label>
+                <label className="text-xs font-medium text-text-3 block mb-1">Due Date</label>
                 <input
                   type="date"
                   defaultValue={task.dueDate ? task.dueDate.split('T')[0] : ''}
                   onChange={handleDueDateChange}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-surface-1 border border-border rounded-lg px-2.5 py-1.5 text-xs text-text focus:outline-none focus:border-primary dark:focus:border-accent"
                 />
               </div>
             </div>
 
             {/* Description */}
             <div>
-              <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+              <h4 className="text-xs font-semibold text-text-2 uppercase tracking-wider mb-2">
                 Description
               </h4>
               <textarea
@@ -370,21 +370,21 @@ export function TaskDetailDrawer({
                     updateTask.mutate({ id: taskId, data: { description: e.target.value } });
                   }
                 }}
-                className="w-full rounded-lg border border-slate-800 bg-slate-950 p-3 text-sm text-slate-200 placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                className="w-full rounded-lg border border-border bg-surface-2 p-3 text-sm text-text placeholder-text-3 focus:border-primary dark:focus:border-accent focus:outline-none focus:ring-1 focus:ring-primary dark:focus:ring-accent"
               />
             </div>
 
             {/* Dependencies & Blockers */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <Link2 className="h-4 w-4 text-slate-400" />
+                <h4 className="text-xs font-semibold text-text-2 uppercase tracking-wider flex items-center gap-1.5">
+                  <Link2 className="h-4 w-4 text-text-3" />
                   Dependencies
                 </h4>
                 {!isAddingBlocker && (
                   <button
                     onClick={() => setIsAddingBlocker(true)}
-                    className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1"
+                    className="text-xs text-primary dark:text-accent hover:underline flex items-center gap-1 font-medium"
                   >
                     <Plus className="h-3.5 w-3.5" />
                     Add Blocker
@@ -398,7 +398,7 @@ export function TaskDetailDrawer({
                   <select
                     value={selectedBlockerId}
                     onChange={(e) => setSelectedBlockerId(e.target.value)}
-                    className="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                    className="flex-1 bg-surface-2 border border-border rounded-lg px-2.5 py-1.5 text-xs text-text focus:outline-none focus:border-primary dark:focus:border-accent"
                     autoFocus
                   >
                     <option value="">Select prerequisite blocker task...</option>
@@ -433,31 +433,31 @@ export function TaskDetailDrawer({
 
               {/* Blocked By List */}
               <div className="space-y-2">
-                <div className="text-[11px] font-medium text-slate-400">Blocked by:</div>
+                <div className="text-[11px] font-medium text-text-3">Blocked by:</div>
                 {!task.dependencies || task.dependencies.length === 0 ? (
-                  <p className="text-xs text-slate-500 italic pl-1">No blocking tasks</p>
+                  <p className="text-xs text-text-3 italic pl-1">No blocking tasks</p>
                 ) : (
                   <div className="space-y-1.5">
                     {task.dependencies.map((dep) => (
                       <div
                         key={dep.id}
-                        className="flex items-center justify-between p-2.5 rounded-lg bg-slate-950/60 border border-slate-800/80 text-xs"
+                        className="flex items-center justify-between p-2.5 rounded-lg bg-surface-2 border border-border text-xs"
                       >
                         <div className="flex items-center gap-2 truncate">
-                          <span className="font-mono text-[11px] text-slate-400">
+                          <span className="font-mono text-[11px] text-text-3">
                             {dep.dependsOnTask.project.key}-{dep.dependsOnTask.number}
                           </span>
-                          <span className="font-medium text-slate-200 truncate">
+                          <span className="font-medium text-text truncate">
                             {dep.dependsOnTask.title}
                           </span>
                         </div>
                         <div className="flex items-center gap-2 shrink-0">
-                          <span className="text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded">
+                          <span className="text-[10px] bg-surface-3 text-text-2 px-1.5 py-0.5 rounded">
                             {dep.dependsOnTask.status}
                           </span>
                           <button
                             onClick={() => handleRemoveBlocker(dep.id)}
-                            className="text-slate-500 hover:text-rose-400 transition-colors"
+                            className="text-text-3 hover:text-semantic-danger transition-colors"
                             title="Remove dependency"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
@@ -471,21 +471,21 @@ export function TaskDetailDrawer({
                 {/* Blocking (Tasks waiting on this task) */}
                 {task.blocking && task.blocking.length > 0 && (
                   <div className="mt-3 space-y-1.5">
-                    <div className="text-[11px] font-medium text-slate-400">Blocks:</div>
+                    <div className="text-[11px] font-medium text-text-3">Blocks:</div>
                     {task.blocking.map((b) => (
                       <div
                         key={b.id}
-                        className="flex items-center justify-between p-2.5 rounded-lg bg-slate-950/60 border border-slate-800/80 text-xs"
+                        className="flex items-center justify-between p-2.5 rounded-lg bg-surface-2 border border-border text-xs"
                       >
                         <div className="flex items-center gap-2 truncate">
-                          <span className="font-mono text-[11px] text-slate-400">
+                          <span className="font-mono text-[11px] text-text-3">
                             {b.task.project.key}-{b.task.number}
                           </span>
-                          <span className="font-medium text-slate-200 truncate">
+                          <span className="font-medium text-text truncate">
                             {b.task.title}
                           </span>
                         </div>
-                        <span className="text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded">
+                        <span className="text-[10px] bg-surface-3 text-text-2 px-1.5 py-0.5 rounded">
                           {b.task.status}
                         </span>
                       </div>
@@ -498,14 +498,14 @@ export function TaskDetailDrawer({
             {/* Subtasks */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <CheckSquare className="h-4 w-4 text-slate-400" />
+                <h4 className="text-xs font-semibold text-text-2 uppercase tracking-wider flex items-center gap-1.5">
+                  <CheckSquare className="h-4 w-4 text-text-3" />
                   Subtasks ({task.subtasks?.length ?? 0})
                 </h4>
                 {!isAddingSubtask && (
                   <button
                     onClick={() => setIsAddingSubtask(true)}
-                    className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1"
+                    className="text-xs text-primary dark:text-accent hover:underline flex items-center gap-1 font-medium"
                   >
                     <Plus className="h-3.5 w-3.5" />
                     Add Subtask
@@ -517,10 +517,10 @@ export function TaskDetailDrawer({
                 {task.subtasks?.map((sub) => (
                   <div
                     key={sub.id}
-                    className="flex items-center justify-between p-2.5 rounded-lg bg-slate-950/60 border border-slate-800/80 text-xs"
+                    className="flex items-center justify-between p-2.5 rounded-lg bg-surface-2 border border-border text-xs"
                   >
-                    <span className="font-medium text-slate-200">{sub.title}</span>
-                    <span className="text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded">
+                    <span className="font-medium text-text">{sub.title}</span>
+                    <span className="text-[10px] bg-surface-3 text-text-2 px-1.5 py-0.5 rounded">
                       {sub.status}
                     </span>
                   </div>
@@ -534,7 +534,7 @@ export function TaskDetailDrawer({
                       value={newSubtaskTitle}
                       onChange={(e) => setNewSubtaskTitle(e.target.value)}
                       autoFocus
-                      className="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                      className="flex-1 bg-surface-2 border border-border rounded-lg px-3 py-1.5 text-xs text-text placeholder-text-3 focus:outline-none focus:border-primary dark:focus:border-accent"
                     />
                     <Button type="submit" size="sm">
                       Add
@@ -554,14 +554,14 @@ export function TaskDetailDrawer({
 
             {/* Subscribers */}
             <div>
-              <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+              <h4 className="text-xs font-semibold text-text-2 uppercase tracking-wider mb-2">
                 Subscribers ({task.subscribers?.length ?? 0})
               </h4>
               <div className="flex flex-wrap gap-2">
                 {task.subscribers?.map((sub) => (
                   <div
                     key={sub.userId}
-                    className="flex items-center gap-1.5 bg-slate-950 border border-slate-800 rounded-full px-2.5 py-1 text-xs text-slate-300"
+                    className="flex items-center gap-1.5 bg-surface-2 border border-border rounded-full px-2.5 py-1 text-xs text-text-2"
                   >
                     <Avatar name={sub.user.name || sub.user.email} size="sm" />
                     <span>{sub.user.name || sub.user.email}</span>
@@ -573,11 +573,11 @@ export function TaskDetailDrawer({
             {/* Attachments */}
             <div>
               <div className="flex items-center justify-between mb-2">
-                <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <Paperclip className="h-4 w-4 text-slate-400" />
+                <h4 className="text-xs font-semibold text-text-2 uppercase tracking-wider flex items-center gap-1.5">
+                  <Paperclip className="h-4 w-4 text-text-3" />
                   Attachments ({task.attachments?.length ?? 0})
                 </h4>
-                <label className="text-xs text-indigo-400 hover:text-indigo-300 flex items-center gap-1 cursor-pointer">
+                <label className="text-xs text-primary dark:text-accent hover:underline flex items-center gap-1 cursor-pointer font-medium">
                   <Upload className="h-3.5 w-3.5" />
                   Upload File
                   <input type="file" onChange={handleFileUpload} className="hidden" />
@@ -588,23 +588,23 @@ export function TaskDetailDrawer({
                 {task.attachments?.map((att) => (
                   <div
                     key={att.id}
-                    className="flex items-center justify-between p-2.5 rounded-lg bg-slate-950/60 border border-slate-800/80 text-xs"
+                    className="flex items-center justify-between p-2.5 rounded-lg bg-surface-2 border border-border text-xs"
                   >
                     <a
                       href={`http://localhost:5000${att.fileUrl}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-indigo-400 hover:underline font-medium truncate max-w-xs"
+                      className="text-primary dark:text-accent hover:underline font-medium truncate max-w-xs"
                     >
                       {att.name}
                     </a>
                     <div className="flex items-center gap-3">
-                      <span className="text-slate-500 text-[11px]">
+                      <span className="text-text-3 text-[11px]">
                         {(att.size / 1024).toFixed(1)} KB
                       </span>
                       <button
                         onClick={() => deleteAttachment.mutate(att.id)}
-                        className="text-slate-500 hover:text-rose-400"
+                        className="text-text-3 hover:text-semantic-danger"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
                       </button>
@@ -615,7 +615,17 @@ export function TaskDetailDrawer({
             </div>
 
             {/* Realtime Comments Section */}
-            <div className="border-t border-slate-800/80 pt-4">
+            <div className="border-t border-border pt-4">
+              <TaskCommentsSection
+                taskId={task.id}
+                typingUsers={typingUsers}
+                sendTyping={sendTyping}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
               <TaskCommentsSection
                 taskId={task.id}
                 typingUsers={typingUsers}

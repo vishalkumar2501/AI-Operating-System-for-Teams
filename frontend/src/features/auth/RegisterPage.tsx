@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRegister } from './auth.queries';
-import { Button, Input, useToast } from '@/components/ui';
+import { Button, Input, useToast, Logo } from '@/components/ui';
 import { AxiosError } from 'axios';
 
 const registerSchema = z
@@ -19,17 +19,6 @@ const registerSchema = z
   });
 
 type RegisterFormValues = z.infer<typeof registerSchema>;
-
-function TeamOSLogo() {
-  return (
-    <div className="flex items-center gap-2">
-      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 font-bold text-white text-sm">
-        T
-      </div>
-      <span className="text-xl font-semibold tracking-tight text-slate-100">TeamOS</span>
-    </div>
-  );
-}
 
 export function RegisterPage() {
   const navigate = useNavigate();
@@ -59,15 +48,15 @@ export function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-bg px-4 text-text">
       <div className="w-full max-w-sm">
         <div className="mb-8 flex flex-col items-center gap-3">
-          <TeamOSLogo />
-          <p className="text-sm text-slate-400">Create your account</p>
+          <Logo variant="full" size="md" />
+          <p className="text-sm text-text-2">Create your account</p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="rounded-xl border border-slate-800 bg-slate-900 p-6 shadow-xl flex flex-col gap-4">
+          <div className="rounded-xl border border-border bg-surface-1 p-6 shadow-card flex flex-col gap-4">
             <Input
               label="Full name"
               type="text"
@@ -108,9 +97,9 @@ export function RegisterPage() {
           </div>
         </form>
 
-        <p className="mt-5 text-center text-sm text-slate-500">
+        <p className="mt-5 text-center text-sm text-text-3">
           Already have an account?{' '}
-          <Link to="/login" className="text-indigo-400 hover:text-indigo-300 transition-colors">
+          <Link to="/login" className="text-accent hover:underline transition-colors font-medium">
             Sign in
           </Link>
         </p>
@@ -118,3 +107,4 @@ export function RegisterPage() {
     </div>
   );
 }
+export default RegisterPage;

@@ -57,7 +57,7 @@ export function ProjectTasksPage() {
 
   if (!project) {
     return (
-      <div className="p-8 text-center text-slate-400">
+      <div className="p-8 text-center text-text-3">
         <p>Project not found.</p>
         <Button
           variant="ghost"
@@ -76,7 +76,7 @@ export function ProjectTasksPage() {
       <div className="flex items-center gap-3">
         <button
           onClick={() => navigate(`/workspaces/${workspaceId}/projects`)}
-          className="p-1.5 rounded-lg text-slate-400 hover:text-slate-100 hover:bg-slate-800 transition-colors"
+          className="p-1.5 rounded-lg text-text-3 hover:text-text hover:bg-surface-2 transition-colors"
           title="Back to Projects"
         >
           <ArrowLeft className="h-4 w-4" />
@@ -85,7 +85,7 @@ export function ProjectTasksPage() {
           <Badge variant="info" className="font-mono text-xs">
             {project.key}
           </Badge>
-          <h1 className="text-xl font-bold text-slate-100 tracking-tight">{project.name}</h1>
+          <h1 className="text-xl font-bold text-text tracking-tight">{project.name}</h1>
         </div>
       </div>
 
@@ -94,13 +94,13 @@ export function ProjectTasksPage() {
         <div className="flex flex-wrap items-center gap-3">
           {/* Search */}
           <div className="relative min-w-[200px] flex-1 sm:flex-none">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-text-3" />
             <input
               type="text"
               placeholder="Search tasks..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-8 pr-3 py-1.5 bg-slate-900 border border-slate-800 rounded-lg text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+              className="w-full pl-8 pr-3 py-1.5 bg-surface-2 border border-border rounded-lg text-xs text-text placeholder-text-3 focus:outline-none focus:border-primary dark:focus:border-accent transition-colors"
             />
           </div>
 
@@ -108,7 +108,7 @@ export function ProjectTasksPage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-indigo-500"
+            className="bg-surface-2 border border-border rounded-lg px-2.5 py-1.5 text-xs text-text-2 focus:outline-none focus:border-primary dark:focus:border-accent transition-colors"
           >
             <option value="">All Statuses</option>
             <option value="BACKLOG">Backlog</option>
@@ -122,7 +122,7 @@ export function ProjectTasksPage() {
           <select
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value)}
-            className="bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-indigo-500"
+            className="bg-surface-2 border border-border rounded-lg px-2.5 py-1.5 text-xs text-text-2 focus:outline-none focus:border-primary dark:focus:border-accent transition-colors"
           >
             <option value="">All Priorities</option>
             <option value="LOW">Low</option>
@@ -134,13 +134,13 @@ export function ProjectTasksPage() {
 
         <div className="flex items-center gap-3 justify-end">
           {/* View Toggle */}
-          <div className="flex items-center bg-slate-900 p-0.5 rounded-lg border border-slate-800">
+          <div className="flex items-center bg-surface-2 p-0.5 rounded-lg border border-border">
             <button
               onClick={() => setViewMode('board')}
               className={`p-1.5 rounded-md text-xs flex items-center gap-1.5 transition-colors ${
                 viewMode === 'board'
-                  ? 'bg-slate-800 text-slate-100 font-medium'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-surface-3 text-text font-semibold shadow-sm'
+                  : 'text-text-3 hover:text-text'
               }`}
             >
               <Kanban className="h-3.5 w-3.5" />
@@ -150,8 +150,8 @@ export function ProjectTasksPage() {
               onClick={() => setViewMode('list')}
               className={`p-1.5 rounded-md text-xs flex items-center gap-1.5 transition-colors ${
                 viewMode === 'list'
-                  ? 'bg-slate-800 text-slate-100 font-medium'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-surface-3 text-text font-semibold shadow-sm'
+                  : 'text-text-3 hover:text-text'
               }`}
             >
               <List className="h-3.5 w-3.5" />
@@ -161,8 +161,8 @@ export function ProjectTasksPage() {
               onClick={() => setViewMode('graph')}
               className={`p-1.5 rounded-md text-xs flex items-center gap-1.5 transition-colors ${
                 viewMode === 'graph'
-                  ? 'bg-slate-800 text-slate-100 font-medium'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-surface-3 text-text font-semibold shadow-sm'
+                  : 'text-text-3 hover:text-text'
               }`}
             >
               <Network className="h-3.5 w-3.5" />
@@ -200,7 +200,7 @@ export function ProjectTasksPage() {
           onStatusChange={handleStatusChange}
         />
       ) : (
-        <div className="h-[750px] w-full rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
+        <div className="h-[750px] w-full rounded-2xl border border-border overflow-hidden shadow-xl bg-surface-1">
           <DependencyGraphView
             projectId={projectId!}
             onSelectTask={(id) => {

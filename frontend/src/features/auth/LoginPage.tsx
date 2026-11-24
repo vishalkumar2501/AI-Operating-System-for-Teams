@@ -3,7 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useLogin } from './auth.queries';
-import { Button, Input, useToast } from '@/components/ui';
+import { Button, Input, useToast, Logo } from '@/components/ui';
 import { AxiosError } from 'axios';
 
 const loginSchema = z.object({
@@ -12,17 +12,6 @@ const loginSchema = z.object({
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
-
-function TeamOSLogo() {
-  return (
-    <div className="flex items-center gap-2">
-      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 font-bold text-white text-sm">
-        T
-      </div>
-      <span className="text-xl font-semibold tracking-tight text-slate-100">TeamOS</span>
-    </div>
-  );
-}
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -65,15 +54,15 @@ export function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-bg px-4 text-text">
       <div className="w-full max-w-sm">
         <div className="mb-8 flex flex-col items-center gap-3">
-          <TeamOSLogo />
-          <p className="text-sm text-slate-400">Sign in to your workspace</p>
+          <Logo variant="full" size="md" />
+          <p className="text-sm text-text-2">Sign in to your workspace</p>
         </div>
 
         {errorParam && (
-          <div className="mb-4 rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+          <div className="mb-4 rounded-lg border border-semantic-danger-border bg-semantic-danger-subtle px-4 py-3 text-sm text-semantic-danger">
             {errorParam === 'no_token'
               ? 'No authentication token received.'
               : 'Authentication failed. Please try again.'}
@@ -81,7 +70,7 @@ export function LoginPage() {
         )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          <div className="rounded-xl border border-slate-800 bg-slate-900 p-6 shadow-xl">
+          <div className="rounded-xl border border-border bg-surface-1 p-6 shadow-card">
             <div className="flex flex-col gap-4">
               <Input
                 label="Email"
@@ -107,10 +96,10 @@ export function LoginPage() {
 
             <div className="relative my-4">
               <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-slate-800" />
+                <span className="w-full border-t border-border" />
               </div>
               <div className="relative flex justify-center text-xs">
-                <span className="bg-slate-900 px-2 text-slate-500">or</span>
+                <span className="bg-surface-1 px-2 text-text-3">or</span>
               </div>
             </div>
 
@@ -143,9 +132,9 @@ export function LoginPage() {
           </div>
         </form>
 
-        <p className="mt-5 text-center text-sm text-slate-500">
+        <p className="mt-5 text-center text-sm text-text-3">
           Don&apos;t have an account?{' '}
-          <Link to="/register" className="text-indigo-400 hover:text-indigo-300 transition-colors">
+          <Link to="/register" className="text-accent hover:underline transition-colors font-medium">
             Create one
           </Link>
         </p>
@@ -153,3 +142,4 @@ export function LoginPage() {
     </div>
   );
 }
+export default LoginPage;

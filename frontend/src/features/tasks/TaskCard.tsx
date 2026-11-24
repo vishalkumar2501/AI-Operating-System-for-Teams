@@ -36,14 +36,14 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
       {...listeners}
       {...attributes}
       onClick={onClick}
-      className={`p-3.5 bg-slate-900 border rounded-lg hover:border-slate-700 transition-all cursor-pointer group shadow-sm select-none ${
+      className={`p-3.5 bg-surface-1 border rounded-lg hover:border-accent/60 transition-all cursor-pointer group shadow-card select-none ${
         isDragging
-          ? 'opacity-60 border-indigo-500 shadow-indigo-500/10 shadow-lg ring-1 ring-indigo-500'
-          : 'border-slate-800'
+          ? 'opacity-80 border-accent ring-2 ring-ring shadow-lg'
+          : 'border-border hover:bg-surface-2'
       }`}
     >
       <div className="flex items-center justify-between mb-2">
-        <span className="text-xs font-mono font-medium text-slate-400 group-hover:text-indigo-400 transition-colors">
+        <span className="text-xs font-mono font-medium text-text-3 group-hover:text-accent transition-colors">
           {task.project.key}-{task.number}
         </span>
         <Badge
@@ -54,12 +54,12 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
         </Badge>
       </div>
 
-      <h4 className="text-sm font-medium text-slate-200 line-clamp-2 leading-snug">{task.title}</h4>
+      <h4 className="text-sm font-medium text-text line-clamp-2 leading-snug">{task.title}</h4>
 
-      <div className="mt-3.5 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-500">
+      <div className="mt-3.5 pt-2.5 border-t border-border flex items-center justify-between text-xs text-text-3">
         <div className="flex items-center gap-3">
           {task.dueDate && (
-            <span className="flex items-center gap-1 text-[11px] text-slate-400">
+            <span className="flex items-center gap-1 text-[11px] text-text-2">
               <Calendar className="h-3 w-3" />
               {new Date(task.dueDate).toLocaleDateString(undefined, {
                 month: 'short',
@@ -87,7 +87,7 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
           {task.assignee ? (
             <Avatar name={task.assignee.name || task.assignee.email} size="sm" />
           ) : (
-            <div className="h-5 w-5 rounded-full border border-dashed border-slate-700 flex items-center justify-center text-[10px] text-slate-600">
+            <div className="h-5 w-5 rounded-full border border-dashed border-border-strong flex items-center justify-center text-[10px] text-text-3">
               ?
             </div>
           )}
@@ -96,3 +96,4 @@ export function TaskCard({ task, onClick }: TaskCardProps) {
     </div>
   );
 }
+export default TaskCard;

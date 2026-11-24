@@ -63,51 +63,51 @@ export function CalendarPage() {
   const daysArray = Array.from({ length: daysInMonth }, (_, i) => i + 1);
 
   return (
-    <div className="flex-1 flex flex-col overflow-hidden bg-slate-950 text-slate-100">
+    <div className="flex-1 flex flex-col overflow-hidden bg-bg text-text">
       {/* Top Header */}
-      <div className="flex items-center justify-between border-b border-slate-800 p-4 shrink-0">
+      <div className="flex items-center justify-between border-b border-border p-4 shrink-0">
         <div className="flex items-center gap-4">
-          <h1 className="text-xl font-bold text-white flex items-center gap-2">
-            <CalendarIcon className="h-5 w-5 text-indigo-400" />
+          <h1 className="text-xl font-bold text-text flex items-center gap-2">
+            <CalendarIcon className="h-5 w-5 text-primary dark:text-accent" />
             Team Calendar
           </h1>
 
-          <div className="flex items-center gap-1 bg-slate-900 border border-slate-800 rounded-lg p-0.5">
+          <div className="flex items-center gap-1 bg-surface-2 border border-border rounded-lg p-0.5">
             <button
               onClick={handlePrev}
-              className="p-1 text-slate-400 hover:text-white rounded hover:bg-slate-800"
+              className="p-1 text-text-3 hover:text-text rounded hover:bg-surface-3 transition-colors"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
             <button
               onClick={handleToday}
-              className="px-2.5 py-1 text-xs font-medium text-slate-300 hover:text-white"
+              className="px-2.5 py-1 text-xs font-medium text-text-2 hover:text-text transition-colors"
             >
               Today
             </button>
             <button
               onClick={handleNext}
-              className="p-1 text-slate-400 hover:text-white rounded hover:bg-slate-800"
+              className="p-1 text-text-3 hover:text-text rounded hover:bg-surface-3 transition-colors"
             >
               <ChevronRight className="h-4 w-4" />
             </button>
           </div>
 
-          <span className="text-sm font-semibold text-slate-200">
+          <span className="text-sm font-semibold text-text">
             {currentDate.toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}
           </span>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="flex rounded-lg bg-slate-900 border border-slate-800 p-0.5 text-xs">
+          <div className="flex rounded-lg bg-surface-2 border border-border p-0.5 text-xs">
             {(['month', 'week', 'day'] as const).map((mode) => (
               <button
                 key={mode}
                 onClick={() => setViewMode(mode)}
                 className={`rounded px-2.5 py-1 font-medium capitalize transition-colors ${
                   viewMode === mode
-                    ? 'bg-indigo-600 text-white'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-primary dark:bg-accent text-on-primary dark:text-on-accent font-semibold shadow-sm'
+                    : 'text-text-3 hover:text-text'
                 }`}
               >
                 {mode}
@@ -117,7 +117,7 @@ export function CalendarPage() {
 
           <button
             onClick={() => setIsModalOpen(true)}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-500 shadow-md shadow-indigo-600/20"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-primary dark:bg-accent px-3 py-1.5 text-xs font-semibold text-on-primary dark:text-on-accent hover:opacity-90 shadow-sm transition-colors"
           >
             <Plus className="h-4 w-4" />
             Schedule
@@ -131,12 +131,12 @@ export function CalendarPage() {
         <div className="flex-1 flex flex-col overflow-y-auto p-4">
           {isLoading ? (
             <div className="flex h-full items-center justify-center">
-              <Spinner className="h-8 w-8 text-indigo-500" />
+              <Spinner className="h-8 w-8 text-primary dark:text-accent" />
             </div>
           ) : (
             <div className="h-full flex flex-col">
               {/* Day headers */}
-              <div className="grid grid-cols-7 gap-px border-b border-slate-800 text-center text-xs font-medium text-slate-400 pb-2">
+              <div className="grid grid-cols-7 gap-px border-b border-border text-center text-xs font-medium text-text-3 pb-2">
                 <span>Sun</span>
                 <span>Mon</span>
                 <span>Tue</span>
@@ -147,10 +147,10 @@ export function CalendarPage() {
               </div>
 
               {/* Month calendar cells */}
-              <div className="flex-1 grid grid-cols-7 grid-rows-5 gap-px bg-slate-800/40 rounded-lg overflow-hidden border border-slate-800 mt-2">
+              <div className="flex-1 grid grid-cols-7 grid-rows-5 gap-px bg-border rounded-lg overflow-hidden border border-border mt-2">
                 {/* Empty cells before month starts */}
                 {Array.from({ length: startDayOfWeek }).map((_, idx) => (
-                  <div key={`empty-${idx}`} className="bg-slate-950/60 min-h-[90px] p-2" />
+                  <div key={`empty-${idx}`} className="bg-surface-1/40 min-h-[90px] p-2" />
                 ))}
 
                 {/* Day cells */}
@@ -167,20 +167,22 @@ export function CalendarPage() {
                     <div
                       key={day}
                       onClick={() => setSelectedDay(dayStr)}
-                      className={`min-h-[90px] bg-slate-900/40 p-2 cursor-pointer transition-colors hover:bg-slate-900/80 ${
-                        isSelected ? 'ring-1 ring-indigo-500 bg-slate-900/90' : ''
+                      className={`min-h-[90px] bg-surface-1 p-2 cursor-pointer transition-colors hover:bg-surface-2 ${
+                        isSelected ? 'ring-2 ring-primary dark:ring-accent bg-surface-2' : ''
                       }`}
                     >
                       <div className="flex items-center justify-between mb-1.5">
                         <span
                           className={`text-xs font-semibold rounded-full h-5 w-5 flex items-center justify-center ${
-                            isToday ? 'bg-indigo-600 text-white font-bold' : 'text-slate-400'
+                            isToday
+                              ? 'bg-primary dark:bg-accent text-on-primary dark:text-on-accent font-bold'
+                              : 'text-text-3'
                           }`}
                         >
                           {day}
                         </span>
                         {dayItems.length > 0 && (
-                          <span className="text-[10px] text-slate-500">{dayItems.length}</span>
+                          <span className="text-[10px] text-text-3">{dayItems.length}</span>
                         )}
                       </div>
 
@@ -197,8 +199,8 @@ export function CalendarPage() {
                             }}
                             className={`rounded px-1.5 py-0.5 text-[10px] font-medium truncate flex items-center gap-1 ${
                               item.type === 'MEETING'
-                                ? 'bg-indigo-950/90 text-indigo-300 border border-indigo-800/40'
-                                : 'bg-emerald-950/90 text-emerald-300 border border-emerald-800/40'
+                                ? 'bg-primary-subtle text-primary dark:bg-accent-subtle dark:text-accent border border-primary/20 dark:border-accent/20'
+                                : 'bg-semantic-success/15 text-semantic-success border border-semantic-success/30'
                             }`}
                           >
                             {item.type === 'MEETING' ? (
@@ -210,7 +212,7 @@ export function CalendarPage() {
                           </div>
                         ))}
                         {dayItems.length > 3 && (
-                          <div className="text-[10px] text-slate-500 font-medium pl-1">
+                          <div className="text-[10px] text-text-3 font-medium pl-1">
                             +{dayItems.length - 3} more
                           </div>
                         )}
@@ -224,21 +226,21 @@ export function CalendarPage() {
         </div>
 
         {/* Right Sidebar: Selected Day & Free/Busy Intelligence */}
-        <div className="w-80 border-l border-slate-800 bg-slate-900/50 p-4 flex flex-col shrink-0 overflow-y-auto">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-4">
+        <div className="w-80 border-l border-border bg-surface-1 p-4 flex flex-col shrink-0 overflow-y-auto">
+          <div className="flex items-center justify-between pb-3 border-b border-border mb-4">
             <div>
-              <h3 className="text-sm font-semibold text-white">
+              <h3 className="text-sm font-semibold text-text">
                 {new Date(selectedDay).toLocaleDateString(undefined, {
                   weekday: 'short',
                   month: 'short',
                   day: 'numeric',
                 })}
               </h3>
-              <p className="text-[11px] text-slate-400">Scheduled events & open slots</p>
+              <p className="text-[11px] text-text-3">Scheduled events & open slots</p>
             </div>
             <button
               onClick={() => setIsModalOpen(true)}
-              className="p-1 rounded bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600 hover:text-white transition-colors"
+              className="p-1 rounded bg-surface-2 text-text-2 hover:bg-primary dark:hover:bg-accent hover:text-on-primary dark:hover:text-on-accent transition-colors"
             >
               <Plus className="h-4 w-4" />
             </button>
@@ -246,12 +248,12 @@ export function CalendarPage() {
 
           {/* Events on selected day */}
           <div className="space-y-2 mb-6">
-            <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <h4 className="text-xs font-semibold text-text-3 uppercase tracking-wider">
               Events ({feed?.filter((i) => i.startsAt.startsWith(selectedDay)).length || 0})
             </h4>
 
             {feed?.filter((i) => i.startsAt.startsWith(selectedDay)).length === 0 ? (
-              <p className="text-xs text-slate-500 py-3 text-center">No events on this date</p>
+              <p className="text-xs text-text-3 py-3 text-center">No events on this date</p>
             ) : (
               feed
                 ?.filter((i) => i.startsAt.startsWith(selectedDay))
@@ -263,17 +265,17 @@ export function CalendarPage() {
                         navigate(`/workspaces/${workspaceId}/meetings/${item.referenceId}`);
                       }
                     }}
-                    className="rounded-lg border border-slate-800 bg-slate-950/60 p-2.5 hover:border-slate-700 cursor-pointer"
+                    className="rounded-lg border border-border bg-surface-2 p-2.5 hover:border-border-strong cursor-pointer transition-colors"
                   >
-                    <div className="flex items-center gap-1.5 text-xs font-medium text-white mb-1">
+                    <div className="flex items-center gap-1.5 text-xs font-medium text-text mb-1">
                       {item.type === 'MEETING' ? (
-                        <Video className="h-3.5 w-3.5 text-indigo-400" />
+                        <Video className="h-3.5 w-3.5 text-primary dark:text-accent" />
                       ) : (
-                        <CheckSquare className="h-3.5 w-3.5 text-emerald-400" />
+                        <CheckSquare className="h-3.5 w-3.5 text-semantic-success" />
                       )}
                       <span className="truncate">{item.title}</span>
                     </div>
-                    <div className="text-[11px] text-slate-400 flex items-center gap-1">
+                    <div className="text-[11px] text-text-3 flex items-center gap-1">
                       <Clock className="h-3 w-3" />
                       {new Date(item.startsAt).toLocaleTimeString([], {
                         hour: '2-digit',
@@ -291,25 +293,27 @@ export function CalendarPage() {
           </div>
 
           {/* Free / Busy Intelligence */}
-          <div className="border-t border-slate-800 pt-4">
-            <div className="flex items-center gap-1.5 text-xs font-semibold text-amber-400 mb-2">
-              <Sparkles className="h-3.5 w-3.5" />
+          <div className="border-t border-border pt-4">
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-text dark:text-accent mb-2">
+              <span className="inline-flex items-center justify-center p-1 rounded bg-ai-bg text-ai-text text-[10px] font-bold">
+                <Sparkles className="h-3 w-3" />
+              </span>
               <span>Free / Busy Assistant (30m)</span>
             </div>
 
-            <p className="text-[11px] text-slate-400 mb-3">
+            <p className="text-[11px] text-text-3 mb-3">
               Open slots without scheduling conflicts across team working hours (09:00 - 18:00):
             </p>
 
             <div className="space-y-1.5 max-h-48 overflow-y-auto">
               {!freeBusy || freeBusy.availableSlots.length === 0 ? (
-                <p className="text-xs text-slate-500">No free slots found.</p>
+                <p className="text-xs text-text-3">No free slots found.</p>
               ) : (
                 freeBusy.availableSlots.slice(0, 8).map((slot, idx) => (
                   <button
                     key={idx}
                     onClick={() => setIsModalOpen(true)}
-                    className="w-full text-left rounded bg-slate-950/70 border border-slate-800 px-2 py-1 text-xs text-slate-300 hover:border-indigo-500/50 hover:text-white flex items-center justify-between"
+                    className="w-full text-left rounded bg-surface-2 border border-border px-2 py-1 text-xs text-text-2 hover:border-primary/50 dark:hover:border-accent/50 hover:text-text flex items-center justify-between transition-colors"
                   >
                     <span>
                       {new Date(slot.start).toLocaleTimeString([], {
@@ -322,7 +326,7 @@ export function CalendarPage() {
                         minute: '2-digit',
                       })}
                     </span>
-                    <span className="text-[10px] text-emerald-400 font-medium">Available</span>
+                    <span className="text-[10px] text-semantic-success font-medium">Available</span>
                   </button>
                 ))
               )}

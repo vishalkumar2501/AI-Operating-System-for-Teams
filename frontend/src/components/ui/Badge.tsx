@@ -1,4 +1,13 @@
-type BadgeVariant = 'success' | 'warning' | 'info' | 'destructive' | 'default';
+import React from 'react';
+
+type BadgeVariant =
+  | 'success'
+  | 'warning'
+  | 'info'
+  | 'destructive'
+  | 'default'
+  | 'ai'
+  | 'accent';
 
 interface BadgeProps {
   variant?: BadgeVariant;
@@ -7,11 +16,13 @@ interface BadgeProps {
 }
 
 const variantClasses: Record<BadgeVariant, string> = {
-  success: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30',
-  warning: 'bg-amber-500/15 text-amber-400 border-amber-500/30',
-  info: 'bg-indigo-500/15 text-indigo-400 border-indigo-500/30',
-  destructive: 'bg-red-500/15 text-red-400 border-red-500/30',
-  default: 'bg-slate-700/50 text-slate-400 border-slate-600/30',
+  success: 'bg-semantic-success-subtle text-semantic-success border-semantic-success-border',
+  warning: 'bg-semantic-warning-subtle text-semantic-warning border-semantic-warning-border',
+  info: 'bg-semantic-info-subtle text-semantic-info border-semantic-info-border',
+  destructive: 'bg-semantic-danger-subtle text-semantic-danger border-semantic-danger-border',
+  default: 'bg-surface-3 text-text-2 border-border',
+  ai: 'bg-ai-bg text-ai-text border-ai-border font-semibold',
+  accent: 'bg-accent-subtle text-accent border-accent/25 font-semibold',
 };
 
 export function Badge({ variant = 'default', children, className = '' }: BadgeProps) {
@@ -23,3 +34,4 @@ export function Badge({ variant = 'default', children, className = '' }: BadgePr
     </span>
   );
 }
+export default Badge;

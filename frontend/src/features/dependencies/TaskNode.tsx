@@ -11,19 +11,19 @@ export interface TaskNodeData extends GraphNode {
 export type TaskNodeType = Node<TaskNodeData, 'taskNode'>;
 
 const statusColors: Record<TaskStatus, { bg: string; text: string; border: string }> = {
-  BACKLOG: { bg: 'bg-slate-800', text: 'text-slate-400', border: 'border-slate-700' },
-  TODO: { bg: 'bg-indigo-950/50', text: 'text-indigo-400', border: 'border-indigo-800/60' },
-  IN_PROGRESS: { bg: 'bg-blue-950/50', text: 'text-blue-400', border: 'border-blue-800/60' },
-  IN_REVIEW: { bg: 'bg-purple-950/50', text: 'text-purple-400', border: 'border-purple-800/60' },
-  DONE: { bg: 'bg-emerald-950/50', text: 'text-emerald-400', border: 'border-emerald-800/60' },
-  BLOCKED: { bg: 'bg-rose-950/50', text: 'text-rose-400', border: 'border-rose-800/60' },
+  BACKLOG: { bg: 'bg-surface-2', text: 'text-text-3', border: 'border-border' },
+  TODO: { bg: 'bg-semantic-info-subtle', text: 'text-semantic-info', border: 'border-semantic-info-border' },
+  IN_PROGRESS: { bg: 'bg-accent-subtle', text: 'text-accent', border: 'border-accent/30' },
+  IN_REVIEW: { bg: 'bg-semantic-warning-subtle', text: 'text-semantic-warning', border: 'border-semantic-warning-border' },
+  DONE: { bg: 'bg-semantic-success-subtle', text: 'text-semantic-success', border: 'border-semantic-success-border' },
+  BLOCKED: { bg: 'bg-semantic-danger-subtle', text: 'text-semantic-danger', border: 'border-semantic-danger-border' },
 };
 
 const priorityColors: Record<string, string> = {
-  LOW: 'text-slate-400',
-  MEDIUM: 'text-blue-400',
-  HIGH: 'text-amber-400',
-  URGENT: 'text-rose-400 font-semibold',
+  LOW: 'text-text-3',
+  MEDIUM: 'text-semantic-info',
+  HIGH: 'text-semantic-warning',
+  URGENT: 'text-semantic-danger font-semibold',
 };
 
 export const TaskNode = memo(({ data }: NodeProps<TaskNodeType>) => {
@@ -36,96 +36,89 @@ export const TaskNode = memo(({ data }: NodeProps<TaskNodeType>) => {
   return (
     <div
       onClick={() => nodeData.onSelectTask?.(nodeData.id)}
-      className={`group relative w-64 rounded-xl border p-3.5 shadow-lg transition-all duration-150 cursor-pointer ${
+      className={`group relative w-64 rounded-xl border p-3.5 shadow-card transition-all duration-150 cursor-pointer ${
         isCritical
-          ? 'border-amber-500/80 bg-slate-900/95 shadow-amber-950/40 ring-2 ring-amber-500/25 hover:border-amber-400'
+          ? 'border-accent bg-surface-1 ring-2 ring-accent/30 hover:border-accent-hover'
           : isBlocked
-            ? 'border-rose-700/80 bg-slate-900/95 ring-1 ring-rose-500/20 hover:border-rose-500'
+            ? 'border-semantic-danger bg-surface-1 ring-1 ring-semantic-danger/30'
             : isDone
-              ? 'border-slate-800/80 bg-slate-900/60 opacity-80 hover:opacity-100 hover:border-slate-700'
-              : 'border-slate-800 bg-slate-900/95 hover:border-indigo-500/60 hover:shadow-indigo-950/20'
+              ? 'border-border bg-surface-1 opacity-70 hover:opacity-100'
+              : 'border-border bg-surface-1 hover:border-accent/60'
       }`}
     >
       {/* Target handle: prerequisite connects here */}
       <Handle
         type="target"
         position={Position.Left}
-        className="!h-3 !w-3 !rounded-full !border-2 !border-slate-950 !bg-indigo-400 hover:!bg-indigo-300"
+        className="!h-3 !w-3 !rounded-full !border-2 !border-surface-1 !bg-accent hover:!bg-accent-hover"
       />
 
       {/* Top Header: Key & Status Badge */}
       <div className="flex items-center justify-between gap-2 mb-2">
-        <span className="font-mono text-xs font-semibold text-slate-400 group-hover:text-indigo-300 transition-colors">
+        <span className="font-mono text-xs font-semibold text-text-3 group-hover:text-accent transition-colors">
           {nodeData.key}
         </span>
-        <span
-          className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[10px] font-medium border ${statusTheme.bg} ${statusTheme.text} ${statusTheme.border}`}
-        >
-          {isDone ? (
-            <CheckCircle2 className="h-3 w-3" />
-          ) : isBlocked ? (
-            <AlertTriangle className="h-3 w-3" />
-          ) : (
-            <Circle className="h-2 w-2 fill-current" />
-          )}
-          {nodeData.status}
-        </span>
-      </div>
-
-      {/* Task Title */}
-      <p
-        className={`text-xs font-medium leading-snug line-clamp-2 ${
-          isDone ? 'text-slate-400 line-through' : 'text-slate-100'
-        }`}
-        title={nodeData.title}
-      >
-        {nodeData.title}
-      </p>
-
-      {/* Bottom row: Priority, Estimate, Badges */}
-      <div className="mt-3 flex items-center justify-between border-t border-slate-800/80 pt-2 text-[11px] text-slate-400">
-        <div className="flex items-center gap-2">
-          <span className={priorityColors[nodeData.priority] ?? 'text-slate-400'}>
-            {nodeData.priority}
-          </span>
-          {nodeData.estimate != null && (
-            <span className="inline-flex items-center gap-0.5 text-slate-400">
-              <Clock className="h-2.5 w-2.5" />
-              {nodeData.estimate}h
-            </span>
-          )}
-        </div>
-
-        {/* Status flags */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5">
           {isCritical && (
             <span
-              className="inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 text-[9px] font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/30"
-              title="On project critical path"
+              className="flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-accent text-on-accent"
+              title="On Critical Path"
             >
-              <Flame className="h-2.5 w-2.5 fill-current" />
-              CPM
+              <Flame className="h-3 w-3" />
+              Critical
             </span>
           )}
-          {isBlocked && !isDone && (
+          {isBlocked && !isCritical && (
             <span
-              className="inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 text-[9px] font-semibold bg-rose-500/15 text-rose-300 border border-rose-500/30"
-              title="Blocked by prerequisite tasks"
+              className="flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-semantic-danger-subtle text-semantic-danger border border-semantic-danger-border"
+              title="Blocked by incomplete dependency"
             >
+              <AlertTriangle className="h-3 w-3" />
               Blocked
             </span>
           )}
+          <span
+            className={`rounded px-1.5 py-0.5 text-[10px] font-semibold border ${statusTheme.bg} ${statusTheme.text} ${statusTheme.border}`}
+          >
+            {nodeData.status.replace('_', ' ')}
+          </span>
         </div>
       </div>
 
-      {/* Source handle: outgoing dependency connects to dependents */}
+      {/* Title */}
+      <p className="line-clamp-2 text-xs font-medium text-text leading-snug mb-3">
+        {nodeData.title}
+      </p>
+
+      {/* Footer: Priority & Execution Times */}
+      <div className="flex items-center justify-between border-t border-border pt-2 text-[10px] text-text-3">
+        <span className={priorityColors[nodeData.priority] ?? 'text-text-3'}>
+          {nodeData.priority}
+        </span>
+        <div className="flex items-center gap-2">
+          {nodeData.estimatedHours && (
+            <span className="flex items-center gap-0.5">
+              <Clock className="h-2.5 w-2.5" />
+              {nodeData.estimatedHours}h
+            </span>
+          )}
+          {isDone ? (
+            <CheckCircle2 className="h-3.5 w-3.5 text-semantic-success" />
+          ) : (
+            <Circle className="h-3.5 w-3.5 text-text-3" />
+          )}
+        </div>
+      </div>
+
+      {/* Source handle: dependents connect here */}
       <Handle
         type="source"
         position={Position.Right}
-        className="!h-3 !w-3 !rounded-full !border-2 !border-slate-950 !bg-indigo-400 hover:!bg-indigo-300"
+        className="!h-3 !w-3 !rounded-full !border-2 !border-surface-1 !bg-accent hover:!bg-accent-hover"
       />
     </div>
   );
 });
 
 TaskNode.displayName = 'TaskNode';
+export default TaskNode;

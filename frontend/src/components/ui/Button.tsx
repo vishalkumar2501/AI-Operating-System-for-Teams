@@ -1,7 +1,7 @@
 import React from 'react';
 import { Loader2 } from 'lucide-react';
 
-type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'destructive';
+type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'destructive' | 'accent' | 'ai';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -13,13 +13,17 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    'bg-indigo-600 text-white hover:bg-indigo-500 focus-visible:ring-indigo-500 disabled:bg-indigo-600/50',
+    'bg-primary text-on-primary hover:opacity-90 active:opacity-100 focus-visible:ring-ring font-semibold shadow-sm',
   secondary:
-    'bg-slate-800 text-slate-100 hover:bg-slate-700 focus-visible:ring-slate-500 border border-slate-700',
+    'bg-surface-2 text-text hover:bg-surface-3 focus-visible:ring-ring border border-border',
   ghost:
-    'bg-transparent text-slate-300 hover:bg-slate-800 hover:text-slate-100 focus-visible:ring-slate-500',
+    'bg-transparent text-text-2 hover:bg-surface-2 hover:text-text focus-visible:ring-ring',
   destructive:
-    'bg-red-600/20 text-red-400 hover:bg-red-600/30 border border-red-500/40 focus-visible:ring-red-500',
+    'bg-semantic-danger-subtle text-semantic-danger hover:bg-semantic-danger/20 border border-semantic-danger-border focus-visible:ring-semantic-danger',
+  accent:
+    'bg-accent text-on-accent hover:bg-accent-hover active:bg-accent-pressed focus-visible:ring-ring font-semibold shadow-sm',
+  ai:
+    'bg-ai-bg text-ai-text hover:bg-accent-hover border border-ai-border font-semibold shadow-sm',
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
@@ -45,8 +49,8 @@ export function Button({
       className={`
         inline-flex items-center justify-center rounded-lg font-medium
         transition-colors duration-150
-        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950
-        disabled:cursor-not-allowed disabled:opacity-60
+        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-bg
+        disabled:cursor-not-allowed disabled:opacity-50
         ${variantClasses[variant]}
         ${sizeClasses[size]}
         ${className}
@@ -61,3 +65,4 @@ export function Button({
     </button>
   );
 }
+export default Button;

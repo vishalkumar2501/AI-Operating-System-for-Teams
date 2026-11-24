@@ -30,10 +30,10 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   const dismiss = (id: string) => setToasts((prev) => prev.filter((t) => t.id !== id));
 
   const variantClasses: Record<ToastVariant, string> = {
-    success: 'border-emerald-500/50 bg-emerald-500/10 text-emerald-300',
-    error: 'border-red-500/50 bg-red-500/10 text-red-300',
-    warning: 'border-amber-500/50 bg-amber-500/10 text-amber-300',
-    info: 'border-indigo-500/50 bg-indigo-500/10 text-indigo-300',
+    success: 'border-semantic-success-border bg-surface-1 text-semantic-success shadow-card',
+    error: 'border-semantic-danger-border bg-surface-1 text-semantic-danger shadow-card',
+    warning: 'border-semantic-warning-border bg-surface-1 text-semantic-warning shadow-card',
+    info: 'border-semantic-info-border bg-surface-1 text-semantic-info shadow-card',
   };
 
   return (
@@ -43,12 +43,12 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
         {toasts.map((t) => (
           <div
             key={t.id}
-            className={`flex items-center justify-between gap-3 rounded-lg border px-4 py-3 text-sm shadow-lg backdrop-blur-sm transition-all ${variantClasses[t.variant]}`}
+            className={`flex items-center justify-between gap-3 rounded-lg border px-4 py-3 text-sm shadow-lg backdrop-blur-md transition-all ${variantClasses[t.variant]}`}
           >
-            <span>{t.message}</span>
+            <span className="font-medium text-text">{t.message}</span>
             <button
               onClick={() => dismiss(t.id)}
-              className="shrink-0 opacity-70 hover:opacity-100 transition-opacity"
+              className="shrink-0 text-text-3 hover:text-text transition-colors"
             >
               <X className="h-4 w-4" />
             </button>
@@ -59,8 +59,10 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function useToast(): ToastContextValue {
-  const ctx = useContext(ToastContext);
-  if (!ctx) throw new Error('useToast must be used within ToastProvider');
-  return ctx;
+export function useToast() {
+  const context = useContext(ToastContext);
+  if (!context) {
+    throw new Error('useToast must be used within a ToastProvider');
+  }
+  return context;
 }

@@ -60,14 +60,14 @@ export function MeetingDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="flex h-full items-center justify-center bg-slate-950">
-        <Spinner className="h-8 w-8 text-indigo-500" />
+      <div className="flex h-full items-center justify-center bg-bg">
+        <Spinner className="h-8 w-8 text-primary dark:text-accent" />
       </div>
     );
   }
 
   if (!meeting) {
-    return <div className="p-8 text-center bg-slate-950 text-slate-400">Meeting not found.</div>;
+    return <div className="p-8 text-center bg-bg text-text-3">Meeting not found.</div>;
   }
 
   const transcript = meeting.transcript;
@@ -93,39 +93,39 @@ export function MeetingDetailPage() {
   };
 
   return (
-    <div className="flex-1 overflow-y-auto bg-slate-950 p-6 text-slate-100">
+    <div className="flex-1 overflow-y-auto bg-bg p-6 text-text">
       {/* Back button */}
       <button
         onClick={() => navigate(`/workspaces/${workspaceId}/meetings`)}
-        className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white mb-4"
+        className="inline-flex items-center gap-2 text-sm text-text-3 hover:text-text mb-4 transition-colors"
       >
         <ArrowLeft className="h-4 w-4" />
         Back to Meetings
       </button>
 
       {/* Header Banner */}
-      <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-6 mb-6">
+      <div className="rounded-xl border border-border bg-surface-1 p-6 mb-6 shadow-sm">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
               {meeting.project && (
-                <span className="rounded bg-indigo-950/80 border border-indigo-700/50 px-2 py-0.5 text-xs font-semibold text-indigo-300">
+                <span className="rounded bg-surface-2 border border-border px-2 py-0.5 text-xs font-semibold text-text">
                   [{meeting.project.key}] {meeting.project.name}
                 </span>
               )}
-              <span className="rounded-full bg-blue-950/80 text-blue-400 border border-blue-800/40 px-2.5 py-0.5 text-xs font-medium uppercase">
+              <span className="rounded-full bg-surface-2 text-text-2 border border-border px-2.5 py-0.5 text-xs font-medium uppercase">
                 {meeting.status}
               </span>
             </div>
 
-            <h1 className="text-2xl font-bold text-white">{meeting.title}</h1>
+            <h1 className="text-2xl font-bold text-text">{meeting.title}</h1>
             {meeting.description && (
-              <p className="mt-2 text-sm text-slate-400 max-w-2xl">{meeting.description}</p>
+              <p className="mt-2 text-sm text-text-3 max-w-2xl">{meeting.description}</p>
             )}
 
-            <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-slate-400">
+            <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-text-3">
               <span className="flex items-center gap-1.5">
-                <Calendar className="h-4 w-4 text-slate-500" />
+                <Calendar className="h-4 w-4 text-text-3" />
                 {new Date(meeting.startsAt).toLocaleDateString(undefined, {
                   weekday: 'short',
                   month: 'short',
@@ -134,7 +134,7 @@ export function MeetingDetailPage() {
                 })}
               </span>
               <span className="flex items-center gap-1.5">
-                <Clock className="h-4 w-4 text-slate-500" />
+                <Clock className="h-4 w-4 text-text-3" />
                 {new Date(meeting.startsAt).toLocaleTimeString([], {
                   hour: '2-digit',
                   minute: '2-digit',
@@ -146,7 +146,7 @@ export function MeetingDetailPage() {
                 })}
               </span>
               <span className="flex items-center gap-1.5">
-                <Users className="h-4 w-4 text-slate-500" />
+                <Users className="h-4 w-4 text-text-3" />
                 {meeting.participants.length} participant(s)
               </span>
             </div>
@@ -158,7 +158,7 @@ export function MeetingDetailPage() {
                 href={meeting.meetingUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 shadow-md shadow-indigo-600/20"
+                className="inline-flex items-center gap-2 rounded-lg bg-primary dark:bg-accent px-4 py-2 text-sm font-semibold text-on-primary dark:text-on-accent hover:opacity-90 shadow-sm transition-colors"
               >
                 <Video className="h-4 w-4" />
                 Join Video Call
@@ -169,7 +169,7 @@ export function MeetingDetailPage() {
       </div>
 
       {successMessage && (
-        <div className="mb-6 rounded-lg bg-emerald-500/10 border border-emerald-500/20 p-4 text-sm text-emerald-400 flex items-center gap-2">
+        <div className="mb-6 rounded-lg bg-semantic-success/10 border border-semantic-success/20 p-4 text-sm text-semantic-success flex items-center gap-2">
           <CheckCircle2 className="h-5 w-5" />
           {successMessage}
         </div>
@@ -179,11 +179,11 @@ export function MeetingDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left: Transcript & Dialogue */}
         <div className="lg:col-span-7 space-y-4">
-          <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+          <div className="rounded-xl border border-border bg-surface-1 p-5 shadow-sm">
+            <div className="flex items-center justify-between pb-4 border-b border-border">
               <div className="flex items-center gap-2">
-                <FileAudio className="h-5 w-5 text-indigo-400" />
-                <h2 className="text-base font-semibold text-white">
+                <FileAudio className="h-5 w-5 text-primary dark:text-accent" />
+                <h2 className="text-base font-semibold text-text">
                   Audio Transcript & Diarization
                 </h2>
               </div>
@@ -192,7 +192,7 @@ export function MeetingDetailPage() {
                 <button
                   onClick={() => transcribeMutation.mutate()}
                   disabled={transcribeMutation.isPending}
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-600/80 hover:bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-primary dark:bg-accent px-3 py-1.5 text-xs font-semibold text-on-primary dark:text-on-accent hover:opacity-90 disabled:opacity-50 transition-colors"
                 >
                   {transcribeMutation.isPending ? (
                     <Spinner className="h-3.5 w-3.5" />
@@ -206,9 +206,9 @@ export function MeetingDetailPage() {
 
             {transcribeMutation.isPending && (
               <div className="py-12 text-center">
-                <Spinner className="h-8 w-8 text-indigo-500 mx-auto mb-2" />
-                <p className="text-sm text-slate-300 font-medium">Processing audio with AI...</p>
-                <p className="text-xs text-slate-500">
+                <Spinner className="h-8 w-8 text-primary dark:text-accent mx-auto mb-2" />
+                <p className="text-sm text-text font-medium">Processing audio with AI...</p>
+                <p className="text-xs text-text-3">
                   Transcribing speech and extracting key decisions
                 </p>
               </div>
@@ -216,11 +216,11 @@ export function MeetingDetailPage() {
 
             {!transcript && !transcribeMutation.isPending && (
               <div className="py-12 text-center">
-                <FileAudio className="h-10 w-10 text-slate-600 mx-auto mb-3" />
-                <p className="text-sm text-slate-400 mb-4">No audio recording or transcript yet.</p>
+                <FileAudio className="h-10 w-10 text-text-3 mx-auto mb-3" />
+                <p className="text-sm text-text-3 mb-4">No audio recording or transcript yet.</p>
                 <button
                   onClick={() => transcribeMutation.mutate()}
-                  className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500"
+                  className="inline-flex items-center gap-2 rounded-lg bg-primary dark:bg-accent px-4 py-2 text-sm font-semibold text-on-primary dark:text-on-accent hover:opacity-90 transition-colors"
                 >
                   <Sparkles className="h-4 w-4" />
                   Run AI Audio Pipeline
@@ -233,19 +233,19 @@ export function MeetingDetailPage() {
                 {transcript.segments && transcript.segments.length > 0 ? (
                   transcript.segments.map((seg, idx) => (
                     <div key={idx} className="flex gap-3 group">
-                      <span className="text-[11px] font-mono text-slate-500 pt-0.5 shrink-0">
+                      <span className="text-[11px] font-mono text-text-3 pt-0.5 shrink-0">
                         {formatMs(seg.startMs)}
                       </span>
                       <div className="flex-1">
-                        <div className="text-xs font-semibold text-indigo-400">
+                        <div className="text-xs font-semibold text-primary dark:text-accent">
                           {seg.speakerName || 'Speaker'}
                         </div>
-                        <p className="text-sm text-slate-300 mt-0.5 leading-relaxed">{seg.text}</p>
+                        <p className="text-sm text-text mt-0.5 leading-relaxed">{seg.text}</p>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <p className="text-sm text-slate-300 whitespace-pre-wrap leading-relaxed">
+                  <p className="text-sm text-text whitespace-pre-wrap leading-relaxed">
                     {transcript.rawText}
                   </p>
                 )}
@@ -257,35 +257,37 @@ export function MeetingDetailPage() {
         {/* Right: AI Summary & Action Items */}
         <div className="lg:col-span-5 space-y-6">
           {/* AI Summary Card */}
-          <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
+          <div className="rounded-xl border border-border bg-surface-1 p-5 shadow-sm">
             <div className="flex items-center gap-2 mb-3">
-              <Sparkles className="h-5 w-5 text-amber-400" />
-              <h2 className="text-base font-semibold text-white">AI Meeting Summary</h2>
+              <span className="p-1 rounded bg-ai-bg text-ai-text text-[10px]">
+                <Sparkles className="h-3.5 w-3.5" />
+              </span>
+              <h2 className="text-base font-semibold text-text">AI Meeting Summary</h2>
             </div>
 
             {transcript?.summary ? (
-              <div className="rounded-lg bg-slate-950/60 border border-slate-800 p-4 text-sm text-slate-300 leading-relaxed">
+              <div className="rounded-lg bg-surface-2 border border-border p-4 text-sm text-text leading-relaxed">
                 {transcript.summary}
               </div>
             ) : (
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-text-3">
                 Summary will appear automatically when transcript processing is triggered.
               </p>
             )}
           </div>
 
           {/* Extracted Action Items Card */}
-          <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
+          <div className="rounded-xl border border-border bg-surface-1 p-5 shadow-sm">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
-                <CheckSquare className="h-5 w-5 text-emerald-400" />
-                <h2 className="text-base font-semibold text-white">Extracted Action Items</h2>
+                <CheckSquare className="h-5 w-5 text-semantic-success" />
+                <h2 className="text-base font-semibold text-text">Extracted Action Items</h2>
               </div>
-              <span className="text-xs text-slate-400">{actionItems.length} found</span>
+              <span className="text-xs text-text-3">{actionItems.length} found</span>
             </div>
 
             {actionItems.length === 0 ? (
-              <p className="text-xs text-slate-500 py-4 text-center">
+              <p className="text-xs text-text-3 py-4 text-center">
                 No action items extracted yet. Run the AI audio pipeline to detect tasks.
               </p>
             ) : (
@@ -298,25 +300,25 @@ export function MeetingDetailPage() {
                       onClick={() => handleToggleAction(idx)}
                       className={`flex items-start gap-3 rounded-lg border p-3 cursor-pointer transition-colors ${
                         isSelected
-                          ? 'border-indigo-500/50 bg-indigo-950/30'
-                          : 'border-slate-800 bg-slate-950/40 hover:border-slate-700'
+                          ? 'border-primary/50 dark:border-accent/50 bg-primary-subtle dark:bg-accent-subtle'
+                          : 'border-border bg-surface-2 hover:border-border-strong'
                       }`}
                     >
                       <input
                         type="checkbox"
                         checked={isSelected}
                         onChange={() => handleToggleAction(idx)}
-                        className="mt-1 rounded border-slate-700 text-indigo-600 focus:ring-0"
+                        className="mt-1 rounded border-border text-primary focus:ring-0 accent-primary dark:accent-accent"
                       />
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-slate-200">{item.title}</p>
-                        <div className="mt-1 flex items-center gap-3 text-xs text-slate-400">
+                        <p className="text-sm font-medium text-text">{item.title}</p>
+                        <div className="mt-1 flex items-center gap-3 text-xs text-text-3">
                           {item.assigneeName && <span>Assignee: {item.assigneeName}</span>}
                           {item.deadline && (
                             <span>Due: {new Date(item.deadline).toLocaleDateString()}</span>
                           )}
                           {item.suggestedPriority && (
-                            <span className="text-amber-400">{item.suggestedPriority}</span>
+                            <span className="text-semantic-warning font-medium">{item.suggestedPriority}</span>
                           )}
                         </div>
                       </div>
@@ -327,7 +329,7 @@ export function MeetingDetailPage() {
                 <button
                   onClick={handleConvertSelected}
                   disabled={selectedActionIndexes.length === 0 || convertMutation.isPending}
-                  className="w-full mt-2 inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-40 transition-colors"
+                  className="w-full mt-2 inline-flex items-center justify-center gap-2 rounded-lg bg-semantic-success px-4 py-2 text-sm font-semibold text-white hover:opacity-90 disabled:opacity-40 transition-colors shadow-sm"
                 >
                   {convertMutation.isPending && <Spinner className="h-4 w-4" />}
                   Convert Selected ({selectedActionIndexes.length}) to Tasks
@@ -337,10 +339,10 @@ export function MeetingDetailPage() {
           </div>
 
           {/* Participants & RSVPs Card */}
-          <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
+          <div className="rounded-xl border border-border bg-surface-1 p-5 shadow-sm">
             <div className="flex items-center gap-2 mb-3">
-              <Users className="h-5 w-5 text-indigo-400" />
-              <h2 className="text-base font-semibold text-white">
+              <Users className="h-5 w-5 text-primary dark:text-accent" />
+              <h2 className="text-base font-semibold text-text">
                 Participants ({meeting.participants.length})
               </h2>
             </div>
@@ -354,15 +356,15 @@ export function MeetingDetailPage() {
                       src={p.user.avatarUrl}
                       className="h-6 w-6 text-[10px]"
                     />
-                    <span className="text-slate-300">{p.user.name}</span>
+                    <span className="text-text">{p.user.name}</span>
                   </div>
                   <span
                     className={`rounded px-1.5 py-0.5 font-medium ${
                       p.rsvp === 'ACCEPTED'
-                        ? 'bg-emerald-950/80 text-emerald-400'
+                        ? 'bg-semantic-success/15 text-semantic-success'
                         : p.rsvp === 'DECLINED'
-                          ? 'bg-rose-950/80 text-rose-400'
-                          : 'bg-slate-800 text-slate-400'
+                          ? 'bg-semantic-danger/15 text-semantic-danger'
+                          : 'bg-surface-2 text-text-3'
                     }`}
                   >
                     {p.rsvp}

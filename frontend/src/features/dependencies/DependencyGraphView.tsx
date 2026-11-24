@@ -122,12 +122,12 @@ function layoutGraph(
       type: 'smoothstep',
       animated: isCritical,
       style: {
-        stroke: isCritical ? '#f59e0b' : '#6366f1',
+        stroke: isCritical ? '#E4F222' : '#6E6E75',
         strokeWidth: isCritical ? 2.5 : 1.5,
       },
       markerEnd: {
         type: MarkerType.ArrowClosed,
-        color: isCritical ? '#f59e0b' : '#6366f1',
+        color: isCritical ? '#E4F222' : '#6E6E75',
         width: 14,
         height: 14,
       },
@@ -184,9 +184,9 @@ export function DependencyGraphView({ projectId, onSelectTask }: DependencyGraph
 
   if (isLoading) {
     return (
-      <div className="flex h-full w-full items-center justify-center bg-slate-950">
-        <div className="flex items-center gap-3 text-sm text-slate-400">
-          <RefreshCw className="h-4 w-4 animate-spin text-indigo-500" />
+      <div className="flex h-full w-full items-center justify-center bg-surface-1">
+        <div className="flex items-center gap-3 text-sm text-text-2">
+          <RefreshCw className="h-4 w-4 animate-spin text-accent" />
           Computing dependency graph & critical path...
         </div>
       </div>
@@ -195,14 +195,14 @@ export function DependencyGraphView({ projectId, onSelectTask }: DependencyGraph
 
   if (error) {
     return (
-      <div className="flex h-full w-full items-center justify-center bg-slate-950 p-6">
-        <div className="max-w-md rounded-xl border border-rose-900/50 bg-rose-950/20 p-6 text-center">
-          <AlertTriangle className="mx-auto h-8 w-8 text-rose-400 mb-2" />
-          <h3 className="text-base font-semibold text-rose-300">Failed to load graph</h3>
-          <p className="mt-1 text-xs text-rose-400/80">{(error as Error).message}</p>
+      <div className="flex h-full w-full items-center justify-center bg-surface-1 p-6">
+        <div className="max-w-md rounded-xl border border-semantic-danger-border bg-surface-2 p-6 text-center shadow-card">
+          <AlertTriangle className="mx-auto h-8 w-8 text-semantic-danger mb-2" />
+          <h3 className="text-base font-semibold text-text">Failed to load graph</h3>
+          <p className="mt-1 text-xs text-text-3">{(error as Error).message}</p>
           <button
             onClick={() => refetch()}
-            className="mt-4 rounded-lg bg-rose-600 px-4 py-2 text-xs font-medium text-white hover:bg-rose-500"
+            className="mt-4 rounded-lg bg-primary px-4 py-2 text-xs font-medium text-on-primary hover:opacity-90 transition-opacity"
           >
             Retry
           </button>
@@ -212,15 +212,15 @@ export function DependencyGraphView({ projectId, onSelectTask }: DependencyGraph
   }
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-slate-950 select-none">
+    <div className="relative h-full w-full overflow-hidden bg-surface-1 select-none">
       {/* Top Banner: Critical Path & Graph Statistics */}
       <div className="absolute top-4 left-4 z-10 flex flex-wrap items-center gap-3">
         {criticalPathCount > 0 && (
-          <div className="flex items-center gap-2 rounded-xl border border-amber-500/40 bg-slate-900/90 px-3.5 py-2 text-xs backdrop-blur-md shadow-lg shadow-black/40">
-            <Flame className="h-4 w-4 text-amber-400 animate-pulse" />
+          <div className="flex items-center gap-2 rounded-xl border border-accent bg-surface-1/95 px-3.5 py-2 text-xs backdrop-blur-md shadow-card">
+            <Flame className="h-4 w-4 text-accent animate-pulse" />
             <div>
-              <span className="font-semibold text-amber-300">Critical Path: </span>
-              <span className="text-slate-200">
+              <span className="font-semibold text-accent">Critical Path: </span>
+              <span className="text-text">
                 {criticalPathDuration}h total duration ({criticalPathCount} bottleneck{' '}
                 {criticalPathCount === 1 ? 'task' : 'tasks'})
               </span>
@@ -229,30 +229,30 @@ export function DependencyGraphView({ projectId, onSelectTask }: DependencyGraph
         )}
 
         {/* Legend */}
-        <div className="flex items-center gap-4 rounded-xl border border-slate-800 bg-slate-900/90 px-3.5 py-2 text-xs text-slate-300 backdrop-blur-md shadow-lg shadow-black/40">
+        <div className="flex items-center gap-4 rounded-xl border border-border bg-surface-1/95 px-3.5 py-2 text-xs text-text backdrop-blur-md shadow-card">
           <div className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-amber-400 animate-ping" />
-            <span className="text-[11px] text-amber-300 font-medium">Critical Path</span>
+            <span className="h-2 w-2 rounded-full bg-accent animate-ping" />
+            <span className="text-[11px] text-accent font-medium">Critical Path</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-rose-500" />
-            <span className="text-[11px] text-rose-300 font-medium">Blocked</span>
+            <span className="h-2 w-2 rounded-full bg-semantic-danger" />
+            <span className="text-[11px] text-semantic-danger font-medium">Blocked</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-indigo-500" />
-            <span className="text-[11px] text-indigo-300 font-medium">Dependency Edge</span>
+            <span className="h-2 w-2 rounded-full bg-text-3" />
+            <span className="text-[11px] text-text-2 font-medium">Dependency Edge</span>
           </div>
         </div>
       </div>
 
       {/* Error alert toast */}
       {errorMessage && (
-        <div className="absolute top-4 right-4 z-20 flex items-center gap-2 max-w-md rounded-xl border border-rose-500/50 bg-rose-950/90 px-4 py-3 text-xs text-rose-200 shadow-xl backdrop-blur-md animate-in fade-in slide-in-from-top-2">
-          <AlertTriangle className="h-4 w-4 shrink-0 text-rose-400" />
+        <div className="absolute top-4 right-4 z-20 flex items-center gap-2 max-w-md rounded-xl border border-semantic-danger-border bg-surface-1 px-4 py-3 text-xs text-semantic-danger shadow-card backdrop-blur-md">
+          <AlertTriangle className="h-4 w-4 shrink-0 text-semantic-danger" />
           <span className="flex-1">{errorMessage}</span>
           <button
             onClick={() => setErrorMessage(null)}
-            className="rounded p-1 text-rose-400 hover:bg-rose-900/50 hover:text-white"
+            className="rounded p-1 text-text-3 hover:text-text"
           >
             ✕
           </button>
@@ -260,8 +260,8 @@ export function DependencyGraphView({ projectId, onSelectTask }: DependencyGraph
       )}
 
       {/* Bottom Hint */}
-      <div className="absolute bottom-4 left-4 z-10 flex items-center gap-2 rounded-lg border border-slate-800/80 bg-slate-900/80 px-3 py-1.5 text-[11px] text-slate-400 backdrop-blur-sm">
-        <HelpCircle className="h-3.5 w-3.5 text-slate-400" />
+      <div className="absolute bottom-4 left-4 z-10 flex items-center gap-2 rounded-lg border border-border bg-surface-1/90 px-3 py-1.5 text-[11px] text-text-3 backdrop-blur-sm shadow-sm">
+        <HelpCircle className="h-3.5 w-3.5 text-text-3" />
         <span>Drag from right handle of blocker to left handle of dependent task to link.</span>
       </div>
 
@@ -280,18 +280,18 @@ export function DependencyGraphView({ projectId, onSelectTask }: DependencyGraph
         defaultEdgeOptions={{ type: 'smoothstep' }}
         proOptions={{ hideAttribution: true }}
       >
-        <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="#334155" />
-        <Controls className="!border-slate-800 !bg-slate-900 !shadow-lg [&>button]:!border-slate-800 [&>button]:!bg-slate-900 [&>button]:!text-slate-300 hover:[&>button]:!bg-slate-800" />
+        <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="#6E6E75" />
+        <Controls className="!border-border !bg-surface-1 !shadow-card [&>button]:!border-border [&>button]:!bg-surface-1 [&>button]:!text-text hover:[&>button]:!bg-surface-2" />
         <MiniMap
           nodeColor={(node) => {
             const data = node.data as any;
-            if (data?.isCriticalPath) return '#f59e0b';
-            if (data?.isBlocked || data?.status === 'BLOCKED') return '#e11d48';
-            if (data?.status === 'DONE') return '#10b981';
-            return '#6366f1';
+            if (data?.isCriticalPath) return '#E4F222';
+            if (data?.isBlocked || data?.status === 'BLOCKED') return '#FF6B6B';
+            if (data?.status === 'DONE') return '#3DD68C';
+            return '#5BA8FF';
           }}
-          className="!border-slate-800 !bg-slate-950/90 !rounded-xl !shadow-lg"
-          maskColor="rgba(2, 6, 23, 0.7)"
+          className="!border-border !bg-surface-1/90 !rounded-xl !shadow-card"
+          maskColor="rgba(11, 11, 12, 0.7)"
         />
       </ReactFlow>
     </div>

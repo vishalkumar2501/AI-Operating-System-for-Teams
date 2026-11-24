@@ -25,17 +25,17 @@ export function ProjectRisksBanner({
   const highRisks = risks.filter((r) => r.severity === 'HIGH');
 
   return (
-    <div className="mb-6 rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-slate-200">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-amber-500/20">
+    <div className="mb-6 rounded-xl border border-semantic-warning-border bg-semantic-warning-subtle p-4 text-text shadow-sm">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-semantic-warning-border/40">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-500/20 text-amber-400">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-surface-1 text-semantic-warning border border-semantic-warning-border">
             <AlertTriangle className="h-4 w-4" />
           </div>
           <div>
-            <h4 className="text-sm font-semibold text-amber-300">
+            <h4 className="text-sm font-semibold text-text">
               AI Risk Engine Detected {risks.length} Bottleneck(s)
             </h4>
-            <p className="text-xs text-amber-400/80">
+            <p className="text-xs text-text-2">
               {highRisks.length} high severity risks requiring team attention.
             </p>
           </div>
@@ -45,7 +45,7 @@ export function ProjectRisksBanner({
           onClick={() =>
             onOpenAiAssistant?.('Scan and propose resolutions for project bottlenecks and risks')
           }
-          className="inline-flex items-center gap-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 px-3 py-1.5 text-xs font-semibold text-amber-300 transition-colors shadow-sm"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-surface-1 hover:bg-surface-2 border border-semantic-warning-border px-3 py-1.5 text-xs font-semibold text-semantic-warning transition-colors shadow-sm"
         >
           <Sparkles className="h-3.5 w-3.5" />
           Resolve with AI Assistant
@@ -57,22 +57,22 @@ export function ProjectRisksBanner({
         {risks.slice(0, 3).map((r) => (
           <div
             key={r.id}
-            className="flex items-start justify-between text-xs rounded-lg bg-slate-950/40 p-2.5 border border-amber-500/10"
+            className="flex items-start justify-between text-xs rounded-lg bg-surface-1 p-2.5 border border-border"
           >
             <div>
               <div className="flex items-center gap-2 mb-0.5">
                 <span
-                  className={`rounded px-1.5 py-0.2 text-[9px] font-bold uppercase ${
+                  className={`rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider ${
                     r.severity === 'HIGH'
-                      ? 'bg-rose-950 text-rose-300 border border-rose-800/40'
-                      : 'bg-amber-950 text-amber-300 border border-amber-800/40'
+                      ? 'bg-semantic-danger-subtle text-semantic-danger border border-semantic-danger-border'
+                      : 'bg-semantic-warning-subtle text-semantic-warning border border-semantic-warning-border'
                   }`}
                 >
                   {r.severity}
                 </span>
-                <span className="font-semibold text-white">{r.title}</span>
+                <span className="font-semibold text-text">{r.title}</span>
               </div>
-              <p className="text-slate-400 text-[11px]">{r.description}</p>
+              <p className="text-text-3 text-[11px]">{r.description}</p>
             </div>
           </div>
         ))}
@@ -80,3 +80,4 @@ export function ProjectRisksBanner({
     </div>
   );
 }
+export default ProjectRisksBanner;
