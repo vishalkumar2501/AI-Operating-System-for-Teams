@@ -96,10 +96,10 @@ export const TaskNode = memo(({ data }: NodeProps<TaskNodeType>) => {
           {nodeData.priority}
         </span>
         <div className="flex items-center gap-2">
-          {nodeData.estimatedHours && (
+          {Boolean(nodeData.estimatedHours) && (
             <span className="flex items-center gap-0.5">
               <Clock className="h-2.5 w-2.5" />
-              {nodeData.estimatedHours}h
+              {String(nodeData.estimatedHours)}h
             </span>
           )}
           {isDone ? (
