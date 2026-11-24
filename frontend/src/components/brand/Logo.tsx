@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTheme } from '@/store/theme.store';
 
 export interface LogoProps {
