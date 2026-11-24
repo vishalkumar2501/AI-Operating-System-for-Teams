@@ -626,15 +626,5 @@ export function TaskDetailDrawer({
         )}
       </div>
     </div>
-              <TaskCommentsSection
-                taskId={task.id}
-                typingUsers={typingUsers}
-                sendTyping={sendTyping}
-              />
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
   );
 }
