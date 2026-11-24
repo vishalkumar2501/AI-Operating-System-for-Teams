@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface AvatarProps {
   name?: string | null;
   src?: string | null;
