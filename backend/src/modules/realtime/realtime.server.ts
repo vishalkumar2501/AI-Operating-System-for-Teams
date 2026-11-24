@@ -31,7 +31,13 @@ export interface SocketData {
 export async function initRealtimeServer(httpServer: HttpServer): Promise<Server> {
   const io = new Server(httpServer, {
     cors: {
-      origin: [env.CLIENT_URL, 'http://localhost:5173', 'http://127.0.0.1:5173'],
+      origin: [
+        env.CLIENT_URL,
+        'http://localhost:5173',
+        'http://127.0.0.1:5173',
+        'http://localhost:5174',
+        'http://127.0.0.1:5174',
+      ],
       credentials: true,
     },
     pingInterval: 25000,
@@ -93,7 +99,11 @@ export async function initRealtimeServer(httpServer: HttpServer): Promise<Server
 
       next();
     } catch (err: any) {
-      logger.error({ err: err?.message || err }, '[realtime] Socket authentication error');
+      if (err?.name === 'TokenExpiredError' || err?.message?.includes('jwt expired')) {
+        logger.warn('[realtime] Socket access token expired — awaiting client refresh');
+      } else {
+        logger.error({ err: err?.message || err }, '[realtime] Socket authentication error');
+      }
       next(
         new Error(`Authentication failed: ${err?.message || 'invalid or expired access token'}`)
       );

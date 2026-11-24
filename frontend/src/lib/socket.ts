@@ -21,8 +21,24 @@ export function getSocket(): Socket {
       // connected
     });
 
-    socketInstance.on('connect_error', (err) => {
+    socketInstance.on('connect_error', async (err) => {
       console.warn('[socket] Connection error:', err.message);
+      if (
+        err.message.includes('Authentication failed') ||
+        err.message.includes('jwt expired') ||
+        err.message.includes('jwt')
+      ) {
+        socketInstance?.disconnect();
+        try {
+          const { api } = await import('./api');
+          const res = await api.post<{ data: { accessToken: string } }>('/auth/refresh');
+          const newToken = res.data.data.accessToken;
+          localStorage.setItem('teamos_token', newToken);
+          connectSocket(newToken);
+        } catch {
+          localStorage.removeItem('teamos_token');
+        }
+      }
     });
   }
 

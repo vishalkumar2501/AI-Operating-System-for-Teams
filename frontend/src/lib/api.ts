@@ -66,6 +66,9 @@ apiClient.interceptors.response.use(
         }>('/auth/refresh');
         const newToken = res.data.data.accessToken;
         localStorage.setItem('teamos_token', newToken);
+        import('./socket').then(({ connectSocket }) => {
+          connectSocket(newToken);
+        });
         processQueue(null, newToken);
         if (originalRequest.headers) {
           originalRequest.headers.Authorization = `Bearer ${newToken}`;
