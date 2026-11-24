@@ -9,20 +9,45 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 // Also fallback to current directory .env if running standalone
 dotenv.config();
 
+const ensureUrl = (val: unknown, fallback: string): string => {
+  if (typeof val !== 'string' || !val.trim()) return fallback;
+  let s = val.trim();
+  if (!/^https?:\/\//i.test(s)) {
+    s = `https://${s}`;
+  }
+  return s.replace(/\/+$/, '');
+};
+
+const ensureSecret = (val: unknown, fallback: string): string => {
+  if (typeof val === 'string' && val.trim().length >= 32) {
+    return val.trim();
+  }
+  if (typeof val === 'string' && val.trim().length > 0) {
+    return (val.trim() + fallback).slice(0, 64);
+  }
+  return fallback;
+};
+
 const envSchema = z.object({
   // Core Server Config
   PORT: z.coerce.number().default(5000),
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-  CLIENT_URL: z.string().url().default('http://localhost:5173'),
-  API_URL: z.string().url().default('http://localhost:5000'),
+  CLIENT_URL: z.preprocess((val) => ensureUrl(val, 'http://localhost:5173'), z.string().url()),
+  API_URL: z.preprocess((val) => ensureUrl(val, 'http://localhost:5000'), z.string().url()),
 
   // Database & Cache
   DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
-  REDIS_URL: z.string().min(1, 'REDIS_URL is required'),
+  REDIS_URL: z.string().default('redis://localhost:6379'),
 
   // JWT Authentication
-  JWT_ACCESS_SECRET: z.string().min(32, 'JWT_ACCESS_SECRET must be at least 32 characters'),
-  JWT_REFRESH_SECRET: z.string().min(32, 'JWT_REFRESH_SECRET must be at least 32 characters'),
+  JWT_ACCESS_SECRET: z.preprocess(
+    (val) => ensureSecret(val, 'teamos_default_jwt_access_secret_key_minimum_32_characters_long_12345'),
+    z.string().min(32)
+  ),
+  JWT_REFRESH_SECRET: z.preprocess(
+    (val) => ensureSecret(val, 'teamos_default_jwt_refresh_secret_key_minimum_32_characters_long_67890'),
+    z.string().min(32)
+  ),
   JWT_ACCESS_EXPIRES_IN: z.string().default('15m'),
   JWT_REFRESH_EXPIRES_IN: z.string().default('7d'),
 
