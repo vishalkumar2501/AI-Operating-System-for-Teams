@@ -10,6 +10,8 @@ import { logger } from './lib/logger';
 import { requestId } from './middleware/requestId';
 import { errorHandler } from './middleware/errorHandler';
 import { apiRouter } from './routes/index';
+import { prisma } from './lib/prisma';
+import { redis } from './lib/redis';
 
 const app = express();
 
@@ -98,9 +100,18 @@ app.use(
 );
 
 // ---------------------------------------------------------------------------
-// Health check for load balancers & container health probes
+// Health check for load balancers, container probes & UptimeRobot keep-alive
+// Actively warms DB and Redis connections to eliminate serverless cold-starts
 // ---------------------------------------------------------------------------
-app.get('/health', (_req, res) => {
+app.get('/health', async (_req, res) => {
+  try {
+    await Promise.allSettled([
+      prisma.$queryRaw`SELECT 1`,
+      redis.ping(),
+    ]);
+  } catch {
+    // Keep health check responsive even if a dependency is momentarily lagging
+  }
   res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 

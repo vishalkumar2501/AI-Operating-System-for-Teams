@@ -9,7 +9,7 @@ import { authRepository } from './auth.repository';
 import { createAuditLog } from '../audit/audit.service';
 import type { RegisterDto, LoginDto } from './auth.schema';
 
-const BCRYPT_COST = 12;
+const BCRYPT_COST = 10; // Optimized for cloud serverless/shared vCPU response times (OWASP compliant)
 
 export interface AuthTokens {
   accessToken: string;
