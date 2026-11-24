@@ -1,5 +1,5 @@
-import React from 'react';
-import { Sun, Moon, Laptop, Palette, Shield, Bell, Key } from 'lucide-react';
+import type { ReactNode } from 'react';
+import { Sun, Moon, Laptop, Palette, Shield } from 'lucide-react';
 import { useTheme, ThemeMode } from '@/store/theme.store';
 
 export function SettingsPlaceholder() {
@@ -9,7 +9,7 @@ export function SettingsPlaceholder() {
     id: ThemeMode;
     label: string;
     description: string;
-    icon: React.ReactNode;
+    icon: ReactNode;
   }> = [
     {
       id: 'dark',
