@@ -41,11 +41,13 @@ const envSchema = z.object({
 
   // JWT Authentication
   JWT_ACCESS_SECRET: z.preprocess(
-    (val) => ensureSecret(val, 'teamos_default_jwt_access_secret_key_minimum_32_characters_long_12345'),
+    (val) =>
+      ensureSecret(val, 'teamos_default_jwt_access_secret_key_minimum_32_characters_long_12345'),
     z.string().min(32)
   ),
   JWT_REFRESH_SECRET: z.preprocess(
-    (val) => ensureSecret(val, 'teamos_default_jwt_refresh_secret_key_minimum_32_characters_long_67890'),
+    (val) =>
+      ensureSecret(val, 'teamos_default_jwt_refresh_secret_key_minimum_32_characters_long_67890'),
     z.string().min(32)
   ),
   JWT_ACCESS_EXPIRES_IN: z.string().default('15m'),

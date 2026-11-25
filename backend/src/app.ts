@@ -105,10 +105,7 @@ app.use(
 // ---------------------------------------------------------------------------
 app.get('/health', async (_req, res) => {
   try {
-    await Promise.allSettled([
-      prisma.$queryRaw`SELECT 1`,
-      redis.ping(),
-    ]);
+    await Promise.allSettled([prisma.$queryRaw`SELECT 1`, redis.ping()]);
   } catch {
     // Keep health check responsive even if a dependency is momentarily lagging
   }

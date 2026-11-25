@@ -22,7 +22,10 @@ async function startServer(): Promise<void> {
     await redis.ping();
     logger.info('Redis connection established');
   } catch (err: any) {
-    logger.warn({ err: err?.message || err }, 'Failed to connect to Redis — continuing in standalone mode without Redis cluster');
+    logger.warn(
+      { err: err?.message || err },
+      'Failed to connect to Redis — continuing in standalone mode without Redis cluster'
+    );
   }
 
   const httpServer = http.createServer(app);
